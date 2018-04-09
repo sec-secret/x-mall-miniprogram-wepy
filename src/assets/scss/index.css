@@ -137,4 +137,12 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical; }
 
+.container-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); }
+
 /*# sourceMappingURL=index.css.map */

@@ -1,0 +1,195 @@
+<style lang="scss">
+  @import '../../assets/scss/index.scss';
+  .mall-mine{
+    .mine-area{
+      position: relative;
+      height: 400rpx;
+      .mine-back{
+        width: 100%;
+        height: 100%;
+      }
+      .mine-info{
+        position: absolute;
+        z-index: 3;
+        .icon{
+          width: 120rpx;
+          height: 120rpx;
+          border-radius: 100px;
+          overflow: hidden;
+        }
+        .name{
+          color: $color-white;
+          font-size: $size-7;
+        }
+      }
+    }
+    .order-area{
+      background: $color-white;
+      padding-top: 10rpx;
+      .order-title{
+        height: 60rpx;
+        .name{
+          flex: 1;
+        }
+        .icon{
+          margin-left: 20rpx;
+          width: 20rpx;
+          height: 20rpx;
+        }
+      }
+      .order-menu{
+        height: 200rpx;
+        .menu-item{
+          flex: 1;
+          .icon{
+            width: 70rpx;
+            height: 70rpx;
+          }
+          .name{
+            margin-top: 20rpx;
+          }
+        }
+      }
+    }
+    .th1-area{
+
+    }
+    .th2-area{
+      margin-top: 40rpx;
+      padding-bottom: 50rpx;
+    }
+    .cell{
+      background: $color-white;
+      height: 100rpx;
+      label{
+        flex: 1;
+      }
+      image{
+        width: 20rpx;
+        height: 20rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="mall-mine page">
+    <view class="mine-area">
+      <image class="mine-back" src="./img/temp_mine-back.png" alt="">
+      </image>
+      <view class="mine-info container-center flex-center-y">
+        <image class="icon" src="{{userInfo.avatarUrl}}" alt="">
+        </image>
+        <label class="name">{{userInfo.nickName}}</label>
+      </view>
+    </view>
+
+    <view class="order-area">
+      <view class="order-title flex-middle-x pr2 pl2" @tap="actionClickOrders">
+        <label class="name">我的订单</label>
+        <label>查看全部订单</label>
+        <image class="icon" src="./img/right-arrow.png" alt="">
+        </image>
+      </view>
+      <view class="order-menu flex-middle-x">
+        <repeat for="{{orderMenuList}}"
+                item="menu">
+          <view class="menu-item flex-center-y">
+            <image class="icon" src="{{menu.icon}}" alt="">
+            </image>
+            <label class="name">{{menu.name}}</label>
+          </view>
+        </repeat>
+      </view>
+    </view>
+    <view class="th1-area">
+      <view class="cell flex-middle-x pl2 pr2 top-seg"
+            data-index="0"
+            @tap="actionClickMenu">
+        <label>退款/售后</label>
+        <image src="./img/right-arrow.png" alt="">
+        </image>
+      </view>
+      <view class="cell flex-middle-x pl2 pr2 top-seg"
+            data-index="1"
+            @tap="actionClickMenu">
+        <label>小呱客服</label>
+        <image src="./img/right-arrow.png" alt="">
+        </image>
+      </view>
+    </view>
+    <view class="th2-area">
+      <view class=" cell flex-middle-x pl2 pr2"
+            data-index="2"
+            @tap="actionClickMenu">
+        <label>我的钱包</label>
+        <image src="./img/right-arrow.png" alt="">
+        </image>
+      </view>
+      <view class="cell flex-middle-x pl2 pr2 top-seg"
+            data-index="3"
+            @tap="actionClickMenu">
+        <label>我的地址</label>
+        <image src="./img/right-arrow.png" alt="">
+        </image>
+      </view>
+      <view class="cell flex-middle-x pl2 pr2 top-seg"
+            data-index="4"
+            @tap="actionClickMenu">
+        <label>我的优惠券</label>
+        <image src="./img/right-arrow.png" alt="">
+        </image>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import { connect } from 'wepy-redux'
+
+  @connect({
+    userInfo (state) {
+      return state.user.userInfo
+    }
+  })
+  export default class Mine extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的'
+    }
+    components = {
+    }
+
+    data = {
+      orderMenuList: [{
+        name: '待付款',
+        icon: './img/daifukuan.png'
+      }, {
+        name: '待收货',
+        icon: './img/daishouhuo.png'
+      }, {
+        name: '已发货',
+        icon: './img/yifahuo.png'
+      }, {
+        name: '已完成',
+        icon: './img/yiwancheng.png'
+      }]
+    }
+
+    computed = {
+    }
+
+    methods = {
+      actionClickOrders() {
+        this.$router.push({name: 'MallMineOrders'})
+      },
+      actionClickMenu(e){
+        let index = e.currentTarget.dataset.index;
+        let menuNameList = ['', '', '', 'MallMineAddress', '']
+        this.$router.push({name: menuNameList[index]});
+      }
+    }
+
+    onLoad() {
+    }
+  }
+</script>

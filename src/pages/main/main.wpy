@@ -61,7 +61,7 @@
 <template>
   <view class="main page">
     <swiper class="banner">
-      <swiper-item wx:key="index" class="banner-item">
+      <swiper-item key="index" class="banner-item">
         <image class="image" src="/assets/main/temp_banner.png">
         </image>
       </swiper-item>
@@ -74,38 +74,38 @@
         </image>
       </view>
       <swiper class="swiper" display-multiple-items="3">
-        <swiper-item class="swiper-item"
-                     wx:for="{{hotGoods}}"
-                     wx:key="index">
-          <goods-cell goods="{{item}}">
-          </goods-cell>
-        </swiper-item>
+        <repeat for="{{hotGoods}}"
+                key="index">
+          <swiper-item class="swiper-item">
+            <goods-cell :goods="item">
+            </goods-cell>
+          </swiper-item>
+        </repeat>
       </swiper>
     </view>
-
     <view class="recommend-goods top-seg bottom-seg">
       <view class="title-area flex-center-x bottom-seg">
         <text>为您推荐</text>
         <image class="icon ml2" src="/assets/main/round-right-arrow.png">
         </image>
       </view>
-
-      <view class="recommend-item pl2 pr2 flex-y"
-            wx:for="{{recommendGoods}}"
-            wx:for-item="goods"
-            wx:key="index">
-        <view class="goods-user flex-middle-x">
-          <image class="icon" src="/assets/main/temp_nick_logo.png" alt="">
-          </image>
-          <label class="nick ml1">小呱君</label>
+      <repeat for="{{recommendGoods}}"
+              item="goods"
+              key="index">
+        <view class="recommend-item pl2 pr2 flex-y">
+          <view class="goods-user flex-middle-x">
+            <image class="icon" src="/assets/main/temp_nick_logo.png" alt="">
+            </image>
+            <label class="nick ml1">小呱君</label>
+          </view>
+          <view class="flex-middle-x flex-center-x">
+            <image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">
+            </image>
+          </view>
+          <label class="goods-name mall-product-name">{{goods.name}}</label>
+          <label class="goods-price">￥{{goods.price}}</label>
         </view>
-        <view class="flex-middle-x flex-center-x">
-          <image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">
-          </image>
-        </view>
-        <label class="goods-name mall-product-name">{{goods.name}}</label>
-        <label class="goods-price">￥{{goods.price}}</label>
-      </view>
+      </repeat>
     </view>
   </view>
 </template>
@@ -114,17 +114,18 @@
   import wepy from 'wepy'
   import NetworkManagerMain from '../../network/NetworkManagerMain';
   import UnitTool from '../../tool/UnitTool';
-
-  export default class Index extends wepy.page {
+  import GoodsCell from '@/components/widget/goods-cell';
+  export default class Main extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页'
+    }
     data = {
       hotGoods: [],
       recommendGoods: []
     }
 
-    computed = {
-      now () {
-        return +new Date()
-      }
+    components = {
+      'goods-cell': GoodsCell
     }
 
     methods = {
@@ -132,6 +133,7 @@
 
     onLoad() {
       NetworkManagerMain.main().then(data => {
+        console.log(data);
         this.hotGoods = data.hotGoods;
         this.recommendGoods = data.hotGoods.map(_ => {
           return {
@@ -140,7 +142,6 @@
           }
         });
         this.$apply();
-        console.log(data);
       }, error => {
         console.log(error);
       });

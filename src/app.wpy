@@ -1,4 +1,5 @@
 <style lang="scss">
+  @import './assets/scss/index.scss';
   .container {
     height: 100%;
     display: flex;
@@ -9,6 +10,8 @@
   }
   .page {
     background: #f6f6f6;
+    font-size: 30rpx;
+    color: $color-1;
   }
 </style>
 
@@ -18,6 +21,7 @@
 
   import { setStore } from 'wepy-redux'
   import configStore from './store'
+  import {UPDATE_USER_INFO} from './store/types/user'
 
   const store = configStore()
   setStore(store)
@@ -25,14 +29,47 @@
   export default class extends wepy.app {
     config = {
       pages: [
+        'pages/mine/mine',
         'pages/main/main',
-        'pages/index'
+        'pages/category/category',
+        'pages/cart/cart'
       ],
       window: {
         backgroundTextStyle: 'light',
         navigationBarBackgroundColor: '#fff',
         navigationBarTitleText: 'WeChat',
         navigationBarTextStyle: 'black'
+      },
+      tabBar: {
+        color: '#a9b7b7',
+        selectedColor: '#FF9900',
+        borderStyle: 'black',
+        list: [
+          {
+            selectedIconPath: 'assets/main/main-ed.png',
+            iconPath: 'assets/main/main.png',
+            pagePath: 'pages/main/main',
+            text: '首页'
+          },
+          {
+            selectedIconPath: 'assets/main/category-ed.png',
+            iconPath: 'assets/main/category.png',
+            pagePath: 'pages/category/category',
+            text: '分类'
+          },
+          {
+            selectedIconPath: 'assets/main/cart-ed.png',
+            iconPath: 'assets/main/cart.png',
+            pagePath: 'pages/cart/cart',
+            text: '购物车'
+          },
+          {
+            selectedIconPath: 'assets/main/mine-ed.png',
+            iconPath: 'assets/main/mine.png',
+            pagePath: 'pages/mine/mine',
+            text: '我的'
+          }
+        ]
       }
     }
 
@@ -71,6 +108,10 @@
         success (res) {
           that.globalData.userInfo = res.userInfo
           cb && cb(res.userInfo)
+          store.dispatch({
+            type: UPDATE_USER_INFO,
+            userInfo: res.userInfo
+          });
         }
       })
     }

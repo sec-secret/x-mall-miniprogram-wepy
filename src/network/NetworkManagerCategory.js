@@ -1,4 +1,4 @@
-import NetworkManager from "./NetworkManager";
+import NetworkManager from './NetworkManager';
 
 export default class NetworkManagerCategory extends NetworkManager{
     static moreCategories(){

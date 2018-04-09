@@ -11,9 +11,6 @@ export default class NetworkManager{
         return this._instance;
     }
 
-    constructor(){
-    }
-
     /**
      * 普通异常
      * @param {error} errorMessage
@@ -86,10 +83,10 @@ export default class NetworkManager{
     getCarryData(){
         let carryData = null;
         if (this.delegate && this.delegate.carryData){
-            if (typeof this.delegate.carryData === "function"){
+            if (typeof this.delegate.carryData === 'function'){
                 carryData = this.delegate.carryData();
             }
-            if (typeof this.delegate.carryData === "object"){
+            if (typeof this.delegate.carryData === 'object'){
                 carryData = this.delegate.carryData;
             }
         }

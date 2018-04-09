@@ -1,0 +1,281 @@
+<style lang="scss">
+  @import '../../assets/scss/index.scss';
+  .cart{
+    .pay-area {
+      background: $color-white;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: $tab-bar-height;
+      text-align: center;
+      color: $color-2;
+      z-index: 10;
+      .select {
+        .select-icon {
+          width: 30rpx;
+          height: 30rpx;
+          background-color: $c-white;
+          border-radius: 15rpx;
+          border: 1rpx solid $c-999;
+          margin-right: 10rpx;
+        }
+        .selected {
+          background: $color-yellow;
+        }
+        flex: 1.3;
+        height: 100%;
+      }
+      .count {
+        flex: 1.3;
+        height: 100%;
+        color: $color-3;
+      }
+      .amount {
+        flex: 2;
+        font-size: $size-6;
+        .price {
+          color: $color-red;
+          font-weight: 500;
+        }
+      }
+      .pay {
+        flex: 2;
+        font-size: $size-6;
+        line-height: $tab-bar-height;
+        background: $color-yellow;
+      }
+    }
+
+    .cart-area {
+      padding-bottom: $tab-bar-height;
+      background: $color-back;
+      .cart-item {
+        height: 200rpx;
+        background: $color-white;
+        margin-bottom: 20rpx;
+        .edit-select-space {
+          width: 100rpx;
+          height: 100rpx;
+          .select-icon {
+            width: 30rpx;
+            height: 30rpx;
+            background: $c-white;
+            border: 1px solid $c-999;
+            border-radius: 15rpx;
+          }
+          .selected{
+            background: $color-yellow;
+          }
+        }
+        .icon {
+          margin-left: 10rpx;
+          width: 100rpx;
+          height: 100rpx;
+        }
+        .content {
+          margin-left: 20rpx;
+          flex: 1;
+          .name {
+            font-size: $size-6;
+          }
+          .info {
+            margin-top: 10rpx;
+            height: 50rpx;
+            line-height: 50rpx;
+            .price {
+              flex: 1;
+              color: $color-orange;
+              font-weight: 500;
+            }
+            .input {
+              height: 50rpx;
+              line-height: 50rpx;
+              width: 160rpx;
+              border: 1px solid $color-seg;
+              border-radius: 2px;
+              overflow: hidden;
+              .count-button {
+                height: 100%;
+                width: 50rpx;
+                text-align: center;
+                background-color: #efefef;
+                border-radius: 2rpx;
+                font-size: $size-5;
+                color: $color-2;
+              }
+              .count-number {
+                width: 60rpx;
+                height: 100%;
+                color: $color-orange;
+                text-align: center;
+                outline: 0;
+                border: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="cart">
+    <view class="pay-area flex-middle-x top-seg">
+      <view class="select flex-center-x"
+            @tap="actionClickSelectAll">
+        <label class="select-icon {{isSelectedAll?'selected':''}}"></label>
+        <label>全选</label>
+      </view>
+      <view class="count flex-center-x">
+        已选{{selectedCount}}件
+      </view>
+      <view class="amount">
+        合计:<label class="price">￥{{totalPrice}}</label>
+      </view>
+      <label class="pay" @tap="actionClickPay">结算</label>
+    </view>
+
+    <view class="cart-area top-seg">
+      <repeat for="{{goodsList}}"
+              item="goods"
+              key="goods.skuId">
+        <view class="cart-item flex-middle-x pl2 pr2">
+          <label wx:if="{{isEditing}}" @tap="delGoods(goods)">
+            删除
+          </label>
+          <label class="edit-select-space flex-center-x"
+                 data-goods="{{goods}}"
+                 @tap="actionClickGoodsSelected">
+            <label class="select-icon {{selectedJudgeMap[goods.skuId]?'selected':''}}"></label>
+          </label>
+          <image mode="aspectFit" class="icon" src="{{goods.goodsImg}}" alt="">
+          </image>
+          <view class="content flex-y">
+            <label class="name ellipsis-2">
+              {{goods.name}}
+            </label>
+            <view class="info flex-middle-x">
+              <div class="price">￥{{goods.smartPrice}}</div>
+              <view class="input flex-middle-x">
+                <label class="count-button" data-goods="{{goods}}" @tap="actionClickMinus">-</label>
+                <input class="count-number" type="number" value="{{goodsCountList[goods.skuId]}}"/>
+                <label class="count-button" data-goods="{{goods}}" @tap="actionClickPlus">+</label>
+              </view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerCart from '../../network/NetworkManagerCart';
+  import UnitTool from '../../tool/UnitTool';
+  export default class Cart extends wepy.page {
+    config = {
+      navigationBarTitleText: '购物车'
+    }
+    components = {
+    }
+
+    data = {
+      isEditing: false,
+      selectedList: [],
+      goodsList: [],
+      goodsCountList: {},
+      goodsKeyList: {},
+      selectedJudgeMap: {}
+    }
+
+    computed = {
+      selectedCount(){
+        let selectedCount = 0;
+        for (let goodsSkuId in this.selectedJudgeMap){
+          if (this.selectedJudgeMap[goodsSkuId]){
+            selectedCount++
+          }
+        }
+        return selectedCount;
+      },
+      totalPrice(){
+        let totalPrice = 0;
+        for (let goodsSkuId in this.selectedJudgeMap){
+          if (this.selectedJudgeMap.hasOwnProperty(goodsSkuId) && this.selectedJudgeMap[goodsSkuId]){
+            totalPrice += this.goodsKeyList[goodsSkuId].nbPrice * this.goodsCountList[goodsSkuId];
+          }
+        }
+        return UnitTool.formatFenPrice(totalPrice);
+      },
+      isSelectedAll(){
+        for (let goodsSkuId in this.selectedJudgeMap){
+          if (this.selectedJudgeMap.hasOwnProperty(goodsSkuId) && !this.selectedJudgeMap[goodsSkuId]){
+            return false;
+          }
+        }
+        return true;
+      }
+    }
+
+    methods = {
+      actionClickGoodsSelected(e){
+        let goods = e.currentTarget.dataset.goods;
+        this.selectedJudgeMap[goods.skuId] = !this.selectedJudgeMap[goods.skuId];
+      },
+      actionClickSelectAll() {
+        let selectOrClear = !this.isSelectedAll;
+        for (let goodsSkuId in this.selectedJudgeMap){
+          if (this.selectedJudgeMap.hasOwnProperty(goodsSkuId)){
+            this.selectedJudgeMap[goodsSkuId] = selectOrClear;
+          }
+        }
+      },
+      actionClickMinus: function (e) {
+        let goods = e.currentTarget.dataset.goods;
+        if (this.goodsCountList[goods.skuId] <= 1){
+          return;
+        }
+        this.goodsCountList[goods.skuId]--;
+      },
+      actionClickPlus: function (e) {
+        let goods = e.currentTarget.dataset.goods;
+        this.goodsCountList[goods.skuId]++;
+        this.setData({
+          goodsCountList: this.goodsCountList
+        })
+      }
+    }
+
+    fetchGoodsList(userId) {
+      NetworkManagerCart.fetchCartGoods(userId).then(data => {
+        let selectedJudgeMap = {};
+        let goodsCountList = {};
+        let goodsKeyList = {};
+        for (let goods of data.skus) {
+          selectedJudgeMap[goods.skuId] = false;
+          goodsCountList[goods.skuId] = goods.num;
+          goodsKeyList[goods.skuId] = goods;
+        }
+        this.selectedJudgeMap = selectedJudgeMap;
+        this.goodsCountList = goodsCountList;
+        this.goodsKeyList = goodsKeyList;
+        this.goodsList = data.skus.map(_ => {
+          return {
+            ..._,
+            smartPrice: UnitTool.formatFenPrice(_.nbPrice)
+          }
+        });
+        this.$apply();
+        console.log(data)
+      }, err => {
+        console.log(err)
+      })
+    }
+
+    onLoad() {
+      this.fetchGoodsList({userId: 123});
+    }
+  }
+</script>

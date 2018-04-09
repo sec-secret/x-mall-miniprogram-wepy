@@ -1,0 +1,54 @@
+<style lang="scss">
+  @import "../../assets/scss/constant.scss";
+  .goods-cell {
+    height: 100%;
+    padding: 25rpx 25rpx;
+    text-align: center;
+    font-size: $size-1;
+    .image {
+      width: 200rpx;
+      height: 201rpx;
+    }
+    .name{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .price{
+      color: #ff0000;
+    }
+  }
+</style>
+<template>
+  <view class="goods-cell flex-middle-y">
+    <image class="image" src="{{goods.goodsImg}}" mode="scaleToFill"></image>
+    <text class="name">{{goods.name}}</text>
+    <text class="price">￥{{smartPrice}}</text>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  // import UnitTool from '../../tool/UnitTool';
+  export default class Counter extends wepy.component {
+    props = {
+      goods: Object
+    }
+
+    data = {
+    }
+
+    computed = {
+      smartPrice () {
+        // UnitTool.formatFenPrice(this.goods.nbPrice)
+        return 0;
+      }
+    }
+
+    onLoad() {
+      console.log(this.goods);
+      // this.price = ;
+    }
+  }
+</script>

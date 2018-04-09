@@ -1,0 +1,187 @@
+<style lang="scss">
+  @import "../../assets/scss/index.scss";
+  .category{
+    height: 100vh;
+    .search-area{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background: #fff;
+      height: 100rpx;
+      .input{
+        width: 100%;
+        background: #f6f6f6;
+        height: 80rpx;
+        border-radius: 40rpx;
+        padding-left: 30rpx;
+        padding-right: 30rpx;
+        margin-left: 50rpx;
+        margin-right: 50rpx;
+      }
+    }
+    .content-area{
+      height: 100%;
+      margin-top: 98rpx;
+      .menu-area{
+        width: 200rpx;
+        background: $color-seg;
+        .menu-item{
+          width: 100%;
+          height: 100rpx;
+          line-height: 100rpx;
+          text-align: center;
+          background: #fff;
+          font-size: 30rpx;
+          margin-top: 4rpx;
+        }
+        .active{
+          background: $color-seg;
+        }
+      }
+      ::-webkit-scrollbar{
+        width: 0;
+        height: 0;
+        color: transparent;
+      }
+      .category-area{
+        margin-left: 20rpx;
+        margin-right: 20rpx;
+        flex: 1;
+        .banner{
+          width: 100%;
+          height: 300rpx;
+        }
+        .title{
+          margin-top: 30rpx;
+          text-align: center;
+          .line{
+            height: 1px;
+            width: 130rpx;
+            background: $color-seg;
+          }
+          .name{
+            font-size: $size-5;
+            margin: 0 50rpx;
+          }
+        }
+        .second-category-area{
+          flex-wrap: wrap;
+          padding-bottom: 10rpx;
+          .second-category-item{
+            width: 33.33%;
+            margin-top: 50rpx;
+            .icon{
+              width: 100rpx;
+              height: 100rpx;
+            }
+            .name{
+              font-size: $size-4;
+              margin-top: 20rpx;
+              height: 80rpx;
+              line-height: 40rpx;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="category page flex-y">
+    <view class="search-area flex-center-x">
+      <input class="input" placeholder="请输入关键字">
+      </input>
+    </view>
+    <view class="content-area flex-x">
+      <scroll-view class="menu-area flex-y"
+                   scroll-y="true">
+        <repeat for="{{categoryList}}"
+                item="category">
+          <view data-index="{{index}}"
+                class="menu-item ellipsis-1 {{index===selectedMenuIndex?'active':''}}"
+                @tap="actionClickCategory">
+            {{category.catName}}
+          </view>
+        </repeat>
+      </scroll-view>
+      <scroll-view class="category-area flex-y"
+                   scroll-y="true">
+        <image class="banner" src="/assets/main/temp_category_banner.png" alt="">
+        </image>
+        <view class="title flex-center-x">
+          <label class="line"></label>
+          <label class="name">推荐区分类</label>
+          <label class="line"></label>
+        </view>
+        <view class="second-category-area flex-x">
+          <repeat for="{{secondCategoryList}}"
+                  item="category">
+            <view class="second-category-item flex-center-y"
+                  @tap="actionClickSecondCategory">
+              <image class="icon" src="/assets/main/temp_category_icon.png" alt="">
+              </image>
+              <label class="name mall-tow-line-text">{{category.catName}}</label>
+            </view>
+          </repeat>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerCategory from '../../network/NetworkManagerCategory';
+  export default class Category extends wepy.page {
+    config = {
+      navigationBarTitleText: '类别'
+    }
+
+    data = {
+      categoryList: [],
+      secondCategoryList: [],
+      selectedMenuIndex: 0
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      actionClickCategory(e) {
+        let index = e.currentTarget.dataset.index;
+        this.selectedMenuIndex = index;
+        let item = this.data.categoryList[index];
+        this.fetchSecondCategories(item.catId);
+      },
+      actionClickSecondCategory(category){
+        console.log(category)
+      }
+    }
+
+    fetchSecondCategories(parentId){
+      NetworkManagerCategory.secondCategories(parentId).then(data => {
+        this.secondCategoryList = data;
+        this.$apply();
+        console.log(data);
+      }, error => {
+        console.log(error);
+      })
+    }
+
+    onLoad() {
+      NetworkManagerCategory.moreCategories().then(data => {
+        this.categoryList = data;
+        this.$apply();
+        this.fetchSecondCategories(data[0].catId);
+        console.log(data);
+      }, error => {
+        console.log(error);
+      })
+    }
+  }
+</script>
