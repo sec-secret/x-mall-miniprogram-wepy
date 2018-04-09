@@ -1,0 +1,140 @@
+.ml0 {
+  margin-left: 0; }
+
+.ml1 {
+  margin-left: 16rpx; }
+
+.ml2 {
+  margin-left: 20rpx; }
+
+.ml3 {
+  margin-left: 30rpx; }
+
+.ml4 {
+  margin-left: 40rpx; }
+
+.mr0 {
+  margin-right: 0; }
+
+.mr1 {
+  margin-right: 16rpx; }
+
+.mr2 {
+  margin-right: 20rpx; }
+
+.mr3 {
+  margin-right: 30rpx; }
+
+.mr4 {
+  margin-right: 40rpx; }
+
+.pl0 {
+  padding-left: 0; }
+
+.pl1 {
+  padding-left: 16rpx; }
+
+.pl2 {
+  padding-left: 20rpx; }
+
+.pl3 {
+  padding-left: 30rpx; }
+
+.pl4 {
+  padding-left: 40rpx; }
+
+.pr0 {
+  padding-right: 0; }
+
+.pr1 {
+  padding-right: 16rpx; }
+
+.pr2 {
+  padding-right: 20rpx; }
+
+.pr3 {
+  padding-right: 30rpx; }
+
+.pr4 {
+  padding-right: 40rpx; }
+
+.flex-x {
+  display: flex;
+  flex-direction: row; }
+
+.flex-middle-x {
+  display: flex;
+  flex-direction: row;
+  align-items: center; }
+
+.flex-center-x {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; }
+
+.flex-middle-y {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
+.flex-center-y {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; }
+
+.flex-y {
+  display: flex;
+  flex-direction: column; }
+
+.flex-item {
+  flex: auto; }
+
+.layout-flex-align-items_center {
+  align-items: center; }
+
+.layout-flex-justify-content_center {
+  justify-content: center; }
+
+.layout-flex-justify-content_flex-end {
+  justify-content: flex-end; }
+
+.layout-flex-justify-content_flex-start {
+  justify-content: flex-start; }
+
+.layout-flex-justify-content_space-between {
+  justify-content: space-between; }
+
+.layout-flex-justify-content_space-around {
+  justify-content: space-around; }
+
+.layout-flex-align-self_center {
+  align-self: center; }
+
+.layout-flex-wrap {
+  flex-wrap: wrap; }
+
+.bottom-seg {
+  border-bottom: 1px solid #d9d9d9;
+  box-sizing: content-box; }
+
+.top-seg {
+  border-top: 1px solid #d9d9d9;
+  box-sizing: content-box; }
+
+.ellipsis-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical; }
+
+.ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; }
+
+/*# sourceMappingURL=index.css.map */

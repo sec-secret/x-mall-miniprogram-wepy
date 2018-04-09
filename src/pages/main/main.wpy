@@ -1,0 +1,149 @@
+<style lang="scss">
+  @import "../../assets/scss/index.scss";
+  .banner{
+    .banner-item{
+      height: 320rpx;
+      .image{
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .new-goods {
+    background: #fff;
+    .swiper{
+      .swiper-item {
+        height: 100%;
+      }
+    }
+  }
+
+  .title-area {
+    height: 100rpx;
+    .icon {
+      width: 40rpx;
+      height: 40rpx;
+    }
+  }
+
+  .recommend-goods {
+    margin-top: 20rpx;
+    background: #fff;
+    .recommend-item{
+      margin-top: 20rpx;
+      .goods-user{
+        margin-top: 10rpx;
+        .icon{
+          width: 60rpx;
+          height: 60rpx;
+        }
+      }
+      .goods-img{
+        margin-top: 10rpx;
+        width: 100%;
+        height: 310rpx;
+      }
+      .goods-name{
+        margin-top: 10rpx;
+        font-size: 30rpx;
+      }
+      .goods-price{
+        margin-top: 10rpx;
+        color: $color-orange;
+        font-size: $size-5;
+        font-weight: bold;
+      }
+    }
+  }
+
+</style>
+<template>
+  <view class="main page">
+    <swiper class="banner">
+      <swiper-item wx:key="index" class="banner-item">
+        <image class="image" src="/assets/main/temp_banner.png">
+        </image>
+      </swiper-item>
+    </swiper>
+
+    <view class="new-goods top-seg bottom-seg">
+      <view class="title-area flex-center-x bottom-seg">
+        <text>热门推荐</text>
+        <image class="icon ml2" src="/assets/main/round-right-arrow.png">
+        </image>
+      </view>
+      <swiper class="swiper" display-multiple-items="3">
+        <swiper-item class="swiper-item"
+                     wx:for="{{hotGoods}}"
+                     wx:key="index">
+          <goods-cell goods="{{item}}">
+          </goods-cell>
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <view class="recommend-goods top-seg bottom-seg">
+      <view class="title-area flex-center-x bottom-seg">
+        <text>为您推荐</text>
+        <image class="icon ml2" src="/assets/main/round-right-arrow.png">
+        </image>
+      </view>
+
+      <view class="recommend-item pl2 pr2 flex-y"
+            wx:for="{{recommendGoods}}"
+            wx:for-item="goods"
+            wx:key="index">
+        <view class="goods-user flex-middle-x">
+          <image class="icon" src="/assets/main/temp_nick_logo.png" alt="">
+          </image>
+          <label class="nick ml1">小呱君</label>
+        </view>
+        <view class="flex-middle-x flex-center-x">
+          <image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">
+          </image>
+        </view>
+        <label class="goods-name mall-product-name">{{goods.name}}</label>
+        <label class="goods-price">￥{{goods.price}}</label>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerMain from '../../network/NetworkManagerMain';
+  import UnitTool from '../../tool/UnitTool';
+
+  export default class Index extends wepy.page {
+    data = {
+      hotGoods: [],
+      recommendGoods: []
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+    }
+
+    onLoad() {
+      NetworkManagerMain.main().then(data => {
+        this.hotGoods = data.hotGoods;
+        this.recommendGoods = data.hotGoods.map(_ => {
+          return {
+            ..._,
+            price: UnitTool.formatFenPrice(_.nbPrice)
+          }
+        });
+        this.$apply();
+        console.log(data);
+      }, error => {
+        console.log(error);
+      });
+    }
+  }
+</script>

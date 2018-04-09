@@ -1,0 +1,15 @@
+{
+	"description": "xiaogua mall for miniprogram",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx58b1b582646001c0",
+	"projectname": "x-mall-miniprogram",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}

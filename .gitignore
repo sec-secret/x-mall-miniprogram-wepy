@@ -1,0 +1,4 @@
+node_modules
+dist
+.DB_store
+.idea

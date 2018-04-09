@@ -1,0 +1,25 @@
+.bottom-seg{
+  border-bottom: 1px solid #d9d9d9;
+  box-sizing: content-box;
+}
+
+.top-seg{
+  border-top: 1px solid #d9d9d9;
+  box-sizing: content-box;
+}
+
+.ellipsis-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
