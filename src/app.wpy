@@ -29,10 +29,11 @@
   export default class extends wepy.app {
     config = {
       pages: [
-        'pages/mine/mine',
+        'pages/main/goods-detail',
         'pages/main/main',
         'pages/category/category',
-        'pages/cart/cart'
+        'pages/cart/cart',
+        'pages/mine/mine'
       ],
       window: {
         backgroundTextStyle: 'light',
@@ -71,6 +72,10 @@
           }
         ]
       }
+    }
+
+    i = {
+      test: 'just a test'
     }
 
     globalData = {

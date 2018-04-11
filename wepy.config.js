@@ -16,7 +16,9 @@ module.exports = {
     alias: {
       counter: path.join(__dirname, 'src/components/counter'),
       '@': path.join(__dirname, 'src'),
-      '@assets': path.join(__dirname, 'src/assets')
+      '@assets': path.join(__dirname, 'src/assets'),
+      '@tool': path.join(__dirname, 'src/tool'),
+      '@network': path.join(__dirname, 'src/network')
     },
     aliasFields: ['wepy', 'wpy'],
     modules: ['node_modules']

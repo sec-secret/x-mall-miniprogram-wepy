@@ -22,7 +22,7 @@
   }
 </style>
 <template>
-  <view class="goods-cell flex-middle-y">
+  <view class="goods-cell flex-middle-y" @tap="actionClickCell">
     <image class="image" src="{{goods.goodsImg}}" mode="scaleToFill"></image>
     <text class="name">{{goods.name}}</text>
     <text class="price">￥{{smartPrice}}</text>
@@ -46,9 +46,13 @@
       }
     }
 
+    methods = {
+      actionClickCell(){
+        this.$emit('actionClickCell', this.goods);
+      }
+    }
+
     onLoad() {
-      console.log(this.goods);
-      // this.price = ;
     }
   }
 </script>
