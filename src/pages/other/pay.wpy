@@ -1,0 +1,33 @@
+<style lang="scss">
+</style>
+<template>
+  <web-view src="{{webUrl}}" class="page">
+  </web-view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'just a test'
+    }
+    components = {
+    }
+
+    data = {
+    }
+
+    computed = {
+      webUrl () {
+        return 'http://mall.beta.zookainet.com/mall/#/temp_test?payUrl=' + this.payUrl;
+      }
+    }
+
+    methods = {
+    }
+
+    onLoad(options) {
+      this.payUrl = options.payUrl;
+    }
+  }
+</script>

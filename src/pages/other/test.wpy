@@ -1,0 +1,87 @@
+<style lang="scss">
+  .test{
+    background: #ff0000;
+    width: 300rpx;
+    height: 50rpx;
+    border: solid 1px #e6e6e6;
+  }
+</style>
+<template>
+  <view class="test"
+        @tap="actionClickPay">
+    去支付{{status}}
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'just a test'
+    }
+    components = {
+    }
+
+    data = {
+      status: '未开始'
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      actionClickPay(){
+        /* eslint-disable */
+        this.status = '点击';
+
+        // if (wx.getStorageSync('payUrl')){
+        //   wx.navigateTo({
+        //     url: 'pay?payUrl=' + wx.getStorageSync('payUrl')
+        //   })
+        //   return;
+        // }
+        wx.request({
+          url: 'http://local.idoupiao.com:4888/xabcjsfilm/pay/lyconfirmpay.api',
+          data: {
+            inType: 'JiangSuABC',
+            openId: 'oxmudxLXzqKWTSnZ8ikaJscicl-Y',
+            signCode: '23b4044b11af85609d76089aea44a924',
+            userId: '13764730291',
+            secret: '074CA81E531E7DAD4DB60458E5A9C66B5C147794',
+            from: '',
+            bean: 0,
+            isSubTenAct: false,
+            privilegeCount: 0,
+            orderId: 16268
+          },
+          success: function (data) {
+            // wx.showToast({
+            //   title: 'asd',
+            //   duration: 5000
+            // });
+            this.status = '请求成功';
+            console.log(data.data.data);
+            wx.setStorageSync('payUrl', encodeURIComponent(data.data.data));
+            wx.navigateTo({
+              url: 'pay?payUrl=' + encodeURIComponent(data.data.data)
+            })
+          },
+          fail: function () {
+            this.status = '请求失败';
+            console.log('请求失败');
+          }
+        })
+        // wx.navigateTo({
+        //   url: 'pay?payUrl=' + payUrl
+        // })
+        /* eslint-enable */
+      }
+    }
+
+    onLoad() {
+    }
+  }
+</script>

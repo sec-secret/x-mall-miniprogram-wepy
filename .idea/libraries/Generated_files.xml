@@ -127,32 +127,19 @@
         <item url="file://$PROJECT_DIR$/dist/dist/pages/main/goods-detail.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/main/main.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/mine/mine.js" />
+        <item url="file://$PROJECT_DIR$/dist/dist/pages/other/pay.js" />
+        <item url="file://$PROJECT_DIR$/dist/dist/pages/other/test.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/temp.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/store/actions/counter.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/actions/index.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/actions/user.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/store/reducers/counter.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/reducers/index.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/reducers/user.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/store/types/counter.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/types/index.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/types/user.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/tool/NumberTool.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/tool/SetTool.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/tool/UnitTool.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerCategory.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerGoods.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/actions/counter.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/actions/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/actions/user.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/reducers/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/types/counter.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/types/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/types/user.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/tool/SetTool.js" />
-        <item url="file://$PROJECT_DIR$/dist/wepy.config.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -186,6 +173,22 @@
       <root url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerMain.js" />
       <root url="file://$PROJECT_DIR$/dist/src/tool/NumberTool.js" />
       <root url="file://$PROJECT_DIR$/dist/src/tool/UnitTool.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/pages/test.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/store/actions/counter.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/store/reducers/counter.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/store/types/counter.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerCategory.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerGoods.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/actions/counter.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/actions/index.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/actions/user.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/index.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/reducers/index.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/types/counter.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/types/index.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/store/types/user.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/tool/SetTool.js" />
+      <root url="file://$PROJECT_DIR$/dist/wepy.config.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/_wepylogs.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/app.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/components/widget/goods-cell.js" />
@@ -311,32 +314,19 @@
       <root url="file://$PROJECT_DIR$/dist/dist/pages/main/goods-detail.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/main/main.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/mine/mine.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/pages/other/pay.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/pages/other/test.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/temp.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/store/actions/counter.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/actions/index.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/actions/user.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/index.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/store/reducers/counter.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/reducers/index.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/reducers/user.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/store/types/counter.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/types/index.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/types/user.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/tool/NumberTool.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/tool/SetTool.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/tool/UnitTool.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerCategory.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerGoods.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/actions/counter.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/actions/index.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/actions/user.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/index.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/reducers/index.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/types/counter.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/types/index.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/store/types/user.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/tool/SetTool.js" />
-      <root url="file://$PROJECT_DIR$/dist/wepy.config.js" />
     </CLASSES>
     <SOURCES />
   </library>
