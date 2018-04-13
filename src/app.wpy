@@ -75,15 +75,8 @@
         ]
       }
     }
-
-    i = {
-      test: 'just a test'
-    }
-
     globalData = {
-      userInfo: null,
-      options: null,
-      session: ''
+      userInfo: null
     }
 
     constructor () {
@@ -92,7 +85,6 @@
     }
 
     onLaunch(options) {
-      this.globalData.options = options;
       this.testAsync()
     }
 
@@ -105,7 +97,7 @@
     }
 
     async testAsync () {
-      const data = await this.sleep(3)
+      const data = await this.sleep(3);
       console.log(data)
     }
 
