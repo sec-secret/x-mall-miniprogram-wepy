@@ -11,5 +11,33 @@
 	"appid": "wx58b1b582646001c0",
 	"projectname": "x-mall-miniprogram",
 	"miniprogramRoot": "./dist",
-	"condition": {}
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "分享到群聊之后点击",
+					"pathName": "pages/other/pay",
+					"query": "payUrl=asdasd2222",
+					"scene": "1008"
+				}
+			]
+		}
+	}
 }

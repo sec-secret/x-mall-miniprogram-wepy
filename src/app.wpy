@@ -81,7 +81,9 @@
     }
 
     globalData = {
-      userInfo: null
+      userInfo: null,
+      options: null,
+      session: ''
     }
 
     constructor () {
@@ -89,7 +91,8 @@
       this.use('requestfix')
     }
 
-    onLaunch() {
+    onLaunch(options) {
+      this.globalData.options = options;
       this.testAsync()
     }
 
@@ -111,6 +114,7 @@
       if (this.globalData.userInfo) {
         return this.globalData.userInfo
       }
+
       wepy.getUserInfo({
         success (res) {
           that.globalData.userInfo = res.userInfo

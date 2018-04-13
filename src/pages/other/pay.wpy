@@ -1,8 +1,12 @@
 <style lang="scss">
 </style>
 <template>
-  <web-view src="{{webUrl}}" class="page">
-  </web-view>
+  <view>
+    {{payUrl}}
+    {{options}}
+  </view>
+  <!--<web-view src="{{webUrl}}" class="page" bindmessage="actionReviveMessage">-->
+  <!--</web-view>-->
 </template>
 
 <script>
@@ -11,23 +15,32 @@
     config = {
       navigationBarTitleText: 'just a test'
     }
+
     components = {
     }
 
     data = {
+      payUrl: '',
+      options: ''
     }
 
     computed = {
-      webUrl () {
-        return 'http://mall.beta.zookainet.com/mall/#/temp_test?payUrl=' + this.payUrl;
-      }
+      // webUrl () {
+      //   // return 'http://mall.beta.zookainet.com/mall/#/temp_test?payUrl=' + this.payUrl;
+      //   return 'http://192.168.6.157:8080/#/';
+      // }
     }
 
     methods = {
+      actionReviveMessage(e){
+        console.log('收到h5信息');
+        console.log(e);
+      }
     }
 
     onLoad(options) {
       this.payUrl = options.payUrl;
+      this.options = JSON.stringify(this.$parent.globalData.options);
     }
   }
 </script>

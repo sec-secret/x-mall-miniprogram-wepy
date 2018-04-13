@@ -2,6 +2,8 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/dist/WXBizDataCrypt.js" />
+        <item url="file://$PROJECT_DIR$/dist/demo.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/_wepylogs.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/app.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/components/widget/goods-cell.js" />
@@ -124,6 +126,7 @@
         <item url="file://$PROJECT_DIR$/dist/dist/npm/wepy/lib/wepy.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/cart/cart.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/category/category.js" />
+        <item url="file://$PROJECT_DIR$/dist/dist/pages/demo.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/main/goods-detail.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/main/main.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/mine/mine.js" />
@@ -140,6 +143,7 @@
         <item url="file://$PROJECT_DIR$/dist/dist/tool/NumberTool.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/tool/SetTool.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/tool/UnitTool.js" />
+        <item url="file://$PROJECT_DIR$/dist/src/pages/WXBizDataCrypt.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -189,6 +193,8 @@
       <root url="file://$PROJECT_DIR$/dist/src/store/types/user.js" />
       <root url="file://$PROJECT_DIR$/dist/src/tool/SetTool.js" />
       <root url="file://$PROJECT_DIR$/dist/wepy.config.js" />
+      <root url="file://$PROJECT_DIR$/dist/WXBizDataCrypt.js" />
+      <root url="file://$PROJECT_DIR$/dist/demo.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/_wepylogs.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/app.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/components/widget/goods-cell.js" />
@@ -311,6 +317,7 @@
       <root url="file://$PROJECT_DIR$/dist/dist/npm/wepy/lib/wepy.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/cart/cart.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/category/category.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/pages/demo.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/main/goods-detail.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/main/main.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/mine/mine.js" />
@@ -327,6 +334,7 @@
       <root url="file://$PROJECT_DIR$/dist/dist/tool/NumberTool.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/tool/SetTool.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/tool/UnitTool.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/pages/WXBizDataCrypt.js" />
     </CLASSES>
     <SOURCES />
   </library>
