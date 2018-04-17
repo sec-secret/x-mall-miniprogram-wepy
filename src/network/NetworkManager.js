@@ -66,7 +66,6 @@ export default class NetworkManager{
                 ...otherObject
             })
         })
-
     }
 
     freedomPOST(baseUrl, url, parameters, headers, otherObject) {

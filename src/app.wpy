@@ -25,12 +25,13 @@
 
   const store = configStore()
   setStore(store)
+  Array.prototype.contains = function (el) {
+    return this.indexOf(el) !== -1
+  }
 
   export default class extends wepy.app {
     config = {
       pages: [
-        'pages/other/test',
-        'pages/other/pay',
         'pages/main/goods-detail',
         'pages/main/main',
         'pages/category/category',

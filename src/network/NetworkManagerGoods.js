@@ -1,10 +1,6 @@
 import NetworkManager from './NetworkManager';
 
 export default class NetworkManagerGoods extends NetworkManager{
-  // static addCart(params) {
-  //     return this.instance().POST('/order/addToShoppingCart', params)
-  // }
-
   static goodsDetail(skuId) {
     return this.instance().POST('/goods/getDetail', {skuId});
   }
@@ -27,5 +23,10 @@ export default class NetworkManagerGoods extends NetworkManager{
 
   static goodsImages(skuId){
     return this.instance().POST('/goods/skuImage', {skuId});
+  }
+
+  static goodsAddToCart(params) {
+    return this.instance().POST('/order/addToShoppingCart', {'userId': 123, ...params})
+    // return this.instance().POST('/order/addToShoppingCart', {'userId': GlobalConstant.store.state.userModule.user.userId, ...params})
   }
 }
