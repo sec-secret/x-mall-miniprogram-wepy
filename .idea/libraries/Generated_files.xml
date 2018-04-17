@@ -127,6 +127,7 @@
         <item url="file://$PROJECT_DIR$/dist/dist/pages/main/goods-detail.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/main/main.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/mine/mine.js" />
+        <item url="file://$PROJECT_DIR$/dist/dist/pages/other/other.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/temp.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/actions/index.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/actions/user.js" />
@@ -318,6 +319,7 @@
       <root url="file://$PROJECT_DIR$/dist/dist/pages/main/goods-detail.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/main/main.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/mine/mine.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/pages/other/other.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/temp.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/actions/index.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/actions/user.js" />

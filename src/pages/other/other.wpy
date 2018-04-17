@@ -1,0 +1,51 @@
+<style lang="scss">
+  .test{
+    button{
+      background: #ff0;
+    }
+  }
+</style>
+<template>
+  <view class="page test">
+    <button @tap="actionClickTest">
+      just1 a test
+    </button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'test'
+    }
+    components = {
+    }
+
+    data = {
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      actionClickTest(){
+        console.log('just a test');
+        wepy.checkIsSoterEnrolledInDevice({
+          success: function (res) {
+            console.log(res)
+          },
+          fail: function (error) {
+            console.log(error);
+          }
+        })
+      }
+    }
+
+    onLoad() {
+    }
+  }
+</script>
