@@ -319,7 +319,7 @@
 </style>
 <template>
   <view class="mall-goods-detail page">
-    <view class="tabbar flex-middle-x">
+    <view class="tabbar flex-middle-x top-seg">
       <view class="customer-service flex-center-x">
         <image class="icon" src="./img/customer-service.png" mode="aspectFit">
         </image>
@@ -329,7 +329,7 @@
         </image>
       </view>
       <label class="shop-now" @click="showSelect = true;">立即购买</label>
-      <label @click="showSelect = true;" class="add-cart">加入购物车</label>
+      <label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>
     </view>
 
     <view class="goods-image-area">
@@ -376,16 +376,17 @@
       </view>
     </view>
 
-    <!--<view class="goods-description">-->
-    <!--<rich-text type="text" nodes="{{goodsExt.goodsDetailDesc}}"></rich-text>-->
-    <!--<label wx:if="goodsExt.mobileDesc" v-html="goodsExt.mobileDesc">-->
-    <!--</label>-->
-    <!--</view>-->
+
+    <view class="goods-description">
+      <rich-text type="text" nodes="{{goodsExt.mobileDesc}}"></rich-text>
+      <!--<label wx:if="goodsExt.mobileDesc" v-html="goodsExt.mobileDesc">-->
+      <!--</label>-->
+    </view>
     <!--<view class="goods-param">-->
-    <!--<label v-html="goodsExt.param"></label>-->
+      <!--<label v-html="goodsExt.param"></label>-->
     <!--</view>-->
 
-    <view class="buy-pop-section">
+    <view wx:if="{{isShowBuyPopArea}}" class="buy-pop-section">
       <view class="pop-content">
         <view class="image-area flex-x">
           <image class="image" src="{{popAreaImage}}">
@@ -451,6 +452,7 @@
     }
 
     data = {
+      isShowBuyPopArea: false,
       skuId: 0,
       goods: null,
       goodsExt: null,
@@ -529,9 +531,11 @@
     }
 
     methods = {
+      actionClickShowPopArea(){
+        this.isShowBuyPopArea = true;
+      },
       actionChangeGoodsImage(data){
-        let index = data.detail.current;
-        this.goodsImageIndex = index;
+        this.goodsImageIndex = data.detail.current;
       },
       actionClickTypeValue(e){
         console.log(e.currentTarget);
@@ -576,7 +580,12 @@
         }
         console.log(buyParams);
         NetworkManagerGoods.goodsAddToCart(buyParams).then(data => {
-          console.log(data);
+          this.isShowBuyPopArea = false;
+          wepy.showToast({
+            title: '成功加入购物车',
+            icon: 'success'
+          })
+          this.$apply();
         }, error => {
           console.log(error)
         })
@@ -704,8 +713,7 @@
         })
         this.goodsSimilarTree = goodsSimilarTree;
         console.log(goodsSimilarTree);
-        let selectedTypeList = this.getSelectedNodeList(this.skuId).map(_ => _.saleValue);
-        this.selectedTypeList = selectedTypeList;
+        this.selectedTypeList = this.getSelectedNodeList(this.skuId).map(_ => _.saleValue);
         this.$apply();
       }).catch((err) => {
         console.log(err);
@@ -834,30 +842,6 @@
     //   if (this.buyNumber > this.buyMax) {
     //     this.buyNumber = this.buyMax;
     //   }
-    // }
-    //
-    // onAddShoppingCar() {
-    //   if (this.targetGoodsList.length !== 1 || this.selectedList.some(x => x.lenth === 0)) {
-    //     Toast('请选择商品属性')
-    //     return
-    //   }
-    //   this.showLoading();
-    //   let buyInfo = {
-    //     'skuReqs': [
-    //       {
-    //         'num': this.buyNumber,
-    //         'skuId': this.selectedGoodsId
-    //       }
-    //     ],
-    //     'userId': 123
-    //   }
-    //   JNetworkMallCart.addCart(buyInfo).then(data => {
-    //     this.$router.push({name: 'MallCart'})
-    //     this.closeLoading();
-    //   }, err => {
-    //     console.log(err)
-    //     this.closeLoading();
-    //   })
     // }
     //
     // onBuy() {
