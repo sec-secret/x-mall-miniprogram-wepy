@@ -378,10 +378,12 @@
 
 
     <view class="goods-description">
-      <rich-text type="text" nodes="{{goodsExt.mobileDesc}}"></rich-text>
+      <!--<rich-text type="node" nodes="{{testRictText.nodes}}"></rich-text>-->
+      <view>{{testRictText}}</view>
       <!--<label wx:if="goodsExt.mobileDesc" v-html="goodsExt.mobileDesc">-->
       <!--</label>-->
     </view>
+
     <!--<view class="goods-param">-->
       <!--<label v-html="goodsExt.param"></label>-->
     <!--</view>-->
@@ -444,6 +446,8 @@
   import NetworkManagerGoods from '../../network/NetworkManagerGoods'
   import UnitTool from '@tool/UnitTool';
   import SetTool from '@tool/SetTool';
+  import TestRictText from '../../test.js';
+  import WxParse from '../../wxParse/wxParse'
   export default class GoodsDetail extends wepy.page {
     config = {
       navigationBarTitleText: '商品详情'
@@ -452,6 +456,7 @@
     }
 
     data = {
+      testRictText: '',
       isShowBuyPopArea: false,
       skuId: 0,
       goods: null,
@@ -635,6 +640,16 @@
       // this.fetchGoodsState();
       this.fetchGoodsDetail();
       this.fetchSimilarGoods();
+      // console.log(TestRictText.BODY);
+      let stationName = TestRictText.BODY.replace(/[\r\n]/g, '').substring(9);
+      console.log(stationName.length - 2)
+      stationName = stationName.substring(0, stationName.length - 1);
+      stationName = JSON.parse(stationName);
+      WxParse.wxParse('testRictText', 'html', '<div>just a test</div>', this)
+      console.log('*****************************************************');
+      // this.setData({'testRictText': 'asdasdasdasdasd'})
+      this.testRictText = 'asdasdasdasdas'
+      console.log(this.testRictText);
     }
 
     fetchCheckIsSale() {
