@@ -634,10 +634,10 @@
       // this.fetchGoodsState();
       this.fetchGoodsDetail();
       this.fetchSimilarGoods();
-      // console.log(TestRictText.BODY);
       let stationName = TestRictText.BODY.replace(/[\r\n]/g, '').substring(9);
       stationName = JSON.parse(stationName.substring(0, stationName.length - 1));
-      let aimTree = CPParse.parse(stationName.content)
+      let aimTree = CPParse.parse(stationName.content);
+      console.log(JSON.stringify(aimTree, ' ', ' '));
       this.testRictText = aimTree.children;
       this.$apply();
     }

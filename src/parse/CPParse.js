@@ -1,12 +1,16 @@
 import HtmlToJson from '../wxParse/html2json.js';
-import WxParse from '../wxParse/wxParse'
 import css2json from './css2json';
 export default class CPParse {
   static parse(nodeString){
-    let htmlTree = WxParse.wxParse('testRictText', 'html', nodeString, this)
+    let htmlTree = HtmlToJson.html2json(nodeString, '');
     // console.log(JSON.stringify(htmlTree, ' ', ' '));
     // console.log('*****************************************************');
     let cssMapObject = {};
+    /**
+     * 单个节点简化转换实施者
+     * @param tree 待转换节点
+     * @returns {*} 转换后的节点
+     */
     let simplifyBlock = (tree) => {
       let aimTree = {};
       if (tree.node === 'element' && tree.hasOwnProperty('tag')){
@@ -20,7 +24,7 @@ export default class CPParse {
               }
             }
             cssMapObject = _cssMapObject;
-            console.log(cssMapObject);
+            // console.log(cssMapObject);
           }
           return null;
         }
@@ -35,6 +39,11 @@ export default class CPParse {
       }
       return aimTree;
     }
+    /**
+     * 递归简化伪DOM树结构
+     * @param tree 当前源树的节点
+     * @param aimTree 当前目标树的节点
+     */
     let simplifyNodeTree = (tree, aimTree) => {
       if (tree.hasOwnProperty('nodes')){
         for (let i = 0; i < tree.nodes.length; i++){
@@ -51,7 +60,12 @@ export default class CPParse {
     }
     let aimTree = {};
     simplifyNodeTree(htmlTree, aimTree)
-
+    /**
+     * 样式匹配处理者
+     * @param classesList DOM节点到当前深度样式层级列表
+     * @param cssMapObject 所有样式映射对象
+     * @returns {{}}
+     */
     let matchSmartStyle = (classesList, cssMapObject) => {
       let style = {};
       let traverse = (coveredClesses, list, index) => {
@@ -77,6 +91,11 @@ export default class CPParse {
       traverse([], classesList, 0);
       return style;
     }
+    /**
+     * 递归对DOM节点进行'染色'
+     * @param tree 当前树节点
+     * @param parentClasses 所有父节点样式列表（某节点的样式为应用的class组成的列表）
+     */
     let applyClass2Style = (tree, ...parentClasses) => {
       let classList = [];
       if (tree.hasOwnProperty('classList')){
@@ -89,7 +108,6 @@ export default class CPParse {
         for (let key in styleObject){
           if (styleObject.hasOwnProperty(key)){
             styleString += `${key}: ${styleObject[key]};`;
-            // styleString += key + ':' + styleObject[key] + ';';
           }
         }
         tree['attrs'] = {
@@ -104,7 +122,6 @@ export default class CPParse {
       }
     }
     applyClass2Style(aimTree, []);
-    console.log(JSON.stringify(aimTree, ' ', ' '));
     return aimTree;
   }
 }
