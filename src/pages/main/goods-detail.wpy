@@ -1,6 +1,7 @@
 <style lang="scss">
   @import '../../assets/scss/index.scss';
   .mall-goods-detail {
+    padding-bottom: $tab-bar-height + 50rpx;
     .tabbar {
       background: $color-white;
       position: fixed;
@@ -440,7 +441,7 @@
   import UnitTool from '@tool/UnitTool';
   import SetTool from '@tool/SetTool';
   import TestRictText from '../../test.js';
-  import WxParse from '../../wxParse/wxParse'
+  import CPParse from '../../parse/CPParse'
   export default class GoodsDetail extends wepy.page {
     config = {
       navigationBarTitleText: '商品详情'
@@ -635,39 +636,10 @@
       this.fetchSimilarGoods();
       // console.log(TestRictText.BODY);
       let stationName = TestRictText.BODY.replace(/[\r\n]/g, '').substring(9);
-      stationName = stationName.substring(0, stationName.length - 1);
-      stationName = JSON.parse(stationName);
-      let htmlTree = WxParse.wxParse('testRictText', 'html', stationName.content, this)
-      console.log(JSON.stringify(htmlTree, ' ', ' '));
-      console.log('*****************************************************');
-      let simplifyBlock = (tree) => {
-        let aimTree = {};
-        if (tree.node === 'element' && tree.hasOwnProperty('tag')){
-          aimTree['name'] = tree.tag;
-        }
-        if (tree.node === 'text'){
-          aimTree['type'] = 'text';
-          aimTree['text'] = tree.text;
-        }
-        return aimTree;
-      }
-      let simplifyNodeTree = (tree, aimTree) => {
-        if (tree.hasOwnProperty('nodes')){
-          for (let i = 0; i < tree.nodes.length; i++){
-            if (!aimTree.hasOwnProperty('children')){
-              aimTree.children = [];
-            }
-            let child = simplifyBlock(tree.nodes[i]);
-            aimTree.children.push(child);
-            simplifyNodeTree(tree.nodes[i], child);
-          }
-        }
-      }
-      let aimTree = {};
-      simplifyNodeTree(htmlTree, aimTree)
+      stationName = JSON.parse(stationName.substring(0, stationName.length - 1));
+      let aimTree = CPParse.parse(stationName.content)
       this.testRictText = aimTree.children;
       this.$apply();
-      console.log(JSON.stringify(aimTree, ' ', ' '));
     }
 
     fetchCheckIsSale() {

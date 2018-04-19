@@ -131,6 +131,7 @@
         <item url="file://$PROJECT_DIR$/dist/dist/pages/other/other.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/pages/temp.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/parse/CPParse.js" />
+        <item url="file://$PROJECT_DIR$/dist/dist/parse/css2json.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/actions/index.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/actions/user.js" />
         <item url="file://$PROJECT_DIR$/dist/dist/store/index.js" />
@@ -149,6 +150,8 @@
         <item url="file://$PROJECT_DIR$/dist/dist/wxParse/wxParse.js" />
         <item url="file://$PROJECT_DIR$/dist/src/cpParse/CPParse.js" />
         <item url="file://$PROJECT_DIR$/dist/src/parse/CPParse.js" />
+        <item url="file://$PROJECT_DIR$/dist/src/parse/css2json.js" />
+        <item url="file://$PROJECT_DIR$/dist/src/parse/html2json.js" />
         <item url="file://$PROJECT_DIR$/dist/src/test.js" />
         <item url="file://$PROJECT_DIR$/dist/src/wxParse/html2json.js" />
         <item url="file://$PROJECT_DIR$/dist/src/wxParse/wxParse.js" />
@@ -284,6 +287,7 @@
       <root url="file://$PROJECT_DIR$/dist/dist/pages/other/other.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/pages/temp.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/parse/CPParse.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/parse/css2json.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/actions/index.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/actions/user.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/store/index.js" />
@@ -302,6 +306,8 @@
       <root url="file://$PROJECT_DIR$/dist/dist/wxParse/wxParse.js" />
       <root url="file://$PROJECT_DIR$/dist/src/cpParse/CPParse.js" />
       <root url="file://$PROJECT_DIR$/dist/src/parse/CPParse.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/parse/css2json.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/parse/html2json.js" />
       <root url="file://$PROJECT_DIR$/dist/src/test.js" />
       <root url="file://$PROJECT_DIR$/dist/src/wxParse/html2json.js" />
       <root url="file://$PROJECT_DIR$/dist/src/wxParse/wxParse.js" />
