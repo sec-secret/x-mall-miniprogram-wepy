@@ -103,6 +103,12 @@ export default class CPParse {
         classList = tree.classList;
         tree['parentClassList'] = [...parentClasses]
         let styleObject = matchSmartStyle([...parentClasses, classList], cssMapObject);
+        if (styleObject.hasOwnProperty('width')){
+          if (/.*px$/g.test(styleObject.width)){
+            console.log(styleObject);
+            styleObject.width = '100%'
+          }
+        }
         tree['smartStyle'] = styleObject;
         let styleString = '';
         for (let key in styleObject){
