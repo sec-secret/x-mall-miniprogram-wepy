@@ -33,7 +33,6 @@ function wxParse(bindName = 'wxParseData', type='html', data='<div class="color:
   var transData = {};//存放转化后的数据
   if (type == 'html') {
     transData = HtmlToJson.html2json(data, bindName);
-    console.log(JSON.stringify(transData, ' ', ' '));
   } else if (type == 'md' || type == 'markdown') {
     var converter = new showdown.Converter();
     var html = converter.makeHtml(data);
@@ -42,14 +41,15 @@ function wxParse(bindName = 'wxParseData', type='html', data='<div class="color:
   }
   transData.view = {};
   transData.view.imagePadding = 0;
-  if(typeof(imagePadding) != 'undefined'){
-    transData.view.imagePadding = imagePadding
-  }
-  var bindData = {};
-  bindData[bindName] = transData;
-  that.setData(bindData)
-  that.wxParseImgLoad = wxParseImgLoad;
-  that.wxParseImgTap = wxParseImgTap;
+  // if(typeof(imagePadding) != 'undefined'){
+  //   transData.view.imagePadding = imagePadding
+  // }
+  // var bindData = {};
+  // bindData[bindName] = transData;
+  // that.setData(bindData)
+  // that.wxParseImgLoad = wxParseImgLoad;
+  // that.wxParseImgTap = wxParseImgTap;
+  return transData;
 }
 // 图片点击事件
 function wxParseImgTap(e) {
