@@ -88,6 +88,11 @@
 
     onLaunch(options) {
       this.testAsync()
+      wepy.getSystemInfo({
+        success: function (object) {
+          console.log(object);
+        }
+      })
     }
 
     sleep (s) {

@@ -103,12 +103,32 @@ export default class CPParse {
         classList = tree.classList;
         tree['parentClassList'] = [...parentClasses]
         let styleObject = matchSmartStyle([...parentClasses, classList], cssMapObject);
-        if (styleObject.hasOwnProperty('width')){
-          if (/.*px$/g.test(styleObject.width)){
-            console.log(styleObject);
-            styleObject.width = '100%'
+
+        for (let key in styleObject){
+          if (styleObject.hasOwnProperty(key)){
+            if (/.*px$/g.test(styleObject[key])){
+                  let number = parseInt(styleObject[key].replace(/px/g, ''));
+              styleObject[key] = number * (320 / 640) + 'px';
+            }
           }
         }
+        // if (styleObject.hasOwnProperty('width')){
+        //   if (/.*px$/g.test(styleObject.width)){
+        //     styleObject.width = '320px'
+        //   }
+        // }
+        // if (styleObject.hasOwnProperty('height')){
+        //   if (/.*px$/g.test(styleObject.height)){
+        //     let height = parseInt(styleObject.height.replace(/px/g, ''));
+        //     console.log(height);
+        //     styleObject.height = height * (320 / 640) + 'px';
+        //   }
+        // }
+        // if (styleObject.hasOwnProperty('font-size')){
+        //     let fontSize = parseInt(styleObject['font-size'].replace(/px/g, ''));
+        //     console.log(fontSize);
+        //     styleObject['font-size'] = fontSize * (320 / 640) + 'px';
+        // }
         tree['smartStyle'] = styleObject;
         let styleString = '';
         for (let key in styleObject){

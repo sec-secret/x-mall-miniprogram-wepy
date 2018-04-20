@@ -188,6 +188,8 @@
       .description{
         background: #ff0000;
         width: 100%;
+        margin-left: 50rpx;
+        margin-right: 50rpx;
       }
     }
   }
@@ -440,7 +442,7 @@
   import NetworkManagerGoods from '../../network/NetworkManagerGoods'
   import UnitTool from '@tool/UnitTool';
   import SetTool from '@tool/SetTool';
-  import TestRictText from '../../test.js';
+  // import TestRictText from '../../test.js';
   import CPParse from '../../parse/CPParse'
   export default class GoodsDetail extends wepy.page {
     config = {
@@ -634,12 +636,9 @@
       // this.fetchGoodsState();
       this.fetchGoodsDetail();
       this.fetchSimilarGoods();
-      let stationName = TestRictText.BODY.replace(/[\r\n]/g, '').substring(9);
-      stationName = JSON.parse(stationName.substring(0, stationName.length - 1));
-      let aimTree = CPParse.parse(stationName.content);
-      console.log(JSON.stringify(aimTree, ' ', ' '));
-      this.testRictText = aimTree.children;
-      this.$apply();
+      // let stationName = TestRictText.BODY.replace(/[\r\n]/g, '').substring(9);
+      // stationName = JSON.parse(stationName.substring(0, stationName.length - 1));
+      // let aimTree = CPParse.parse(stationName.content);
     }
 
     fetchCheckIsSale() {
@@ -668,6 +667,11 @@
         this.fetchGoodsImages();
         this.$apply();
         // TODO: 描述富文本的格式化
+        let stationName = data.goodsExt.goodsDetailDesc;
+        let aimTree = CPParse.parse(stationName);
+        console.log(JSON.stringify(aimTree, ' ', ' '));
+        this.testRictText = aimTree.children;
+        this.$apply();
       }, error => {
         console.log(error);
         this.closeLoading()
