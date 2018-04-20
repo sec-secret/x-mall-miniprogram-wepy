@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" rel="stylesheet/scss">
   @import "../../assets/scss/constant.scss";
   .goods-cell {
     height: 100%;

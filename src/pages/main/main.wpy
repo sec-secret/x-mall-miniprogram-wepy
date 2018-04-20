@@ -1,11 +1,148 @@
-<style lang="scss">
+<style lang="scss" rel="stylesheet/scss">
   @import "../../assets/scss/index.scss";
+  .top-search {
+    @include flex-x-middle();
+    justify-content: center;
+    width: 100%;
+    padding-left: 30rpx;
+    padding-right: 30rpx;
+    height: 108rpx;
+    background-color: $xg-c-bg;
+    .search-input {
+      @include flex-x-middle();
+      justify-content: center;
+      width: 100%;
+      height: 78rpx;
+      background-color: #fff;
+      border-radius: 78rpx;
+      image {
+        width: 27rpx;
+        height: 31rpx;
+        margin-right: 10rpx;
+      }
+      text {
+        color: #999;
+        font-size: $xg-size-4;
+        font-weight: lighter;
+      }
+    }
+  }
   .banner{
     .banner-item{
       height: 320rpx;
       .image{
         width: 100%;
         height: 100%;
+      }
+    }
+  }
+  .tips {
+    background-color: #fff;
+    @include flex-x-middle();
+    @include flex-space-between();
+    padding: 0 30rpx;
+    height: 70rpx;
+    view {
+      font-size: $xg-size-2;
+      color: #000;
+      font-weight: lighter;
+      @include flex-x-middle();
+      image {
+        width: 26rpx;
+        height: 26rpx;
+        margin-right: 10rpx;
+      }
+    }
+  }
+  .categories {
+    @include clearfix();
+    padding: 40rpx 20rpx;
+    font-size: $xg-size-4;
+    view {
+      float: left;
+      width: 20%;
+      height: 150rpx;
+      @include flex-y-middle();
+      @include justify-content-center();
+      image {
+        width: 52rpx;
+        height: 52rpx;
+        margin-bottom: 12rpx;
+      }
+    }
+  }
+  .main-section {
+    background-color: $xg-c-white;
+    margin-bottom: 30rpx;
+    padding: 0 .1rem;
+    .title {
+      display: block;
+      text-align: center;
+      font-size: $xg-size-6;
+      color: $xg-c-black;
+      height: 120rpx;
+      line-height: 120rpx;
+    }
+    .recommend-content {
+      @include clearfix();
+      padding: 0 10rpx;
+      .goods-item {
+        float: left;
+        width: 50%;
+        padding: 20rpx 10rpx;
+        background: #fff;
+        image {
+          width: 100%;
+          height: auto;
+        }
+        .info {
+          height: 150rpx;
+          justify-content: center;
+          color: $xg-c-black;
+          font-size: $xg-size-3;
+          .mall-product-name {
+            @include ellipsis(2);
+            margin-top: 16rpx;
+            padding: 0 10rpx;
+            font-weight: lighter;
+          }
+          .price {
+            display: block;
+            font-weight: bold;
+            font-size: $xg-size-5;
+            margin-top: 10rpx;
+            padding: 0 10rpx;
+          }
+          .fenqi {
+            color: #999;
+            padding: 0 10rpx;
+            i {
+              font-weight: bold;
+              color: $xg-c-red;
+              font-size: $xg-size-4;
+            }
+          }
+        }
+      }
+    }
+
+    &.hot-recommend {
+      .recommend-item {
+        &:first-of-type {
+          width: 100%;
+        }
+      }
+    }
+    .go-more {
+      @include flex-center();
+      height: 116rpx;
+      border-top: 2px solid $xg-c-seg;
+      font-size: $xg-size-3;
+      color: #333;
+      font-weight: lighter;
+      image {
+        width: 16rpx;
+        margin-left: 16rpx;
       }
     }
   }
@@ -56,9 +193,14 @@
       }
     }
   }
-
 </style>
 <template>
+  <view class="top-search">
+    <view class="search-input">
+      <image src="./img/icon-search.png"></image>
+      <text>搜索商品，共99999款商品</text>
+    </view>
+  </view>
   <view class="main page">
     <swiper class="banner">
       <swiper-item key="index" class="banner-item">
@@ -66,47 +208,104 @@
         </image>
       </swiper-item>
     </swiper>
-
-    <view class="new-goods top-seg bottom-seg">
-      <view class="title-area flex-center-x bottom-seg">
-        <text>热门推荐</text>
-        <image class="icon ml2" src="/assets/main/round-right-arrow.png">
+    <view class="tips">
+      <view>
+        <image src="./img/blue-tip.png">
         </image>
+        <text>小呱自营假1赔3</text>
       </view>
-      <swiper class="swiper" display-multiple-items="3">
-        <repeat for="{{hotGoods}}"
-                key="index">
-          <swiper-item class="swiper-item">
-            <goods-cell :goods="item" @actionClickCell.user="actionClickHotGoods">
-            </goods-cell>
-          </swiper-item>
-        </repeat>
-      </swiper>
+      <view>
+        <image src="./img/blue-tip.png">
+        </image>
+        <text>7天无忧退货</text>
+      </view>
+      <view>
+        <image src="./img/blue-tip.png">
+        </image>
+        <text>次日快速送达</text>
+      </view>
     </view>
-    <view class="recommend-goods top-seg bottom-seg">
-      <view class="title-area flex-center-x bottom-seg">
-        <text>为您推荐</text>
-        <image class="icon ml2" src="/assets/main/round-right-arrow.png">
-        </image>
-      </view>
-      <repeat for="{{recommendGoods}}"
-              item="goods"
-              key="index">
-        <view class="recommend-item pl2 pr2 flex-y">
-          <view class="goods-user flex-middle-x">
-            <image class="icon" src="/assets/main/temp_nick_logo.png" alt="">
-            </image>
-            <label class="nick ml1">小呱君</label>
-          </view>
-          <view class="flex-middle-x flex-center-x">
-            <image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">
-            </image>
-          </view>
-          <label class="goods-name mall-product-name">{{goods.name}}</label>
-          <label class="goods-price">￥{{goods.price}}</label>
+    <view class="categories">
+      <repeat for="{{categories}}"
+              index="index"
+              item="cat">
+        <view>
+          <image src="{{cat.icon}}">
+          </image>
+          <text>{{cat.catName}}</text>
         </view>
       </repeat>
     </view>
+    <!--<view class="new-goods top-seg bottom-seg">-->
+      <!--<view class="title-area flex-center-x bottom-seg">-->
+        <!--<text>热门推荐</text>-->
+        <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
+        <!--</image>-->
+      <!--</view>-->
+      <repeat for="{{categoryGroup}}"
+              item="group"
+              index="index">
+        <view class="main-section">
+          <text class="title">{{group.category.catName}}</text>
+          <view class="recommend-content">
+            <repeat for="{{group.goods}}" item="goods">
+              <view class="goods-item">
+                <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
+                </image>
+                <view class="info">
+                  <text class="name mall-product-name">{{goods.name}}</text>
+                  <text class="price">￥{{goods.nbPrice}}</text>
+                  <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
+                </view>
+              </view>
+              <!--<goods-cell class="recommend-item"-->
+                          <!--@click.native="onClickGoods(goods)"-->
+                          <!--:key="index"-->
+                          <!--:goods="goods">-->
+              <!--</goods-cell>-->
+            </repeat>
+          </view>
+          <view class="go-more"
+               @tap="onClickCategory(group.category)">
+            <text>查看更多</text>
+            <image src="./img/black-right-arrow.png" mode="widthFix">
+          </view>
+        </view>
+      </repeat>
+      <!--<swiper class="swiper" display-multiple-items="3">-->
+        <!--<repeat for="{{hotGoods}}"-->
+                <!--key="index">-->
+          <!--<swiper-item class="swiper-item">-->
+            <!--<goods-cell :goods="item" @actionClickCell.user="actionClickHotGoods">-->
+            <!--</goods-cell>-->
+          <!--</swiper-item>-->
+        <!--</repeat>-->
+      <!--</swiper>-->
+
+    <!--<view class="recommend-goods top-seg bottom-seg">-->
+      <!--<view class="title-area flex-center-x bottom-seg">-->
+        <!--<text>为您推荐</text>-->
+        <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
+        <!--</image>-->
+      <!--</view>-->
+      <!--<repeat for="{{recommendGoods}}"-->
+              <!--item="goods"-->
+              <!--key="index">-->
+        <!--<view class="recommend-item pl2 pr2 flex-y">-->
+          <!--<view class="goods-user flex-middle-x">-->
+            <!--<image class="icon" src="/assets/main/temp_nick_logo.png" alt="">-->
+            <!--</image>-->
+            <!--<label class="nick ml1">小呱君</label>-->
+          <!--</view>-->
+          <!--<view class="flex-middle-x flex-center-x">-->
+            <!--<image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">-->
+            <!--</image>-->
+          <!--</view>-->
+          <!--<label class="goods-name mall-product-name">{{goods.name}}</label>-->
+          <!--<label class="goods-price">￥{{goods.price}}</label>-->
+        <!--</view>-->
+      <!--</repeat>-->
+    <!--</view>-->
   </view>
 </template>
 
@@ -121,7 +320,60 @@
     }
     data = {
       hotGoods: [],
-      recommendGoods: []
+      recommendGoods: [],
+      categories: [
+        {
+          catName: '服装',
+          icon: './img/icon-fuzhuang.png',
+          catId: 1315
+        },
+        {
+          catName: '母婴',
+          icon: './img/icon-muying.png',
+          catId: 1319
+        },
+        {
+          catName: '数码',
+          icon: './img/icon-shuma.png',
+          catId: 652
+        },
+        {
+          catName: '手机',
+          icon: './img/icon-shouji.png',
+          catId: 9987
+        },
+        {
+          catName: '美妆',
+          icon: './img/icon-meizhuang.png',
+          catId: 1316
+        },
+        {
+          catName: '个护',
+          icon: './img/icon-gehu.png',
+          catId: 1316
+        },
+        {
+          catName: '办公',
+          icon: './img/icon-bangong.png',
+          catId: 670
+        },
+        {
+          catName: '家电',
+          icon: './img/icon-jiadian.png',
+          catId: 737
+        },
+        {
+          catName: '食品',
+          icon: './img/icon-shipin.png',
+          catId: 1320
+        },
+        {
+          catName: '珠宝',
+          icon: './img/icon-zhubao.png',
+          catId: 6144
+        }
+      ],
+      categoryGroup: []
     }
 
     components = {
@@ -149,6 +401,7 @@
             price: UnitTool.formatFenPrice(_.nbPrice)
           }
         });
+        this.categoryGroup = data.hotCategoryAndGoodsResp.items;
         this.$apply();
       }, error => {
         console.log(error);

@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" rel="stylesheet/scss">
   @import './assets/scss/index.scss';
   .container {
     height: 100%;
@@ -7,11 +7,12 @@
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
+    font-size: $xg-size-4;
+    color: #333;
   }
-  .page {
-    background: #f6f6f6;
+  page {
     font-size: 30rpx;
-    color: $color-1;
+    background-color: $xg-c-bg;
   }
 </style>
 

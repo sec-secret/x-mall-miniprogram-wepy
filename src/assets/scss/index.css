@@ -146,3 +146,8 @@
   transform: translate(-50%, -50%); }
 
 /*# sourceMappingURL=index.css.map */
+view, form, input {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

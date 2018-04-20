@@ -2,3 +2,29 @@
 @import "./space.scss";
 @import "./flex.scss";
 @import "./other.scss";
+@import "./reset.scss";
+
+
+@mixin ellipsis($num: 1) {
+  display: -webkit-box;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-line-clamp: $num;
+  /* autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /* autoprefixer: on */
+}
+
+//清除浮动
+@mixin clearfix() {
+  &:after {
+    clear: both;
+    content: '';
+    display: block;
+    height: 0;
+    line-height: 0;
+    overflow: hidden;
+  }
+}
