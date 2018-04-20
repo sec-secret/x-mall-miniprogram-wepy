@@ -442,8 +442,9 @@
   import NetworkManagerGoods from '../../network/NetworkManagerGoods'
   import UnitTool from '@tool/UnitTool';
   import SetTool from '@tool/SetTool';
-  // import TestRictText from '../../test.js';
+  import EncodeTool from '../../tool/EncodeTool';
   import CPParse from '../../parse/CPParse'
+  import NetworkManager from '../../network/NetworkManager';
   export default class GoodsDetail extends wepy.page {
     config = {
       navigationBarTitleText: '商品详情'
@@ -667,11 +668,37 @@
         this.fetchGoodsImages();
         this.$apply();
         // TODO: 描述富文本的格式化
+
         let stationName = data.goodsExt.goodsDetailDesc;
-        let aimTree = CPParse.parse(stationName);
-        console.log(JSON.stringify(aimTree, ' ', ' '));
-        this.testRictText = aimTree.children;
-        this.$apply();
+        stationName = EncodeTool.reconvert(stationName);
+        let aimTree = CPParse.parseString(stationName);
+        let linkStyleList = [];
+        let traverse = (aimTree) => {
+          if (aimTree.name === 'link'){
+            // console.log(aimTree.href);
+            linkStyleList.push('http:' + aimTree.href);
+          }
+          if (aimTree.hasOwnProperty('children')){
+            for (let i = 0; i < aimTree.children.length; i++){
+              traverse(aimTree.children[i]);
+            }
+          }
+        };
+        traverse(aimTree);
+        Promise.all(linkStyleList.map((link) => {
+          return NetworkManager.instance().freedomGET(link)
+        })).then(cssStringList => {
+          let cssString = '';
+          cssStringList.forEach(cs => {
+            cssString += cs;
+          })
+          CPParse.applyCss2Node(aimTree, cssString);
+          this.testRictText = aimTree.children;
+          console.log(aimTree);
+          this.$apply();
+        }, error => {
+          console.log(error);
+        })
       }, error => {
         console.log(error);
         this.closeLoading()

@@ -35,7 +35,7 @@ export default class NetworkManager{
     return error;
   }
 
-  fetchRequest(method, baseUrl, url, parameters, headers, otherObject){
+  fetchRequest(method, baseUrl, url, parameters, headers, otherObject, isStandard){
     return new Promise((resolve, reject) => {
       wepy.request({
         method,
@@ -50,15 +50,19 @@ export default class NetworkManager{
         },
         success: function(res) {
           let responseJson = res.data;
-          if (!responseJson.errorCode) {
-            resolve(responseJson.data);
-          } else {
-            let errorCode = responseJson.errorCode;
-            if (errorCode === 10022) {
-              reject(NetworkManager.notLoginError(100022));
+          if (isStandard){
+            if (!responseJson.errorCode) {
+              resolve(responseJson.data);
             } else {
-              reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+              let errorCode = responseJson.errorCode;
+              if (errorCode === 10022) {
+                reject(NetworkManager.notLoginError(100022));
+              } else {
+                reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+              }
             }
+          } else {
+            resolve(responseJson);
           }
         },
         fail: function (error) {
@@ -69,15 +73,32 @@ export default class NetworkManager{
     })
   }
 
-  freedomPOST(baseUrl, url, parameters, headers, otherObject) {
-    return this.fetchRequest('POST', baseUrl, url, parameters, headers, otherObject);
+  freedomPOST(baseUrl, url, parameters, headers, otherObject, isStandard = false) {
+    return this.fetchRequest('POST', baseUrl, url, parameters, headers, otherObject, isStandard);
   }
 
   POST(url, parameters, headers, otherObject){
     return this.freedomPOST(this.baseUrl, url, {
-      ...this.getCarryData(),
-      ...parameters
-    }, headers, {timeout: this.timeout, ...otherObject})
+        ...this.getCarryData(),
+        ...parameters
+      },
+      headers,
+      {timeout: this.timeout, ...otherObject},
+      true)
+  }
+
+  freedomGET(baseUrl, url, parameters, headers, otherObject, isStandard = false){
+    return this.fetchRequest('GET', baseUrl, url, parameters, headers, otherObject, isStandard);
+  }
+
+  GET(url, parameters, headers, otherObject){
+    return this.freedomGET(this.baseUrl, url, {
+        ...this.getCarryData(),
+        ...parameters
+      },
+      headers,
+      {timeout: this.timeout, ...otherObject},
+      true)
   }
 
   getCarryData(){

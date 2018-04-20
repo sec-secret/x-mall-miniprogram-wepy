@@ -1,65 +1,37 @@
 import HtmlToJson from '../wxParse/html2json.js';
 import css2json from './css2json';
 export default class CPParse {
-  static parse(nodeString){
-    let htmlTree = HtmlToJson.html2json(nodeString, '');
-    // console.log(JSON.stringify(htmlTree, ' ', ' '));
-    // console.log('*****************************************************');
-    let cssMapObject = {};
-    /**
-     * 单个节点简化转换实施者
-     * @param tree 待转换节点
-     * @returns {*} 转换后的节点
-     */
-    let simplifyBlock = (tree) => {
-      let aimTree = {};
-      if (tree.node === 'element' && tree.hasOwnProperty('tag')){
-        if (tree.tag === 'style'){
-          if (tree.hasOwnProperty('nodes') && tree.nodes.length > 0){
-            let simpleCssMapObject = {...cssMapObject, ...css2json(tree.nodes[0].text)};
-            let _cssMapObject = {};
-            for (let key in simpleCssMapObject){
-              if (simpleCssMapObject.hasOwnProperty(key)){
-                _cssMapObject[key.replace(/\./g, '').split(' ').join('_')] = simpleCssMapObject[key];
-              }
-            }
-            cssMapObject = _cssMapObject;
-            // console.log(cssMapObject);
-          }
-          return null;
+  /**
+   * 使用特定方式解析css
+   * @param cssString css字符串
+   * @param keyNomenclature 解析命名法 0: 基本命名法 1: 驼峰命名法 2: 下划线命名法
+   * @returns {{}}
+   * @private
+   */
+  static parseCss(cssString, keyNomenclature = 0){
+    let simpleCssMapObject = css2json(cssString);
+    let _cssMapObject = {};
+    for (let key in simpleCssMapObject){
+      if (simpleCssMapObject.hasOwnProperty(key)){
+        let resultKey = key;
+        if (keyNomenclature === 1){
+          // TODO: 准备实现
         }
-        aimTree['name'] = tree.tag;
-      }
-      if (tree.node === 'text'){
-        aimTree['type'] = 'text';
-        aimTree['text'] = tree.text;
-      }
-      if (tree.hasOwnProperty('classStr')){
-        aimTree['classList'] = tree.classStr.split(' ');
-      }
-      return aimTree;
-    }
-    /**
-     * 递归简化伪DOM树结构
-     * @param tree 当前源树的节点
-     * @param aimTree 当前目标树的节点
-     */
-    let simplifyNodeTree = (tree, aimTree) => {
-      if (tree.hasOwnProperty('nodes')){
-        for (let i = 0; i < tree.nodes.length; i++){
-          if (!aimTree.hasOwnProperty('children')){
-            aimTree.children = [];
-          }
-          let child = simplifyBlock(tree.nodes[i]);
-          if (child){
-            aimTree.children.push(child);
-            simplifyNodeTree(tree.nodes[i], child);
-          }
+
+        if (keyNomenclature === 2){
+          resultKey = key.replace(/\./g, '').split(' ').join('_');
         }
+        _cssMapObject[resultKey] = simpleCssMapObject[key];
       }
     }
-    let aimTree = {};
-    simplifyNodeTree(htmlTree, aimTree)
+    return _cssMapObject;
+  }
+
+  static applyCss2Node(tree, cssMapObjectOrString){
+    let cssMapObject = cssMapObjectOrString;
+    if (typeof cssMapObjectOrString === 'string'){
+      cssMapObject = CPParse.parseCss(cssMapObjectOrString, 2);
+    }
     /**
      * 样式匹配处理者
      * @param classesList DOM节点到当前深度样式层级列表
@@ -90,7 +62,7 @@ export default class CPParse {
       }
       traverse([], classesList, 0);
       return style;
-    }
+    };
     /**
      * 递归对DOM节点进行'染色'
      * @param tree 当前树节点
@@ -107,28 +79,11 @@ export default class CPParse {
         for (let key in styleObject){
           if (styleObject.hasOwnProperty(key)){
             if (/.*px$/g.test(styleObject[key])){
-                  let number = parseInt(styleObject[key].replace(/px/g, ''));
+              let number = parseInt(styleObject[key].replace(/px/g, ''));
               styleObject[key] = number * (320 / 640) + 'px';
             }
           }
         }
-        // if (styleObject.hasOwnProperty('width')){
-        //   if (/.*px$/g.test(styleObject.width)){
-        //     styleObject.width = '320px'
-        //   }
-        // }
-        // if (styleObject.hasOwnProperty('height')){
-        //   if (/.*px$/g.test(styleObject.height)){
-        //     let height = parseInt(styleObject.height.replace(/px/g, ''));
-        //     console.log(height);
-        //     styleObject.height = height * (320 / 640) + 'px';
-        //   }
-        // }
-        // if (styleObject.hasOwnProperty('font-size')){
-        //     let fontSize = parseInt(styleObject['font-size'].replace(/px/g, ''));
-        //     console.log(fontSize);
-        //     styleObject['font-size'] = fontSize * (320 / 640) + 'px';
-        // }
         tree['smartStyle'] = styleObject;
         let styleString = '';
         for (let key in styleObject){
@@ -147,7 +102,79 @@ export default class CPParse {
         }
       }
     }
-    applyClass2Style(aimTree, []);
+    applyClass2Style(tree, []);
+  }
+
+  static parseString(nodeString, cssStyleString = ''){
+    let htmlTree = HtmlToJson.html2json(nodeString, '');
+    console.log(JSON.stringify(htmlTree, ' ', ' '));
+    console.log('*****************************************************');
+    let cssMapObject = {};
+    if (cssStyleString && cssStyleString !== ''){
+      cssMapObject = {...cssMapObject, ...CPParse.parseCss(cssStyleString, 2)};
+    }
+    let aimTree = {};
+    CPParse._simplifyNodeTree(htmlTree, aimTree, styleString => {
+      cssMapObject = {...cssMapObject, ...CPParse.parseCss(styleString, 2)};
+    })
+    CPParse.applyCss2Node(aimTree, cssMapObject);
     return aimTree;
+  }
+
+  /**
+   * 单个节点简化转换实施者
+   * @param tree 待转换节点
+   * @returns {*} 转换后的节点
+   */
+  static _simplifyBlock(tree){
+    let aimTree = {};
+    if (tree.node === 'element' && tree.hasOwnProperty('tag')){
+      if (tree.tag === 'style'){
+        if (tree.hasOwnProperty('nodes') && tree.nodes.length > 0){
+          let text = '';
+          tree.nodes.forEach(styleEle => {
+            text += styleEle.text;
+          })
+          aimTree['text'] = text;
+          // console.log(cssMapObject);
+        }
+        return null;
+      }
+      if (tree.tag === 'link'){
+        aimTree['href'] = tree.attr.href
+      }
+      aimTree['name'] = tree.tag;
+    }
+    if (tree.node === 'text'){
+      aimTree['type'] = 'text';
+      aimTree['text'] = tree.text;
+    }
+    if (tree.hasOwnProperty('classStr')){
+      aimTree['classList'] = tree.classStr.split(' ');
+    }
+    return aimTree;
+  }
+
+  /**
+   * 递归简化伪DOM树结构
+   * @param tree 当前源树的节点
+   * @param aimTree 当前目标树的节点
+   */
+  static _simplifyNodeTree(tree, aimTree, styleStringCallback){
+    if (tree.hasOwnProperty('nodes')){
+      for (let i = 0; i < tree.nodes.length; i++){
+        if (!aimTree.hasOwnProperty('children')){
+          aimTree.children = [];
+        }
+        let child = CPParse._simplifyBlock(tree.nodes[i]);
+        if (child){
+          if (styleStringCallback && child.name === 'style'){
+            styleStringCallback(child.text);
+          }
+          aimTree.children.push(child);
+          CPParse._simplifyNodeTree(tree.nodes[i], child);
+        }
+      }
+    }
   }
 }
