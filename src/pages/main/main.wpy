@@ -249,7 +249,7 @@
           <text class="title">{{group.category.catName}}</text>
           <view class="recommend-content">
             <repeat for="{{group.goods}}" item="goods">
-              <view class="goods-item">
+              <view class="goods-item" @tap="actionClickHotGoods({{goods}})">
                 <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
                 </image>
                 <view class="info">

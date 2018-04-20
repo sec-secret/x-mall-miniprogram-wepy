@@ -34,8 +34,8 @@
     config = {
       pages: [
         // 'pages/other/other',
-        'pages/main/goods-detail',
         'pages/main/main',
+        'pages/main/goods-detail',
         'pages/category/category',
         'pages/cart/cart',
         'pages/mine/mine'
