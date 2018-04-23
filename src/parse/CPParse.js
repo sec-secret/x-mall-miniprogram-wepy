@@ -159,6 +159,7 @@ export default class CPParse {
    * 递归简化伪DOM树结构
    * @param tree 当前源树的节点
    * @param aimTree 当前目标树的节点
+   * @param styleStringCallback style标签回调
    */
   static _simplifyNodeTree(tree, aimTree, styleStringCallback){
     if (tree.hasOwnProperty('nodes')){
