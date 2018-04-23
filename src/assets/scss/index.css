@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .ml0 {
   margin-left: 0; }
 
@@ -145,9 +146,16 @@
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); }
 
-/*# sourceMappingURL=index.css.map */
-view, form, input {
+/*
+页面原有格式重置
+*/
+view {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
+
+/*img{*/
+/*display: block;*/
+/*}*/
+
+/*# sourceMappingURL=index.css.map */
