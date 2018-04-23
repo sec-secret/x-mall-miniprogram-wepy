@@ -107,8 +107,8 @@ export default class CPParse {
 
   static parseString(nodeString, cssStyleString = ''){
     let htmlTree = HtmlToJson.html2json(nodeString, '');
-    console.log(JSON.stringify(htmlTree, ' ', ' '));
-    console.log('*****************************************************');
+    // console.log(JSON.stringify(htmlTree, ' ', ' '));
+    // console.log('*****************************************************');
     let cssMapObject = {};
     if (cssStyleString && cssStyleString !== ''){
       cssMapObject = {...cssMapObject, ...CPParse.parseCss(cssStyleString, 2)};
