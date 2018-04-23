@@ -33,11 +33,12 @@
     config = {
       pages: [
         // 'pages/other/other',
-        'pages/main/goods-detail',
         'pages/main/main',
+        'pages/category/category-detail',
+        'pages/main/goods-detail',
         'pages/category/category',
         'pages/cart/cart',
-        'pages/mine/mine'
+        'pages/mine/mine',
       ],
       window: {
         backgroundTextStyle: 'light',
@@ -46,13 +47,13 @@
         navigationBarTextStyle: 'black'
       },
       tabBar: {
-        color: '#a9b7b7',
-        selectedColor: '#FF9900',
+        color: 'rgb(6, 6, 6)',
+        selectedColor: '#6da3fd',
         borderStyle: 'black',
         list: [
           {
-            selectedIconPath: 'assets/main/main-ed.png',
-            iconPath: 'assets/main/main.png',
+            selectedIconPath: 'assets/main/home-ed.png',
+            iconPath: 'assets/main/home.png',
             pagePath: 'pages/main/main',
             text: '首页'
           },
@@ -69,8 +70,8 @@
             text: '购物车'
           },
           {
-            selectedIconPath: 'assets/main/mine-ed.png',
-            iconPath: 'assets/main/mine.png',
+            selectedIconPath: 'assets/main/user-ed.png',
+            iconPath: 'assets/main/user.png',
             pagePath: 'pages/mine/mine',
             text: '我的'
           }

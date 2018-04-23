@@ -1,0 +1,199 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .category-area {
+    z-index: 10;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100rpx;
+    background-color: #fff;
+    width: 100%;
+    white-space: nowrap;
+    padding: 0 10rpx;
+    @include flex-x-middle();
+    view {
+      height: 100rpx;
+      line-height: 100rpx;
+      padding: 0 20rpx;
+      display: inline-block;
+      font-size: $xg-size-5;
+    }
+    .active {
+      border-bottom: 2px solid $xg-c-red;
+      color: $xg-c-red;
+    }
+  }
+
+  .goods-area {
+    padding: 100rpx 15rpx 0 15rpx;
+    background-color: #fff;
+    height: 100vh;
+    .goods-item {
+      float: left;
+      width: 50%;
+      padding: 20rpx 10rpx;
+      background: #fff;
+      /*&:first-of-type {*/
+      /*width: ;*/
+      /*}*/
+      image {
+        width: 100%;
+        height: auto;
+      }
+      .info {
+        height: 150rpx;
+        justify-content: center;
+        color: $xg-c-black;
+        font-size: $xg-size-3;
+        .mall-product-name {
+          @include ellipsis(2);
+          margin-top: 16rpx;
+          padding: 0 10rpx;
+          font-weight: lighter;
+        }
+        .price {
+          display: block;
+          font-weight: bold;
+          font-size: $xg-size-5;
+          margin-top: 10rpx;
+          padding: 0 10rpx;
+        }
+        .fenqi {
+          color: #999;
+          padding: 0 10rpx;
+          i {
+            font-weight: bold;
+            color: $xg-c-red;
+            font-size: $xg-size-4;
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <wxs src="../main/wxs/main.wxs" module="mainwxs"></wxs>
+  <view class="mall-category-detail">
+    <scroll-view class="category-area" scroll-x="true">
+      <repeat for="{{categoryList}}">
+        <view class="category-item"
+              :class="{'active': index === selectedIndex}"
+              @tap="actionClickCategory({{item}}, {{index}})">
+          {{item.catName}}
+        </view>
+      </repeat>
+    </scroll-view>
+    <scroll-view class="goods-area" scroll-y="true" bindscrolltolower="loadMore" scroll-top="{{scrollTop}}">
+      <repeat for="{{goodsList}}" item="goods">
+        <view class="goods-item" @tap="onClickGoods({{goods}})">
+          <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
+          </image>
+          <view class="info">
+            <text class="name mall-product-name">{{goods.name}}</text>
+            <text class="price">￥{{mainwxs.formatFenPrice(goods.nbPrice)}}</text>
+            <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
+          </view>
+        </view>
+      </repeat>
+    </scroll-view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerCategory from '../../network/NetworkManagerCategory';
+  import NetworkManagerGoods from '../../network/NetworkManagerGoods'
+  export default class CategoryDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '类别'
+    }
+
+    data = {
+      categoryList: [],
+      category: {},
+      selectedIndex: 0,
+      goodsList: [],
+      lastKey: '',
+      loading: true,
+      catId: '',
+      getBottom: false
+    }
+
+    computed = {}
+
+    methods = {
+      actionClickCategory(cate, index) {
+        this.catId = cate.catId;
+        this.selectedIndex = index;
+        this.lastKey = '';
+        this.goodsList = [];
+        this.$apply();
+        NetworkManagerGoods.goodsList(this.catId, this.lastKey)
+          .then(data => {
+            this.goodsList = data.goods;
+            this.lastKey = data.lastKey;
+            this.$apply();
+          }, err => {
+            console.log(err);
+          })
+      },
+      onClickGoods(goods) {
+        /* eslint-disable */
+        wx.navigateTo({
+          url: '/pages/main/goods-detail?skuId=' + goods.skuId
+        })
+        /* eslint-enable */
+      },
+      loadMore() {
+        if (this.getBottom) {
+          return
+        }
+        NetworkManagerGoods.goodsList(this.catId, this.lastKey)
+          .then(data => {
+            this.getBottom = data.goods.length === 0;
+            if (this.getBottom) {
+              return
+            }
+            this.goodsList = this.goodsList.concat(data.goods);
+            this.lastKey = data.lastKey;
+            this.$apply();
+          }, err => {
+            console.log(err);
+          })
+      }
+//      fetchGoodsList(catId, lastKey) {
+//        NetworkMallHome.mallGoodsList(catId, lastKey).then(data => {
+//          this.goodsList = data.goods;
+//          this.lastKey = data.lastKey;
+//          this.$nextTick(() => {
+//            this.loading = data.goods.length === 0;
+//            this.closeLoading();
+//          })
+//        }, error => {
+//          this.closeLoading();
+//          console.log(error);
+//        });
+//      }
+    }
+
+    onLoad(option) {
+        this.catId = option.catId;
+      NetworkManagerCategory.secondCategories(this.catId).then(data => {
+        this.categoryList = data;
+        this.catId = data[0].catId;
+        this.$apply();
+        NetworkManagerGoods.goodsList(this.catId, this.lastKey)
+          .then(data => {
+            this.goodsList = data.goods;
+            this.lastKey = data.lastKey;
+            this.$apply();
+          }, err => {
+            console.log(err);
+          })
+      }, error => {
+        console.log(error);
+      })
+      console.log(option);
+    }
+  }
+</script>

@@ -6,7 +6,7 @@
     width: 100%;
     padding-left: 30rpx;
     padding-right: 30rpx;
-    height: 108rpx;
+    height: 118rpx;
     background-color: $xg-c-bg;
     .search-input {
       @include flex-x-middle();
@@ -383,10 +383,6 @@
       ],
       categoryGroup: []
     }
-
-//    wxs = {
-//      m1: mainwxs
-//    }
 
     components = {
       'goods-cell': GoodsCell

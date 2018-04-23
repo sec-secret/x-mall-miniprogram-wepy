@@ -1,6 +1,9 @@
 import NetworkManager from './NetworkManager';
 
 export default class NetworkManagerGoods extends NetworkManager{
+  static goodsList(catId, lastKey) {
+    return this.instance().POST('/goods/skus', {catId, lastKey})
+  }
   static goodsDetail(skuId) {
     return this.instance().POST('/goods/getDetail', {skuId});
   }

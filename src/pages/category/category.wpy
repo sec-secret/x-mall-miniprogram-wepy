@@ -1,43 +1,50 @@
-<style lang="scss">
+<style lang="scss" rel="stylesheet/scss">
   @import "../../assets/scss/index.scss";
   .category{
     height: 100vh;
-    .search-area{
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+    .top-search {
+      @include flex-x-middle();
+      justify-content: center;
       width: 100%;
-      background: #fff;
-      height: 100rpx;
-      .input{
+      padding-left: 30rpx;
+      padding-right: 30rpx;
+      height: 118rpx;
+      background-color: $xg-c-bg;
+      .search-input {
+        @include flex-x-middle();
+        justify-content: center;
         width: 100%;
-        background: #f6f6f6;
-        height: 80rpx;
-        border-radius: 40rpx;
-        padding-left: 30rpx;
-        padding-right: 30rpx;
-        margin-left: 50rpx;
-        margin-right: 50rpx;
+        height: 78rpx;
+        background-color: #fff;
+        border-radius: 78rpx;
+        image {
+          width: 27rpx;
+          height: 31rpx;
+          margin-right: 10rpx;
+        }
+        text {
+          color: #999;
+          font-size: $xg-size-4;
+          font-weight: lighter;
+        }
       }
     }
     .content-area{
       height: 100%;
-      margin-top: 98rpx;
+      background-color: #ffffff;
+      @include flex-x();
       .menu-area{
-        width: 200rpx;
-        background: $color-seg;
+        width: 162rpx;
+        background: #fff;
         .menu-item{
           width: 100%;
           height: 100rpx;
           line-height: 100rpx;
           text-align: center;
-          background: #fff;
-          font-size: 30rpx;
-          margin-top: 4rpx;
+          color: #333;
         }
         .active{
-          background: $color-seg;
+         color: $xg-c-blue;
         }
       }
       ::-webkit-scrollbar{
@@ -46,38 +53,33 @@
         color: transparent;
       }
       .category-area{
-        margin-left: 20rpx;
-        margin-right: 20rpx;
         flex: 1;
-        .banner{
-          width: 100%;
-          height: 300rpx;
+        .banner-wrapper {
+          padding: 30rpx;
+          .banner{
+            width: 100%;
+          }
         }
         .title{
-          margin-top: 30rpx;
+          margin-top: 10rpx;
+          height: 100rpx;
           text-align: center;
-          .line{
-            height: 1px;
-            width: 130rpx;
-            background: $color-seg;
-          }
           .name{
-            font-size: $size-5;
             margin: 0 50rpx;
           }
         }
         .second-category-area{
           flex-wrap: wrap;
-          padding-bottom: 10rpx;
+          padding-bottom: 100rpx;
           .second-category-item{
             width: 33.33%;
-            margin-top: 50rpx;
+            margin-top: 30rpx;
             .icon{
-              width: 100rpx;
-              height: 100rpx;
+              width: 120rpx;
+              height: 120rpx;
             }
             .name{
-              font-size: $size-4;
+              color: #333;
               margin-top: 20rpx;
               height: 80rpx;
               line-height: 40rpx;
@@ -90,11 +92,13 @@
 </style>
 <template>
   <view class="category page flex-y">
-    <view class="search-area flex-center-x">
-      <input class="input" placeholder="请输入关键字">
-      </input>
+    <view class="top-search">
+      <view class="search-input">
+        <image src="./img/icon-search.png"></image>
+        <text>搜索商品，共99999款商品</text>
+      </view>
     </view>
-    <view class="content-area flex-x">
+    <view class="content-area">
       <scroll-view class="menu-area flex-y"
                    scroll-y="true">
         <repeat for="{{categoryList}}"
@@ -108,19 +112,19 @@
       </scroll-view>
       <scroll-view class="category-area flex-y"
                    scroll-y="true">
-        <image class="banner" src="/assets/main/temp_category_banner.png" alt="">
+        <view class="banner-wrapper">
+        <image class="banner" src="/assets/main/temp_category_banner.png" mode="widthFix">
         </image>
+        </view>
         <view class="title flex-center-x">
-          <label class="line"></label>
-          <label class="name">推荐区分类</label>
-          <label class="line"></label>
+          <label class="name">{{categoryList[selectedMenuIndex].catName}}</label>
         </view>
         <view class="second-category-area flex-x">
           <repeat for="{{secondCategoryList}}"
                   item="category">
             <view class="second-category-item flex-center-y"
-                  @tap="actionClickSecondCategory">
-              <image class="icon" src="/assets/main/temp_category_icon.png" alt="">
+                  @tap="onTapSecondCategory({{category}})">
+              <image class="icon" src="{{category.catImg}}" alt="">
               </image>
               <label class="name mall-tow-line-text">{{category.catName}}</label>
             </view>
@@ -158,8 +162,13 @@
         let item = this.data.categoryList[index];
         this.fetchSecondCategories(item.catId);
       },
-      actionClickSecondCategory(category){
+      onTapSecondCategory(category){
         console.log(category)
+        /* eslint-disable */
+        wx.navigateTo({
+          url: 'category-detail?catId=' + category.catId
+        })
+        /* eslint-enable */
       }
     }
 
