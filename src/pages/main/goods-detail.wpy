@@ -54,124 +54,80 @@
       .page-number {
         background: rgba(0, 0, 0, 0.4);
         position: absolute;
-        width: 80rpx;
-        height: 80rpx;
-        line-height: 80rpx;
-        border-radius: 40rpx;
         text-align: center;
-        right: 80rpx;
-        bottom: 50rpx;
         z-index: 2;
-        color: $color-white;
+        height: 32rpx;
+        line-height: 32rpx;
+        border-radius: 40rpx;
+        right: 30rpx;
+        bottom: 30rpx;
+        color: #ffffff;
+        font-size: $xg-size-1;
+        padding-left: 15rpx;
+        padding-right: 15rpx
       }
     }
 
     .goods-info {
       background: $color-white;
-      padding: 30rpx 30rpx;
+      padding: 50rpx 30rpx;
       .name {
-        line-height: 25rpx;
-        font-size: $size-6;
-        font-weight: 500;
+        font-size:  $xg-size-8;
       }
       .description {
         max-width: 100%;
+        font-size: $xg-size-4;
+        color: #999;
+        margin-top: 20rpx;
       }
       .price {
-        font-size: $size-7;
+        font-size: 24px;
+        margin-top: 30rpx;
+        @include flex-x-middle();
         .new {
-          color: $color-red;
+          color: $xg-c-red;
           font-weight: bold;
         }
-        .old {
-          color: $color-3;
-          font-weight: 500;
-          text-decoration: line-through;
-        }
       }
     }
-
     .service-info {
-      margin-top: 10rpx;
-      background: $color-white;
+      margin-top: 20rpx;
+      background: #fff;
       .title-item {
         height: 100rpx;
-        .title {
-          flex: 1;
-        }
+        @include flex-x-middle();
+        @include flex-justify-content_space-between();
+        padding: 0 30rpx;
+        border-bottom: 1px solid #eeeded;
         .icon {
-          width: 20rpx;
-          height: 30rpx;
+          width: 6rpx;
         }
       }
-      .content-item {
-        padding-bottom: 20rpx;
-        padding-top: 20rpx;
-        .title {
-          height: 50rpx;
-          line-height: 50rpx;
-        }
-        .content {
-          flex: 1;
-          .item {
-            display: inline-flex;
-            align-items: center;
-            height: 50rpx;
-            line-height: 50rpx;
-            .point {
-              width: 10rpx;
-              height: 10rpx;
-              background: $color-orange;
-              border-radius: 5rpx;
-            }
-            .name {
-              font-size: $size-4;
-              color: $color-3;
-            }
+      .service-section {
+        padding: 20rpx 30rpx 40rpx 30rpx;
+        position: relative;
+        @include flex-x();
+        flex-wrap: wrap;
+        view {
+          @include flex-x-middle();
+          font-size: $xg-size-3;
+          color: #666;
+          margin-top: 20rpx;
+          margin-right: 40rpx;
+          image {
+            width: 22rpx;
+            margin-right: 10rpx;
           }
+        }
+        .right-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-6rpx);
+          right: 30rpx;
+          width: 6rpx;
         }
       }
     }
-    .comment-area {
-      margin-top: 10rpx;
-      background: $color-white;
-      .title-item {
-        height: 100rpx;
-        .title {
-          flex: 1;
-        }
-        .icon {
-          width: 20rpx;
-        }
-      }
-      .content-item {
-        .user {
-          height: 100rpx;
-          .icon {
-            width: 60rpx;
-          }
-          .nick {
-            margin-left: 20rpx;
-          }
-          .level {
-            margin-left: 5rpx;
-            height: 30rpx;
-          }
-          .grade {
-            margin-left: 10rpx;
-          }
-        }
-        .custom {
-          line-height: 60rpx;
-          color: $color-3;
-        }
-        .comment {
-          line-height: 60rpx;
-          font-weight: 500;
-        }
-      }
-    }
-
     .detailimg-area {
       display: block;
       width: 100%;
@@ -354,24 +310,23 @@
     </view>
 
     <view class="service-info">
-      <view class="title-item bottom-seg flex-middle-x pl2 pr2">
-        <label class="title" @tap="showSelect=!showSelect">规格数量选择</label>
-        <image class="icon" src="./img/right-arrow.png">
+      <view wx:if="isSale" class="title-item" @tap="actionClickShowPopArea">
+        <view class="title">规格数量选择</view>
+        <image class="icon" src="./img/jiantou3.png" mode="widthFix">
         </image>
       </view>
-      <view class="content-item flex-x pl2 pr2">
-        <label class="title">服务</label>
-        <view class="content ml2">
-          <repeat for="{{serviceItems}}">
-            <view class="item ml2">
-              <label class="point"></label>
-              <label class="name ml2">{{item}}</label>
-            </view>
+      <view class="service-section">
+        <repeat for="{{serviceItems}}">
+          <view>
+            <image src="./img/fuwugouxuan.png" mode="widthFix">
+            </image>
+            <span class="name">{{item}}</span>
+          </view>
           </repeat>
-        </view>
+        <image class="right-arrow" src="./img/jiantou3.png" mode="widthFix">
+        </image>
       </view>
     </view>
-
 
     <view class="goods-description">
       <rich-text class="description" type="node" nodes="{{testRictText}}"></rich-text>
@@ -461,10 +416,10 @@
       goodsImageList: [],
       goodsImageIndex: 0,
       serviceItems: [
-        '30天无忧退换货',
-        '48小时快速退款',
+        '小呱自营假1赔3',
+        '7天无忧退货',
+        '次日快速送达',
         '满88元免邮费',
-        '小呱自营品牌',
         '国内部分地区不配送'
       ],
       imageHeader: {},
@@ -473,7 +428,8 @@
       originGoodsPrice: 0,
       selectedTypeList: ['CK one', '50ml'],
       goodsCount: 1,
-      goodsInventory: Number.MAX_VALUE
+      goodsInventory: Number.MAX_VALUE,
+      isSale: true
     }
 
     computed = {
@@ -632,7 +588,7 @@
     }
 
     onLoad(options) {
-      this.skuId = 207897;
+      this.skuId = 3553539;
       // this.fetchCheckIsSale();
       // this.fetchGoodsState();
       this.fetchGoodsDetail();

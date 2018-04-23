@@ -6,15 +6,12 @@
 
 
 @mixin ellipsis($num: 1) {
-  display: -webkit-box;
-  word-break: break-all;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box ;
   overflow: hidden;
-  -webkit-line-clamp: $num;
-  /* autoprefixer: off */
+  text-overflow: ellipsis;
+  word-break: break-all;
   -webkit-box-orient: vertical;
-  /* autoprefixer: on */
+  -webkit-line-clamp: $num;
 }
 
 //清除浮动

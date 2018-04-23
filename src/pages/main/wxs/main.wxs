@@ -1,0 +1,8 @@
+module.exports = {
+  formatPrice: function(price) {
+    return Number(price).toFixed(2)
+  },
+  formatFenPrice: function(price){
+    return Number(price / 100).toFixed(2)
+  }
+};

@@ -86,11 +86,17 @@
     .recommend-content {
       @include clearfix();
       padding: 0 10rpx;
+      .goods-item:first-of-type {
+        width: 100%;
+      }
       .goods-item {
         float: left;
         width: 50%;
         padding: 20rpx 10rpx;
         background: #fff;
+        /*&:first-of-type {*/
+          /*width: ;*/
+        /*}*/
         image {
           width: 100%;
           height: auto;
@@ -195,6 +201,7 @@
   }
 </style>
 <template>
+  <wxs src="./wxs/main.wxs" module="mainwxs"/>
   <view class="top-search">
     <view class="search-input">
       <image src="./img/icon-search.png"></image>
@@ -254,7 +261,7 @@
                 </image>
                 <view class="info">
                   <text class="name mall-product-name">{{goods.name}}</text>
-                  <text class="price">￥{{goods.nbPrice}}</text>
+                  <text class="price">￥{{mainwxs.formatFenPrice(goods.nbPrice)}}</text>
                   <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
                 </view>
               </view>
@@ -312,12 +319,13 @@
 <script>
   import wepy from 'wepy'
   import NetworkManagerMain from '../../network/NetworkManagerMain';
-  import UnitTool from '../../tool/UnitTool';
   import GoodsCell from '@/components/widget/goods-cell';
+  import mainwxs from './wxs/main.wxs'
   export default class Main extends wepy.page {
     config = {
       navigationBarTitleText: '首页'
     }
+
     data = {
       hotGoods: [],
       recommendGoods: [],
@@ -375,6 +383,10 @@
       ],
       categoryGroup: []
     }
+
+//    wxs = {
+//      m1: mainwxs
+//    }
 
     components = {
       'goods-cell': GoodsCell
