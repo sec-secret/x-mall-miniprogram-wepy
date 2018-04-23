@@ -201,7 +201,7 @@
       <text>搜索商品，共99999款商品</text>
     </view>
   </view>
-  <view class="main page">
+  <view class="main page" @touchmove="actionTouchCategoryStart">
     <swiper class="banner">
       <swiper-item key="index" class="banner-item">
         <image class="image" src="/assets/main/temp_banner.png">
@@ -237,74 +237,74 @@
       </repeat>
     </view>
     <!--<view class="new-goods top-seg bottom-seg">-->
-      <!--<view class="title-area flex-center-x bottom-seg">-->
-        <!--<text>热门推荐</text>-->
-        <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
-        <!--</image>-->
-      <!--</view>-->
-      <repeat for="{{categoryGroup}}"
-              item="group"
-              index="index">
-        <view class="main-section">
-          <text class="title">{{group.category.catName}}</text>
-          <view class="recommend-content">
-            <repeat for="{{group.goods}}" item="goods">
-              <view class="goods-item" @tap="actionClickHotGoods({{goods}})">
-                <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
-                </image>
-                <view class="info">
-                  <text class="name mall-product-name">{{goods.name}}</text>
-                  <text class="price">￥{{goods.nbPrice}}</text>
-                  <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
-                </view>
+    <!--<view class="title-area flex-center-x bottom-seg">-->
+    <!--<text>热门推荐</text>-->
+    <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
+    <!--</image>-->
+    <!--</view>-->
+    <repeat for="{{categoryGroup}}"
+            item="group"
+            index="index">
+      <view class="main-section">
+        <text class="title">{{group.category.catName}}</text>
+        <view class="recommend-content">
+          <repeat for="{{group.goods}}" item="goods">
+            <view class="goods-item" @tap="actionClickHotGoods({{goods}})">
+              <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
+              </image>
+              <view class="info">
+                <text class="name mall-product-name">{{goods.name}}</text>
+                <text class="price">￥{{goods.nbPrice}}</text>
+                <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
               </view>
-              <!--<goods-cell class="recommend-item"-->
-                          <!--@click.native="onClickGoods(goods)"-->
-                          <!--:key="index"-->
-                          <!--:goods="goods">-->
-              <!--</goods-cell>-->
-            </repeat>
-          </view>
-          <view class="go-more"
-               @tap="onClickCategory(group.category)">
-            <text>查看更多</text>
-            <image src="./img/black-right-arrow.png" mode="widthFix">
-          </view>
-        </view>
-      </repeat>
-      <!--<swiper class="swiper" display-multiple-items="3">-->
-        <!--<repeat for="{{hotGoods}}"-->
-                <!--key="index">-->
-          <!--<swiper-item class="swiper-item">-->
-            <!--<goods-cell :goods="item" @actionClickCell.user="actionClickHotGoods">-->
+            </view>
+            <!--<goods-cell class="recommend-item"-->
+            <!--@click.native="onClickGoods(goods)"-->
+            <!--:key="index"-->
+            <!--:goods="goods">-->
             <!--</goods-cell>-->
-          <!--</swiper-item>-->
-        <!--</repeat>-->
-      <!--</swiper>-->
+          </repeat>
+        </view>
+        <view class="go-more"
+              @tap="onClickCategory(group.category)">
+          <text>查看更多</text>
+          <image src="./img/black-right-arrow.png" mode="widthFix"></image>
+        </view>
+      </view>
+    </repeat>
+    <!--<swiper class="swiper" display-multiple-items="3">-->
+    <!--<repeat for="{{hotGoods}}"-->
+    <!--key="index">-->
+    <!--<swiper-item class="swiper-item">-->
+    <!--<goods-cell :goods="item" @actionClickCell.user="actionClickHotGoods">-->
+    <!--</goods-cell>-->
+    <!--</swiper-item>-->
+    <!--</repeat>-->
+    <!--</swiper>-->
 
     <!--<view class="recommend-goods top-seg bottom-seg">-->
-      <!--<view class="title-area flex-center-x bottom-seg">-->
-        <!--<text>为您推荐</text>-->
-        <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
-        <!--</image>-->
-      <!--</view>-->
-      <!--<repeat for="{{recommendGoods}}"-->
-              <!--item="goods"-->
-              <!--key="index">-->
-        <!--<view class="recommend-item pl2 pr2 flex-y">-->
-          <!--<view class="goods-user flex-middle-x">-->
-            <!--<image class="icon" src="/assets/main/temp_nick_logo.png" alt="">-->
-            <!--</image>-->
-            <!--<label class="nick ml1">小呱君</label>-->
-          <!--</view>-->
-          <!--<view class="flex-middle-x flex-center-x">-->
-            <!--<image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">-->
-            <!--</image>-->
-          <!--</view>-->
-          <!--<label class="goods-name mall-product-name">{{goods.name}}</label>-->
-          <!--<label class="goods-price">￥{{goods.price}}</label>-->
-        <!--</view>-->
-      <!--</repeat>-->
+    <!--<view class="title-area flex-center-x bottom-seg">-->
+    <!--<text>为您推荐</text>-->
+    <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
+    <!--</image>-->
+    <!--</view>-->
+    <!--<repeat for="{{recommendGoods}}"-->
+    <!--item="goods"-->
+    <!--key="index">-->
+    <!--<view class="recommend-item pl2 pr2 flex-y">-->
+    <!--<view class="goods-user flex-middle-x">-->
+    <!--<image class="icon" src="/assets/main/temp_nick_logo.png" alt="">-->
+    <!--</image>-->
+    <!--<label class="nick ml1">小呱君</label>-->
+    <!--</view>-->
+    <!--<view class="flex-middle-x flex-center-x">-->
+    <!--<image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">-->
+    <!--</image>-->
+    <!--</view>-->
+    <!--<label class="goods-name mall-product-name">{{goods.name}}</label>-->
+    <!--<label class="goods-price">￥{{goods.price}}</label>-->
+    <!--</view>-->
+    <!--</repeat>-->
     <!--</view>-->
   </view>
 </template>
@@ -375,6 +375,7 @@
       ],
       categoryGroup: []
     }
+    touchMoveRecordList = [];
 
     components = {
       'goods-cell': GoodsCell
@@ -388,6 +389,15 @@
           url: 'goods-detail?skuId=' + goods.skuId
         })
         /* eslint-enable */
+      },
+      actionTouchCategoryStart(e){
+        // console.log(e.touches[0]);
+        let anyTouch = e.touches[0];
+        if (this.touchMoveRecordList.length >= 5){
+          this.touchMoveRecordList.shift();
+        }
+        this.touchMoveRecordList.push({clientX: anyTouch.clientX, clientY: anyTouch.clientY})
+        console.log(this.touchMoveRecordList);
       }
     }
 

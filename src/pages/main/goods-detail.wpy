@@ -528,7 +528,10 @@
         return goodsSimilarDisplayBlob;
       },
       goodsSimilarDisplayTypeCount(){
-        return 2;
+        if (this.goodsSimilarTree.levelCursor){
+          return this.goodsSimilarTree.levelCursor.length;
+        }
+        return 0;
       }
     }
 
@@ -632,7 +635,7 @@
     }
 
     onLoad(options) {
-      this.skuId = 207897;
+      this.skuId = 3553539;
       // this.fetchCheckIsSale();
       // this.fetchGoodsState();
       this.fetchGoodsDetail();
@@ -742,13 +745,13 @@
           })
           if (levelCursor){
             levelCursor.next = childLevelList;
+            levelCursor = levelCursor.next;
           } else {
             levelCursor = childLevelList;
             goodsSimilarTree.levelCursor = levelCursor;
           }
         })
         this.goodsSimilarTree = goodsSimilarTree;
-        console.log(goodsSimilarTree);
         this.selectedTypeList = this.getSelectedNodeList(this.skuId).map(_ => _.saleValue);
         this.$apply();
       }).catch((err) => {
