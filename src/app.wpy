@@ -38,7 +38,8 @@
         'pages/main/goods-detail',
         'pages/category/category',
         'pages/cart/cart',
-        'pages/mine/mine',
+        'pages/mine/mine'
+
       ],
       window: {
         backgroundTextStyle: 'light',

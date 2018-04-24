@@ -209,7 +209,7 @@
       <text>搜索商品，共99999款商品</text>
     </view>
   </view>
-  <view class="main page" @touchmove="actionTouchCategoryStart">
+  <view class="main page">
     <swiper class="banner">
       <swiper-item key="index" class="banner-item">
         <image class="image" src="/assets/main/temp_banner.png">
@@ -255,9 +255,14 @@
             index="index">
       <view class="main-section">
         <text class="title">{{group.category.catName}}</text>
-        <view class="recommend-content">
+        <view class="recommend-content"
+              @touchstart="actionTouchCategoryStart"
+              @touchmove="actionTouchCategoryMove"
+              @touchend="actionTouchCategoryEnd">>
           <repeat for="{{group.goods}}" item="goods">
-            <view class="goods-item" @tap="actionClickHotGoods({{goods}})">
+            <view class="goods-item"
+                  @tap="actionClickHotGoods({{goods}})"
+                  animation="{{index%2?animationRightData:animationLeftData}}">
               <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
               </image>
               <view class="info">
@@ -290,30 +295,30 @@
     <!--</repeat>-->
     <!--</swiper>-->
 
-    <!--<view class="recommend-goods top-seg bottom-seg">-->
-    <!--<view class="title-area flex-center-x bottom-seg">-->
-    <!--<text>为您推荐</text>-->
-    <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
-    <!--</image>-->
-    <!--</view>-->
-    <!--<repeat for="{{recommendGoods}}"-->
-    <!--item="goods"-->
-    <!--key="index">-->
-    <!--<view class="recommend-item pl2 pr2 flex-y">-->
-    <!--<view class="goods-user flex-middle-x">-->
-    <!--<image class="icon" src="/assets/main/temp_nick_logo.png" alt="">-->
-    <!--</image>-->
-    <!--<label class="nick ml1">小呱君</label>-->
-    <!--</view>-->
-    <!--<view class="flex-middle-x flex-center-x">-->
-    <!--<image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">-->
-    <!--</image>-->
-    <!--</view>-->
-    <!--<label class="goods-name mall-product-name">{{goods.name}}</label>-->
-    <!--<label class="goods-price">￥{{goods.price}}</label>-->
-    <!--</view>-->
-    <!--</repeat>-->
-    <!--</view>-->
+  <!--<view class="recommend-goods top-seg bottom-seg">-->
+  <!--<view class="title-area flex-center-x bottom-seg">-->
+  <!--<text>为您推荐</text>-->
+  <!--<image class="icon ml2" src="/assets/main/round-right-arrow.png">-->
+  <!--</image>-->
+  <!--</view>-->
+  <!--<repeat for="{{recommendGoods}}"-->
+  <!--item="goods"-->
+  <!--key="index">-->
+  <!--<view class="recommend-item pl2 pr2 flex-y">-->
+  <!--<view class="goods-user flex-middle-x">-->
+  <!--<image class="icon" src="/assets/main/temp_nick_logo.png" alt="">-->
+  <!--</image>-->
+  <!--<label class="nick ml1">小呱君</label>-->
+  <!--</view>-->
+  <!--<view class="flex-middle-x flex-center-x">-->
+  <!--<image class="goods-img" src="{{goods.goodsImg}}" mode="aspectFit">-->
+  <!--</image>-->
+  <!--</view>-->
+  <!--<label class="goods-name mall-product-name">{{goods.name}}</label>-->
+  <!--<label class="goods-price">￥{{goods.price}}</label>-->
+  <!--</view>-->
+  <!--</repeat>-->
+  <!--</view>-->
   </view>
 </template>
 
@@ -325,8 +330,9 @@
     config = {
       navigationBarTitleText: '首页'
     }
-
     data = {
+      animationLeftData: {},
+      animationRightData: {},
       hotGoods: [],
       recommendGoods: [],
       categories: [
@@ -384,9 +390,29 @@
       categoryGroup: []
     }
     touchMoveRecordList = [];
-
+    isTouching = false;
+    isTriggerInTouching = false;
     components = {
       'goods-cell': GoodsCell
+    }
+
+    doChangeAnimation(){
+      let leftAnimation = wepy.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease',
+        delay: 0
+      });
+      leftAnimation.rotate3d(0, 1, 0, 360).step();
+      this.animationLeftData = leftAnimation.export()
+      let rightAnimation = wepy.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease',
+        delay: 0
+      });
+      rightAnimation.rotate3d(0, 1, 0, -360).step();
+      rightAnimation.rotate3d(0, 0, 0, 0).step({duration: 0});
+      this.animationRightData = rightAnimation.export()
+      this.$apply();
     }
 
     methods = {
@@ -399,13 +425,28 @@
         /* eslint-enable */
       },
       actionTouchCategoryStart(e){
+        this.isTouching = true;
+        this.touchMoveRecordList = [];
+      },
+      actionTouchCategoryEnd(e){
+        this.isTouching = false;
+        this.isTriggerInTouching = false;
+        this.touchMoveRecordList = [];
+      },
+      actionTouchCategoryMove(e){
         // console.log(e.touches[0]);
         let anyTouch = e.touches[0];
-        if (this.touchMoveRecordList.length >= 5){
-          this.touchMoveRecordList.shift();
+        if (this.touchMoveRecordList.length >= 3){
+          let oldTouch = this.touchMoveRecordList.shift();
+          if (oldTouch.clientX - anyTouch.clientX > 80){
+            if (!this.isTriggerInTouching){
+              this.isTriggerInTouching = true;
+              this.doChangeAnimation();
+              console.log(oldTouch.clientX - anyTouch.clientX);
+            }
+          }
         }
         this.touchMoveRecordList.push({clientX: anyTouch.clientX, clientY: anyTouch.clientY})
-        console.log(this.touchMoveRecordList);
       }
     }
 
