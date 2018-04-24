@@ -165,7 +165,7 @@
       onTapSecondCategory(category){
         console.log(category)
         /* eslint-disable */
-        wx.navigateTo({
+        wepy.navigateTo({
           url: 'category-detail?catId=' + category.catId
         })
         /* eslint-enable */

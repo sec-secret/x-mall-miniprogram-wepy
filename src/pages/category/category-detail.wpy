@@ -139,7 +139,7 @@
       },
       onClickGoods(goods) {
         /* eslint-disable */
-        wx.navigateTo({
+        wepy.navigateTo({
           url: '/pages/main/goods-detail?skuId=' + goods.skuId
         })
         /* eslint-enable */

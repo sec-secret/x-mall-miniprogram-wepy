@@ -1,151 +1,103 @@
-<style lang="scss">
+<style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
-  .mall-mine{
-    .mine-area{
+
+  .mall-mine {
+    .mine-area {
       position: relative;
-      height: 400rpx;
-      .mine-back{
+      margin-bottom: 20rpx;
+      .mine-back {
+        left: 0;
+        top: 0;
         width: 100%;
         height: 100%;
+        position: relative;
+        z-index:  -1;
       }
-      .mine-info{
+      .mine-info {
         position: absolute;
-        z-index: 3;
-        .icon{
-          width: 120rpx;
-          height: 120rpx;
-          border-radius: 100px;
-          overflow: hidden;
+        z-index: 10;
+        left: 30rpx;
+        top: 50%;
+        transform: translateY(-50%);
+        @include flex-x-middle();
+        .icon {
+          width: 140rpx;
+          height: 140rpx;
+          border-radius: 70rpx;
+          margin-right: 30rpx;
         }
-        .name{
-          color: $color-white;
-          font-size: $size-7;
+        .name {
+          color: #fff;
+          font-size: $xg-size-8;
         }
-      }
-    }
-    .order-area{
-      background: $color-white;
-      padding-top: 10rpx;
-      .order-title{
-        height: 60rpx;
-        .name{
-          flex: 1;
-        }
-        .icon{
-          margin-left: 20rpx;
-          width: 20rpx;
-          height: 20rpx;
-        }
-      }
-      .order-menu{
-        height: 200rpx;
-        .menu-item{
-          flex: 1;
-          .icon{
-            width: 70rpx;
-            height: 70rpx;
-          }
-          .name{
-            margin-top: 20rpx;
-          }
-        }
-      }
-    }
-    .th1-area{
 
-    }
-    .th2-area{
-      margin-top: 40rpx;
-      padding-bottom: 50rpx;
-    }
-    .cell{
-      background: $color-white;
-      height: 100rpx;
-      label{
-        flex: 1;
+        .login {
+          background-color: transparent;
+          border: 1px solid #fff;
+          border-radius: 4rpx;
+          color: $c-white;
+          width: 200rpx;
+          height: 60rpx;
+          line-height: 60rpx;
+          text-align: center;
+        }
       }
-      image{
+    }
+    .mine-item {
+      padding: 0 30rpx;
+      height: 100rpx;
+      border-bottom: 1px solid $xg-c-seg;
+      color: #333;
+      background-color: #fff;
+      @include flex-x-middle();
+      @include flex-justify-content_space-between();
+      .name {
+        @include flex-x-middle();
+        image {
+          width: 34rpx;
+          margin-right: 20rpx;
+        }
+      }
+      .right-arrow {
         width: 20rpx;
-        height: 20rpx;
       }
     }
   }
 </style>
 <template>
-  <view class="mall-mine page">
+  <view class="mall-mine">
     <view class="mine-area">
-      <image class="mine-back" src="./img/temp_mine-back.png" alt="">
+      <image class="mine-back" src="./img/temp_mine-back.png" mode="widthFix">
       </image>
-      <view class="mine-info container-center flex-center-y">
-        <image class="icon" src="{{userInfo.avatarUrl}}" alt="">
+      <view wx:if="{{hasUserId}}" class="mine-info">
+        <image class="icon" src="{{headImg}}" mode="widthFix">
         </image>
-        <label class="name">{{userInfo.nickName}}</label>
+        <view class="name">{{nickName}}</view>
+      </view>
+      <view wx:else class="mine-info">
+        <image class="icon" src="./img/touxiang.png" mode="widthFix">
+        </image>
+        <view class="login" @tap="onClickLogin">立即登录</view>
       </view>
     </view>
-
-    <view class="order-area">
-      <view class="order-title flex-middle-x pr2 pl2" @tap="actionClickOrders">
-        <label class="name">我的订单</label>
-        <label>查看全部订单</label>
-        <image class="icon" src="./img/right-arrow.png" alt="">
+    <repeat for="{{mineItems}}">
+      <view class="mine-item" @tap="onClickOrders">
+        <view class="name">
+          <image src="{{item.icon}}" mode="widthFix">
+          </image>
+          {{item.name}}
+        </view>
+        <image class="right-arrow" src="./img/right-arrow.png" mode="widthFix">
         </image>
       </view>
-      <view class="order-menu flex-middle-x">
-        <repeat for="{{orderMenuList}}"
-                item="menu">
-          <view class="menu-item flex-center-y">
-            <image class="icon" src="{{menu.icon}}" alt="">
-            </image>
-            <label class="name">{{menu.name}}</label>
-          </view>
-        </repeat>
-      </view>
-    </view>
-    <view class="th1-area">
-      <view class="cell flex-middle-x pl2 pr2 top-seg"
-            data-index="0"
-            @tap="actionClickMenu">
-        <label>退款/售后</label>
-        <image src="./img/right-arrow.png" alt="">
-        </image>
-      </view>
-      <view class="cell flex-middle-x pl2 pr2 top-seg"
-            data-index="1"
-            @tap="actionClickMenu">
-        <label>小呱客服</label>
-        <image src="./img/right-arrow.png" alt="">
-        </image>
-      </view>
-    </view>
-    <view class="th2-area">
-      <view class=" cell flex-middle-x pl2 pr2"
-            data-index="2"
-            @tap="actionClickMenu">
-        <label>我的钱包</label>
-        <image src="./img/right-arrow.png" alt="">
-        </image>
-      </view>
-      <view class="cell flex-middle-x pl2 pr2 top-seg"
-            data-index="3"
-            @tap="actionClickMenu">
-        <label>我的地址</label>
-        <image src="./img/right-arrow.png" alt="">
-        </image>
-      </view>
-      <view class="cell flex-middle-x pl2 pr2 top-seg"
-            data-index="4"
-            @tap="actionClickMenu">
-        <label>我的优惠券</label>
-        <image src="./img/right-arrow.png" alt="">
-        </image>
-      </view>
-    </view>
+    </repeat>
+    </div>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import { connect } from 'wepy-redux'
+  import {connect} from 'wepy-redux'
 
   @connect({
     userInfo (state) {
@@ -156,8 +108,7 @@
     config = {
       navigationBarTitleText: '我的'
     }
-    components = {
-    }
+    components = {}
 
     data = {
       orderMenuList: [{
@@ -172,11 +123,23 @@
       }, {
         name: '已完成',
         icon: './img/yiwancheng.png'
-      }]
+      }],
+      mineItems: [
+        {
+          name: '我的订单',
+          icon: './img/order-icon.png'
+        },
+        {
+          name: '我的地址',
+          icon: './img/address-icon.png'
+        },
+        {
+          name: '小呱客服',
+          icon: './img/mobile-icon.png'
+        }]
     }
 
-    computed = {
-    }
+    computed = {}
 
     methods = {
       actionClickOrders() {

@@ -179,7 +179,7 @@
           .real-price {
             height: 50rpx;
             line-height: 50rpx;
-            font-weight: blod;
+            font-weight: bold;
             color: $color-red;
             font-size: 40rpx;
           }
@@ -245,7 +245,7 @@
               border-radius: 0 4px 4px 0;
               border: 1px solid #999999;
               font-size: $xg-size-4;
-              font-weight: blod;
+              font-weight: bold;
               color: #999999;
               border-left-width: 0;
             }
@@ -263,7 +263,7 @@
               height: 48rpx;
               line-height: 48rpx;
               width: 70rpx;
-              font-weight: blod;
+              font-weight: bold;
               outline: 0;
             }
           }
@@ -586,30 +586,6 @@
           this.goodsCount++
         }
       },
-      addToCar() {
-        let buyParams = {
-          'skuReqs': [
-            {
-              'num': this.goodsCount,
-              'skuId': this.currentSelectedGoodsSkuId()
-            }
-          ],
-          'userId': 123
-        };
-        NetworkManagerGoods.goodsAddToCart(buyParams).then(data => {
-          this.isShowBuyPopArea = false;
-          wepy.showToast({
-            title: '成功加入购物车',
-            icon: 'success'
-          })
-          this.$apply();
-        }, error => {
-          console.log(error)
-        })
-      },
-      goToBuy() {
-
-      },
       onClickAdd() {
           if (this.isShowBuyPopArea) {
               this.addToCar();
@@ -625,12 +601,12 @@
         }
       },
       onClickCarIcon() {
-        wx.switchTab({
+        wepy.switchTab({
           url: '../cart/cart'
         })
       },
       onClickHomeIcon() {
-        wx.switchTab({
+        wepy.switchTab({
           url: '../main/main'
         })
       }
@@ -674,7 +650,7 @@
     }
 
     onLoad(options) {
-      this.skuId = 3553539;
+      this.skuId = options.skuId;
       // this.fetchCheckIsSale();
       // this.fetchGoodsState();
       this.fetchGoodsDetail();
@@ -683,6 +659,30 @@
       // stationName = JSON.parse(stationName.substring(0, stationName.length - 1));
       // let aimTree = CPParse.parse(stationName.content);
     }
+
+    addToCar() {
+      let buyParams = {
+        'skuReqs': [
+          {
+            'num': this.goodsCount,
+            'skuId': this.currentSelectedGoodsSkuId()
+          }
+        ],
+        'userId': 123
+      };
+      NetworkManagerGoods.goodsAddToCart(buyParams).then(data => {
+        this.isShowBuyPopArea = false;
+        wepy.showToast({
+          title: '成功加入购物车',
+          icon: 'success'
+        })
+        this.$apply();
+      }, error => {
+        console.log(error)
+      })
+    }
+
+    goToBuy() {}
 
     fetchCheckIsSale() {
       NetworkManagerGoods.goodsCheckSale(this.skuId).then((info) => {

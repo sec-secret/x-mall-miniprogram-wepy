@@ -393,7 +393,7 @@
       actionClickHotGoods(goods){
         console.log(goods);
         /* eslint-disable */
-        wx.navigateTo({
+        wepy.navigateTo({
           url: 'goods-detail?skuId=' + goods.skuId
         })
         /* eslint-enable */

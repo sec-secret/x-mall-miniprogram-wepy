@@ -1,83 +1,61 @@
-<style lang="scss">
+<style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
   .cart{
-    .pay-area {
-      background: $color-white;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: $tab-bar-height;
-      text-align: center;
-      color: $color-2;
-      z-index: 10;
-      .select {
-        .select-icon {
-          width: 30rpx;
-          height: 30rpx;
-          background-color: $c-white;
-          border-radius: 15rpx;
-          border: 1rpx solid $c-999;
-          margin-right: 10rpx;
-        }
-        .selected {
-          background: $color-yellow;
-        }
-        flex: 1.3;
-        height: 100%;
-      }
-      .count {
-        flex: 1.3;
-        height: 100%;
-        color: $color-3;
-      }
-      .amount {
-        flex: 2;
-        font-size: $size-6;
-        .price {
-          color: $color-red;
-          font-weight: 500;
-        }
-      }
-      .pay {
-        flex: 2;
-        font-size: $size-6;
-        line-height: $tab-bar-height;
-        background: $color-yellow;
-      }
-    }
-
     .cart-area {
+      .tips {
+        @include flex-x-middle();
+        @include flex-justify-content_space-between();
+        padding: 0 30rpx;
+        height: 80rpx;
+        font-size: $xg-size-2;
+        color: #999;
+        view {
+          @include flex-x-middle();
+          image {
+            width: 8rpx;
+            height: 8rpx;
+            margin-right: 10rpx;
+          }
+        }
+      }
       padding-bottom: $tab-bar-height;
       background: $color-back;
       .cart-item {
-        height: 200rpx;
-        background: $color-white;
+        height: 190rpx;
+        background: #fff;
         margin-bottom: 20rpx;
+        padding: 30rpx 30rpx 30rpx 0;
+        @include flex-x-middle();
         .edit-select-space {
-          width: 100rpx;
-          height: 100rpx;
+          padding: 0 30rpx;
+          height: 100%;
+          @include flex-center();
           .select-icon {
-            width: 30rpx;
-            height: 30rpx;
-            background: $c-white;
-            border: 1px solid $c-999;
-            border-radius: 15rpx;
-          }
-          .selected{
-            background: $color-yellow;
+            width: 34rpx;
+            height: 34rpx;
           }
         }
         .icon {
           margin-left: 10rpx;
-          width: 100rpx;
-          height: 100rpx;
+          width: 140rpx;
+          height: 140rpx;
         }
         .content {
           margin-left: 20rpx;
           flex: 1;
           .name {
-            font-size: $size-6;
+            @include ellipsis();
+            font-size: $xg-size-4;
+            color: #333;
+          }
+          .cart-dim {
+            @include ellipsis(2);
+            font-size: $xg-size-2;
+            color: #999;
+            margin-top: .1rem;
+            label {
+              margin-right: .1rem;
+            }
           }
           .info {
             margin-top: 10rpx;
@@ -85,69 +63,129 @@
             line-height: 50rpx;
             .price {
               flex: 1;
-              color: $color-orange;
-              font-weight: 500;
+              color: $xg-c-red;
+              font-weight: bold;
+              font-size: $xg-size-5;
+            }
+            input {
+              min-height: 0;
             }
             .input {
-              height: 50rpx;
-              line-height: 50rpx;
-              width: 160rpx;
-              border: 1px solid $color-seg;
-              border-radius: 2px;
-              overflow: hidden;
+              @include flex-x-middle();
+              z-index: 0;
               .count-button {
-                height: 100%;
-                width: 50rpx;
-                text-align: center;
-                background-color: #efefef;
-                border-radius: 2rpx;
-                font-size: $size-5;
-                color: $color-2;
+                @include flex(none);
+                @include flex-center();
+                height: 48rpx;
+                line-height: 48rpx;
+                width: 52rpx;
+                border-radius: 0 4rpx 4rpx 0;
+                border: 1px solid #999999;
+                font-size: $xg-size-4;
+                font-weight: bold;
+                color: #999999;
+                border-left-width: 0;
+              }
+              .count-button:first-of-type {
+                  border-radius: 4rpx 0 0 4rpx;
+                  border-right: 0;
+                  border-left-width: 1rpx;
               }
               .count-number {
-                width: 60rpx;
-                height: 100%;
-                color: $color-orange;
+                @include flex(none);
+                @include flex-center();
                 text-align: center;
+                border: 1px solid #999;
+                height: 48rpx;
+                line-height: 48rpx;
+                width: 70rpx;
+                font-weight: bold;
                 outline: 0;
-                border: 0;
               }
             }
           }
         }
       }
     }
+
+    .pay-area {
+      @include flex-x-middle();
+      background: #fff;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 88rpx;
+      text-align: center;
+      font-size: $xg-size-4;
+      color: #999;
+      .select {
+        padding-left: 30rpx;
+        .select-icon {
+          width: 34rpx;
+          height: 34rpx;
+          margin-right: 30rpx;
+        }
+        height: 100%;
+      }
+      .amount {
+        @include flex(1);
+        @include flex-x-middle();
+        @include flex-justify-content_flex-end();
+        padding-right: 40rpx;
+        .price {
+          color: $xg-c-red;
+          font-weight: bold;
+          margin-left: 10rpx;
+        }
+      }
+      .pay {
+        width: 212rpx;
+        font-size: $xg-size-4;
+        line-height: 88rpx;
+        background: $xg-c-red;
+        color: white;
+        font-weight: bold;
+        border-radius: 0;
+        outline: 0;
+        &.disabled {
+          background-color: #ccc;
+        }
+      }
+    }
   }
 </style>
 <template>
+  <wxs src="./wxs/cart.wxs" module="cartWxs"></wxs>
   <view class="cart">
-    <view class="pay-area flex-middle-x top-seg">
-      <view class="select flex-center-x"
-            @tap="actionClickSelectAll">
-        <label class="select-icon {{isSelectedAll?'selected':''}}"></label>
-        <label>全选</label>
-      </view>
-      <view class="count flex-center-x">
-        已选{{selectedCount}}件
-      </view>
-      <view class="amount">
-        合计:<label class="price">￥{{totalPrice}}</label>
-      </view>
-      <label class="pay" @tap="actionClickPay">结算</label>
-    </view>
-
     <view class="cart-area top-seg">
+      <view class="tips">
+        <repeat for="{{tips}}">
+          <view>
+            <image src="./img/yuan.png" alt="">
+            </image>
+            <text>{{item}}</text>
+          </view>
+        </repeat>
+      </view>
       <repeat for="{{goodsList}}"
               item="goods"
               key="goods.skuId">
-        <view class="cart-item flex-middle-x pl2 pr2">
+        <view class="cart-item">
           <label wx:if="{{isEditing}}" @tap="delGoods(goods)">
             删除
           </label>
           <label class="edit-select-space flex-center-x"
                  data-goods="{{goods}}"
                  @tap="actionClickGoodsSelected">
-            <label class="select-icon {{selectedJudgeMap[goods.skuId]?'selected':''}}"></label>
+            <image wx:if="{{cartWxs.isSelected(selectedList,goods)}}"
+                   class="select-icon"
+                   src="./img/gouxuan.png">
+            </image>
+            <image wx:else
+                   class="select-icon"
+                   src="./img/meixuan.png">
+            </image>
           </label>
           <image mode="aspectFit" class="icon" src="{{goods.goodsImg}}" alt="">
           </image>
@@ -159,13 +197,36 @@
               <div class="price">￥{{goods.smartPrice}}</div>
               <view class="input flex-middle-x">
                 <label class="count-button" data-goods="{{goods}}" @tap="actionClickMinus">-</label>
-                <input class="count-number" type="number" value="{{goodsCountList[goods.skuId]}}"/>
+                <input
+                  class="count-number"
+                  type="number"
+                  value="{{goods.num}}" @blur="changeNum" data-goods="{{goods}}"/>
                 <label class="count-button" data-goods="{{goods}}" @tap="actionClickPlus">+</label>
               </view>
             </view>
           </view>
         </view>
       </repeat>
+    </view>
+    <view class="pay-area">
+      <view class="select flex-center-x"
+           @tap="actionClickSelectAll">
+        <image wx:if="{{isSelectedAll}}"
+             class="select-icon"
+             src="./img/gouxuan.png">
+        </image>
+        <image wx:else
+             class="select-icon"
+             src="./img/meixuan.png">
+        </image>
+        <view wx:if="{{selectedCount === 0}}">全选</view>
+        <view wx:else>已选({{selectedCount}})</view>
+      </view>
+      <view class="amount">
+        合计:<text class="price">￥{{totalPrice}}</text>
+      </view>
+      <button class="pay {{selectedCount===0?'disabled':''}}"
+              @tap="actionClickPay">下单</button>
     </view>
   </view>
 </template>
@@ -185,71 +246,220 @@
       isEditing: false,
       selectedList: [],
       goodsList: [],
-      goodsCountList: {},
-      goodsKeyList: {},
-      selectedJudgeMap: {}
+      tips: [
+        '7天无忧退货',
+        '48小时快速退款',
+        '满88元免邮费'
+      ]
     }
 
     computed = {
       selectedCount(){
-        let selectedCount = 0;
-        for (let goodsSkuId in this.selectedJudgeMap){
-          if (this.selectedJudgeMap[goodsSkuId]){
-            selectedCount++
-          }
-        }
-        return selectedCount;
+        return this.selectedList.length;
       },
       totalPrice(){
-        let totalPrice = 0;
-        for (let goodsSkuId in this.selectedJudgeMap){
-          if (this.selectedJudgeMap.hasOwnProperty(goodsSkuId) && this.selectedJudgeMap[goodsSkuId]){
-            totalPrice += this.goodsKeyList[goodsSkuId].nbPrice * this.goodsCountList[goodsSkuId];
-          }
-        }
-        return UnitTool.formatFenPrice(totalPrice);
+        let total = 0;
+        this.selectedList.forEach(item => {
+          total += item.nbPrice * item.num;
+        })
+        return UnitTool.formatFenPrice(total);
       },
-      isSelectedAll(){
-        for (let goodsSkuId in this.selectedJudgeMap){
-          if (this.selectedJudgeMap.hasOwnProperty(goodsSkuId) && !this.selectedJudgeMap[goodsSkuId]){
-            return false;
-          }
-        }
-        return true;
+      isSelectedAll() {
+          return this.selectedCount === this.goodsList.length;
       }
     }
 
     methods = {
       actionClickGoodsSelected(e){
         let goods = e.currentTarget.dataset.goods;
-        this.selectedJudgeMap[goods.skuId] = !this.selectedJudgeMap[goods.skuId];
+        console.log(goods);
+        if (this.selectedList.findIndex(item => {
+            return item.cartId === goods.cartId;
+          }) >= 0) {
+          console.log('好')
+          this.selectedList.splice(this.selectedList.findIndex(item => item.cartId === goods.cartId), 1)
+        } else {
+          this.selectedList.push(goods)
+        }
+        this.$apply();
       },
       actionClickSelectAll() {
-        let selectOrClear = !this.isSelectedAll;
-        for (let goodsSkuId in this.selectedJudgeMap){
-          if (this.selectedJudgeMap.hasOwnProperty(goodsSkuId)){
-            this.selectedJudgeMap[goodsSkuId] = selectOrClear;
-          }
+        if (this.selectedList.length === this.goodsList.length) {
+          this.selectedList = [];
+        } else {
+//          数组深拷贝
+          [...this.selectedList] = this.goodsList;
         }
+        this.$apply();
       },
       actionClickMinus: function (e) {
         let goods = e.currentTarget.dataset.goods;
-        if (this.goodsCountList[goods.skuId] <= 1){
+        if (goods.num === 1) {
           return;
         }
-        this.goodsCountList[goods.skuId]--;
+        let params = {
+          'skuReqs': [
+            {
+              'num': 1,
+              'skuId': goods.skuId
+            }
+          ]
+        }
+        NetworkManagerCart.deleteCartGoods(params).then(success => {
+//          更新购物车数据
+          NetworkManagerCart.fetchCartGoods().then(data => {
+            this.goodsList = data.skus.map(_ => {
+              return {
+                ..._,
+                smartPrice: UnitTool.formatFenPrice(_.nbPrice)
+              }
+            });
+            /* 因为商品数量更新的原因要更新整个列表
+             * 在已选择栏中删除旧数据 添加新数据 */
+            let targetIndex = this.selectedList.findIndex(item => item.skuId === goods.skuId);
+            if (targetIndex >= 0) {
+              this.selectedList.splice(
+                this.selectedList.findIndex(item => item.skuId === goods.skuId), 1,
+                data.skus.find(i => {
+                  return i.skuId === goods.skuId;
+                }))
+            } else {
+              this.selectedList.push(this.goodsList.find(i => {
+                return i.skuId === goods.skuId;
+              }))
+            }
+            this.$apply();
+          }, err => {
+          })
+        }, err => {
+        })
       },
       actionClickPlus: function (e) {
         let goods = e.currentTarget.dataset.goods;
-        this.goodsCountList[goods.skuId]++;
-        this.setData({
-          goodsCountList: this.goodsCountList
+        let params = {
+          'skuReqs': [
+            {
+              'num': 1,
+              'skuId': goods.skuId
+            }
+          ]
+        }
+        NetworkManagerCart.addCart(params).then(success => {
+//          更新购物车数据
+          NetworkManagerCart.fetchCartGoods().then(data => {
+            this.goodsList = data.skus.map(_ => {
+              return {
+                ..._,
+                smartPrice: UnitTool.formatFenPrice(_.nbPrice)
+              }
+            });
+            this.$apply();
+            /* 因为商品数量更新的原因要更新整个列表
+             * 在已选择栏中删除旧数据 添加新数据
+             */
+            let targetIndex = this.selectedList.findIndex(item => item.skuId === goods.skuId);
+            if (targetIndex >= 0) {
+              this.selectedList.splice(
+                this.selectedList.findIndex(item => item.skuId === goods.skuId), 1,
+                data.skus.find(i => {
+                  return i.skuId === goods.skuId;
+                }))
+            } else {
+              this.selectedList.push(this.goodsList.find(i => {
+                return i.skuId === goods.skuId;
+              }))
+            }
+            this.$apply();
+          }, err => {
+            console.log(err)
+          })
+        }, err => {
+          console.log(err)
         })
+      },
+      changeNum(e) {
+        console.log(e);
+        let newVal = e.detail.value;
+        let cart = e.currentTarget.dataset.goods;
+        let difference = newVal - cart.num;
+        let params = {
+          'skuReqs': [
+            {
+              'num': Math.abs(difference),
+              'skuId': cart.skuId
+            }
+          ]
+        }
+        if (difference > 0) {
+          NetworkManagerCart.addCart(params).then(data => {
+//          更新购物车数据
+            NetworkManagerCart.fetchCartGoods().then(data => {
+              this.goodsList = data.skus.map(_ => {
+                return {
+                  ..._,
+                  smartPrice: UnitTool.formatFenPrice(_.nbPrice)
+                }
+              });
+              /* 因为商品数量更新的原因要更新整个列表
+               * 在已选择栏中删除旧数据 添加新数据
+               */
+              let targetIndex = this.selectedList.findIndex(item => item.skuId === cart.skuId);
+              if (targetIndex >= 0) {
+                this.selectedList.splice(
+                  this.selectedList.findIndex(item => item.skuId === cart.skuId), 1,
+                  data.skus.find(i => {
+                    return i.skuId === cart.skuId;
+                  }))
+              } else {
+                this.selectedList.push(this.goodsList.find(i => {
+                  return i.skuId === cart.skuId;
+                }))
+              }
+              this.$apply();
+            }, err => {
+              console.log(err)
+              this.closeLoading();
+            })
+          }, err => {
+            console.log(err)
+            this.closeLoading();
+          })
+        } else {
+          NetworkManagerCart.deleteCartGoods(params).then(data => {
+//          更新购物车数据
+            NetworkManagerCart.fetchCartGoods().then(data => {
+              this.goodsList = data.skus.map(_ => {
+                return {
+                  ..._,
+                  smartPrice: UnitTool.formatFenPrice(_.nbPrice)
+                }
+              });
+              /* 因为商品数量更新的原因要更新整个列表
+               * 在已选择栏中删除旧数据 添加新数据 */
+              let targetIndex = this.selectedList.findIndex(item => item.skuId === cart.skuId);
+              if (targetIndex >= 0) {
+                this.selectedList.splice(
+                  this.selectedList.findIndex(item => item.skuId === cart.skuId), 1,
+                  data.skus.find(i => {
+                    return i.skuId === cart.skuId;
+                  }))
+              } else {
+                this.selectedList.push(this.goodsList.find(i => {
+                  return i.skuId === cart.skuId;
+                }))
+              }
+              this.$apply();
+            }, err => {
+              console.log(err)
+            })
+          }, err => {
+            console.log(err)
+          })
+        }
       }
     }
-
-    fetchGoodsList(userId) {
-      NetworkManagerCart.fetchCartGoods(userId).then(data => {
+    fetchGoodsList() {
+      NetworkManagerCart.fetchCartGoods().then(data => {
         let selectedJudgeMap = {};
         let goodsCountList = {};
         let goodsKeyList = {};
@@ -258,9 +468,6 @@
           goodsCountList[goods.skuId] = goods.num;
           goodsKeyList[goods.skuId] = goods;
         }
-        this.selectedJudgeMap = selectedJudgeMap;
-        this.goodsCountList = goodsCountList;
-        this.goodsKeyList = goodsKeyList;
         this.goodsList = data.skus.map(_ => {
           return {
             ..._,
@@ -275,7 +482,7 @@
     }
 
     onLoad() {
-      this.fetchGoodsList({userId: 123});
+      this.fetchGoodsList();
     }
   }
 </script>

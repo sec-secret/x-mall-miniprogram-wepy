@@ -3,10 +3,14 @@
 */
 
 
-view, label, text, input, scroll-view{
+view, label, text, input, scroll-view, button{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+button::after{
+  border:none;
 }
 //
 //a {
