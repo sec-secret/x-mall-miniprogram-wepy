@@ -392,27 +392,25 @@
     touchMoveRecordList = [];
     isTouching = false;
     isTriggerInTouching = false;
+    leftAnimation = null;
+    rightAnimation = null;
     components = {
       'goods-cell': GoodsCell
     }
 
     doChangeAnimation(){
-      let leftAnimation = wepy.createAnimation({
-        duration: 1000,
-        timingFunction: 'ease',
-        delay: 0
-      });
+      let leftAnimation = this.leftAnimation;
       leftAnimation.rotate3d(0, 1, 0, 360).step();
+      leftAnimation.rotate3d(0, 1, 0, 0).step({duration: 0});
       this.animationLeftData = leftAnimation.export()
-      let rightAnimation = wepy.createAnimation({
-        duration: 1000,
-        timingFunction: 'ease',
-        delay: 0
-      });
+      let rightAnimation = this.rightAnimation;
       rightAnimation.rotate3d(0, 1, 0, -360).step();
-      rightAnimation.rotate3d(0, 0, 0, 0).step({duration: 0});
+      rightAnimation.rotate3d(0, 1, 0, 0).step({duration: 0});
       this.animationRightData = rightAnimation.export()
-      this.$apply();
+      setTimeout(() => {
+        this.animationLeftData = {};
+        this.animationRightData = {};
+      }, 1000)
     }
 
     methods = {
@@ -450,7 +448,21 @@
       }
     }
 
+    createAnimation(){
+      this.leftAnimation = wepy.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease',
+        delay: 0
+      });
+      this.rightAnimation = wepy.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease',
+        delay: 0
+      });
+    }
+
     onLoad() {
+      this.createAnimation();
       NetworkManagerMain.main().then(data => {
         console.log(data);
         this.hotGoods = data.hotGoods;
