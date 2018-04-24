@@ -165,26 +165,36 @@
       left: 0;
       bottom: 0;
       overflow: auto;
+      padding-bottom: 88rpx;
       .image-area {
-        height: 230rpx;
+        height: 246rpx;
         .image {
-          height: 180rpx;
-          width: 180rpx;
-          margin: $padding;
+          height: 166rpx;
+          width: 166rpx;
+          margin: 40rpx 30rpx;
         }
         .price-area {
           padding-bottom: 30rpx;
+          font-size: $xg-size-5;
           .real-price {
             height: 50rpx;
             line-height: 50rpx;
-            font-weight: 500;
+            font-weight: blod;
             color: $color-red;
             font-size: 40rpx;
           }
         }
+        .close-icon {
+          position: absolute;
+          right: 30rpx;
+          top: 30rpx;
+          width: 24rpx;
+          height: 24rpx;
+          margin: 0;
+        }
       }
       .type-area {
-        padding: $padding 0 $padding $padding;
+        padding: 30rpx;
         .type-title {
           font-size: $size-4;
           color: $color-2;
@@ -194,17 +204,19 @@
           margin-top: 25rpx;
           .type-item {
             &.active{
-              color: #ff0000;
+              color: #ffffff !important;
+              background-color: #a63533 !important;
             }
-            height: 50rpx;
-            line-height: 50rpx;
+            display: inline-block;
+            height: 70rpx;
+            line-height: 70rpx;
             padding: 0 20rpx;
-            font-size: $size-4;
-            color: $color-2;
-            border: 1px solid $color-2;
+            font-size: $xg-size-4;
+            color: #333;
+            background-color: #f5f5f5;
             border-radius: 4px;
-            margin-right: $padding;
-            margin-bottom: 15rpx;
+            margin-right: 30rpx;
+            margin-bottom: 20rpx;
             word-break: keep-all;
             /*&.selected {
               color: $color-yellow !important;
@@ -219,71 +231,95 @@
           }
         }
         .number-select{
+          @include flex-x-middle();
+          @include flex-justify-content_space-between();
+          height: 90rpx;
           .control {
-            margin-top: 10rpx;
-            .title{
-            }
+            @include flex-x-middle();
             .button {
-              height: 70rpx;
-              line-height: 70rpx;
-              width: 70rpx;
+              @include flex(none);
+              @include flex-center();
+              height: 48rpx;
+              line-height: 48rpx;
+              width: 52rpx;
               border-radius: 0 4px 4px 0;
-              border: 1px solid $color-seg;
-              font-size: $size-8;
-              font-weight: 500;
-              color: $color-2;
-              text-align: center;
-              &:first-of-type {
-                border-radius: 4px 0 0 4px;
-              }
+              border: 1px solid #999999;
+              font-size: $xg-size-4;
+              font-weight: blod;
+              color: #999999;
+              border-left-width: 0;
+            }
+            .button:first-of-type {
+              border-radius: 4px 0 0 4px;
+              border-right: 0;
+              border-left-width: 1px;
             }
             input {
+              @include flex(none);
+              @include flex-center();
+              min-height: 0;
               text-align: center;
-              border-bottom: 1px solid $color-seg;
-              border-top: 1px solid $color-seg;
-              height: 70rpx;
-              line-height: 70rpx;
-              width: 140rpx;
-              font-weight: 500;
+              border: 1px solid #999;
+              height: 48rpx;
+              line-height: 48rpx;
+              width: 70rpx;
+              font-weight: blod;
               outline: 0;
-              border-left-width: 0;
-              border-right-width: 0;
             }
           }
         }
       }
-      footer {
-        height: 100rpx;
-        button {
-          flex: 1;
-          height: 100rpx;
-          font-size: $size-5;
-          font-weight: 500;
-          color: $color-1;
-          background-color: $color-yellow;
-          &:first-of-type {
-            background-color: $c-white;
-          }
-        }
+    }
+  }
+
+  .footer-bar {
+    position: fixed;
+    background: $color-white;
+    bottom: 0;
+    left: 0;
+    height: 88rpx;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+    @include flex-x();
+    .customer-service {
+      @include flex(auto);
+      @include flex-x-middle();
+      @include flex-justify-content_space-around();
+      height: 100%;
+      background: #fcfcfc;
+      image {
+        width: 36rpx;
+      }
+    }
+    button {
+      border-radius: 0;
+      outline: 0;
+    }
+    .buy-button {
+      @include flex-center();
+      width: 212rpx;
+      font-size: $xg-size-5;
+      color: #fff;
+      background-color: #d7807e;
+      &.disable {
+        background-color: #ccc;
+      }
+    }
+    .add-button {
+      @include flex-center();
+      width: 212rpx;
+      font-size: $xg-size-5;
+      color: #fff;
+      background-color: $xg-c-red;
+      &.disable {
+        background-color: #ccc;
       }
     }
   }
 </style>
 <template>
   <view class="mall-goods-detail page">
-    <view class="tabbar flex-middle-x top-seg">
-      <view class="customer-service flex-center-x">
-        <image class="icon" src="./img/customer-service.png" mode="aspectFit">
-        </image>
-      </view>
-      <view class="shopping-cart flex-center-x">
-        <image class="icon" src="./img/shopping-cart.png" mode="aspectFit">
-        </image>
-      </view>
-      <label class="shop-now" @click="showSelect = true;">立即购买</label>
-      <label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>
-    </view>
-
     <view class="goods-image-area">
       <swiper class="swiper"
               bindchange="actionChangeGoodsImage">
@@ -348,6 +384,7 @@
             <view style="flex: 1;"></view>
             <label class="real-price">￥{{popAreaPrice}}</label>
           </view>
+          <image @tap="onClickClosePopArea" class="close-icon" src="./img/close.png" mode="widthFix"></image>
         </view>
 
         <view class="type-area">
@@ -355,6 +392,7 @@
             <repeat for="{{goodsSimilarDisplayTypeCount}}"
                     index="typeIndex">
               <view class="type-row flex-middle-x">
+                <view class="title">{{item.saleName}}</view>
                 <repeat for="{{goodsSimilarDisplayBlob[typeIndex]}}"
                         item="typeValue"
                         index="typeValueIndex">
@@ -372,23 +410,42 @@
           </view>
 
           <view class="number-select">
-            <text class="title">
+            <view class="title">
               数量
-            </text>
-            <view class="control flex-x">
+            </view>
+            <view class="control">
               <text class="button" @tap="actionClickDown">-</text>
               <input class="count-number" type="number" disabled="{{true}}" value="{{goodsCount}}"/>
               <text class="button" @tap="actionClickUp">+</text>
             </view>
           </view>
         </view>
-
-        <footer class="btn-group flex-middle-x">
-          <button class="flex-center-x" @tap="actionClickAddToCar">加入购物车</button>
-          <button class="flex-center-x" @click="onBuy">购买</button>
-        </footer>
       </view>
     </view>
+    <view class="footer-bar">
+      <view class="customer-service">
+        <image @tap="onClickHomeIcon" class="icon" src="./img/shouye.png" mode="widthFix">
+        </image>
+        <image class="icon" src="./img/kefu.png" mode="widthFix">
+        </image>
+        <image @tap="onClickCarIcon" class="icon" src="./img/gouwuche.png" mode="widthFix">
+        </image>
+      </view>
+      <button class="buy-button" @tap="onClickAdd">加入购物车</button>
+      <button class="add-button" @tap="onClickBuy">购买</button>
+    </view>
+    <!--<view class="tabbar flex-middle-x top-seg">-->
+      <!--<view class="customer-service flex-center-x">-->
+        <!--<image class="icon" src="./img/customer-service.png" mode="aspectFit">-->
+        <!--</image>-->
+      <!--</view>-->
+      <!--<view class="shopping-cart flex-center-x">-->
+        <!--<image class="icon" src="./img/shopping-cart.png" mode="aspectFit">-->
+        <!--</image>-->
+      <!--</view>-->
+      <!--<label class="shop-now" @click="showSelect = true;">立即购买</label>-->
+      <!--<label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>-->
+    <!--</view>-->
   </view>
 </template>
 
@@ -404,6 +461,7 @@
     config = {
       navigationBarTitleText: '商品详情'
     }
+
     components = {
     }
 
@@ -426,7 +484,7 @@
       goodsSimilarTree: {},
       popAreaPrice: 0, // ???
       originGoodsPrice: 0,
-      selectedTypeList: ['CK one', '50ml'],
+      selectedTypeList: [],
       goodsCount: 1,
       goodsInventory: Number.MAX_VALUE,
       isSale: true
@@ -492,6 +550,9 @@
     }
 
     methods = {
+        onClickClosePopArea() {
+          this.isShowBuyPopArea = false
+        },
       actionClickShowPopArea(){
         this.isShowBuyPopArea = true;
       },
@@ -525,11 +586,7 @@
           this.goodsCount++
         }
       },
-      actionClickAddToCar() {
-        // if (this.targetGoodsList.length !== 1 || this.selectedList.some(x => x.lenth === 0)) {
-        //   console.log('请选择商品属性')
-        //   return
-        // }
+      addToCar() {
         let buyParams = {
           'skuReqs': [
             {
@@ -538,8 +595,7 @@
             }
           ],
           'userId': 123
-        }
-        console.log(buyParams);
+        };
         NetworkManagerGoods.goodsAddToCart(buyParams).then(data => {
           this.isShowBuyPopArea = false;
           wepy.showToast({
@@ -549,6 +605,33 @@
           this.$apply();
         }, error => {
           console.log(error)
+        })
+      },
+      goToBuy() {
+
+      },
+      onClickAdd() {
+          if (this.isShowBuyPopArea) {
+              this.addToCar();
+          } else {
+              this.isShowBuyPopArea = true;
+          }
+      },
+      onClickBuy() {
+        if (this.isShowBuyPopArea) {
+          this.goToBuy();
+        } else {
+          this.isShowBuyPopArea = true;
+        }
+      },
+      onClickCarIcon() {
+        wx.switchTab({
+          url: '../cart/cart'
+        })
+      },
+      onClickHomeIcon() {
+        wx.switchTab({
+          url: '../main/main'
         })
       }
     }
