@@ -149,7 +149,7 @@
 /*
 页面原有格式重置
 */
-view {
+view, label, text, input, scroll-view {
   margin: 0;
   padding: 0;
   box-sizing: border-box; }

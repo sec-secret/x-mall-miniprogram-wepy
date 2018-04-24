@@ -358,7 +358,7 @@
             </image>
             <span class="name">{{item}}</span>
           </view>
-          </repeat>
+        </repeat>
         <image class="right-arrow" src="./img/jiantou3.png" mode="widthFix">
         </image>
       </view>
@@ -435,16 +435,16 @@
       <button class="add-button" @tap="onClickBuy">购买</button>
     </view>
     <!--<view class="tabbar flex-middle-x top-seg">-->
-      <!--<view class="customer-service flex-center-x">-->
-        <!--<image class="icon" src="./img/customer-service.png" mode="aspectFit">-->
-        <!--</image>-->
-      <!--</view>-->
-      <!--<view class="shopping-cart flex-center-x">-->
-        <!--<image class="icon" src="./img/shopping-cart.png" mode="aspectFit">-->
-        <!--</image>-->
-      <!--</view>-->
-      <!--<label class="shop-now" @click="showSelect = true;">立即购买</label>-->
-      <!--<label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>-->
+    <!--<view class="customer-service flex-center-x">-->
+    <!--<image class="icon" src="./img/customer-service.png" mode="aspectFit">-->
+    <!--</image>-->
+    <!--</view>-->
+    <!--<view class="shopping-cart flex-center-x">-->
+    <!--<image class="icon" src="./img/shopping-cart.png" mode="aspectFit">-->
+    <!--</image>-->
+    <!--</view>-->
+    <!--<label class="shop-now" @click="showSelect = true;">立即购买</label>-->
+    <!--<label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>-->
     <!--</view>-->
   </view>
 </template>
@@ -492,6 +492,11 @@
 
     computed = {
       popAreaImage() {
+        if (!this.goodsSimilarTree.children){
+          if (this.goods){
+            return this.goods.goodsImg
+          }
+        }
         let treeReader = (node, selectedTypeList, index) => {
           if (index >= selectedTypeList.length){
             return '';
@@ -543,16 +548,19 @@
       },
       goodsSimilarDisplayTypeCount(){
         if (this.goodsSimilarTree.levelCursor){
-          return this.goodsSimilarTree.levelCursor.length;
+          let depth = 0;
+          for (let levelCursor = this.goodsSimilarTree.levelCursor; levelCursor; levelCursor = levelCursor.next, depth++){
+          }
+          return depth;
         }
         return 0;
       }
     }
 
     methods = {
-        onClickClosePopArea() {
-          this.isShowBuyPopArea = false
-        },
+      onClickClosePopArea() {
+        this.isShowBuyPopArea = false
+      },
       actionClickShowPopArea(){
         this.isShowBuyPopArea = true;
       },
@@ -587,11 +595,11 @@
         }
       },
       onClickAdd() {
-          if (this.isShowBuyPopArea) {
-              this.addToCar();
-          } else {
-              this.isShowBuyPopArea = true;
-          }
+        if (this.isShowBuyPopArea) {
+          this.addToCar();
+        } else {
+          this.isShowBuyPopArea = true;
+        }
       },
       onClickBuy() {
         if (this.isShowBuyPopArea) {
@@ -750,6 +758,17 @@
     fetchSimilarGoods() {
       NetworkManagerGoods.goodsSimilar(this.skuId).then((data) => {
         let similarGoodsTypeList = data.similarProducts;
+        similarGoodsTypeList = [];
+        // if (similarGoodsTypeList.length === 0){
+        //   similarGoodsTypeList.push({
+        //     dim: 1,
+        //     saleAttrList: [{
+        //       imagePath: '',
+        //       saleValue: ''
+        //     }],
+        //     saleName: ''
+        //   })
+        // }
         this.imageHeader = data.imageHeader;
         // this.similarGoods = data.similarProducts;
         let goodsSimilarTree = {
