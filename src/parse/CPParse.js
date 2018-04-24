@@ -92,6 +92,7 @@ export default class CPParse {
           }
         }
         tree['attrs'] = {
+          ...(tree['attrs'] || {}),
           style: styleString
         }
       }
@@ -142,6 +143,11 @@ export default class CPParse {
       }
       if (tree.tag === 'link'){
         aimTree['href'] = tree.attr.href
+      }
+      if (tree.tag === 'img'){
+        aimTree['attrs'] = {
+          src: tree.attr.src
+        }
       }
       aimTree['name'] = tree.tag;
     }

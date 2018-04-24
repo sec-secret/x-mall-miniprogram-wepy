@@ -682,6 +682,7 @@
     }
 
     onLoad(options) {
+      // this.skuId = 207897;
       this.skuId = 3617917;
       // this.fetchCheckIsSale();
       // this.fetchGoodsState();
