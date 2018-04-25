@@ -1,0 +1,250 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import '../../assets/scss/index.scss';
+  .orders-titles {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 80rpx;
+    color: #999;
+    background-color: #fff;
+    border-bottom: 1rpx solid $xg-c-seg;
+    z-index: 10;
+    @include flex-x-middle();
+    view {
+      font-size: $xg-size-3;
+      float: left;
+      width: 25%;
+      text-align: center;
+      height: 100%;
+      line-height: 80rpx;
+      background: #fff;
+      &.selected {
+        color: $xg-c-red;
+        border-bottom: 2px solid $xg-c-red;
+      }
+    }
+  }
+  .orders-area {
+    padding-top: 80rpx;
+    height: 100vh;
+    .order-item {
+      background-color: $c-white;
+      padding-left: $padding;
+      margin-bottom: 20rpx;
+      .top-part {
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1rpx solid $xg-c-seg;
+      }
+      .content {
+        padding-right: 30rpx;
+        @include flex-x-middle();
+        image {
+          width: 146rpx;
+          height: 146rpx;
+          margin: 24rpx 0;
+        }
+        .goods-info {
+          margin-left: 20rpx;
+          padding-right: 20rpx;
+          height: 100%;
+          @include flex(1);
+          @include flex-y-center();
+          .name {
+            @include ellipsis();
+            margin-bottom: 10rpx;
+            font-size: $xg-size-4;
+          }
+          .dim {
+            @include ellipsis();
+            font-size: $xg-size-2;
+            color: #999;
+          }
+          .price {
+            font-size: $xg-size-5;
+            margin-top: 10rpx;
+            color: $xg-c-red;
+          }
+        }
+        .count {
+          font-size: $xg-size-4;
+          color: #333;
+        }
+        .state {
+          font-size: $xg-size-2;
+        }
+      }
+
+      .bottom-part {
+        height: 90rpx;
+        padding-right: $padding;
+        border-top: 1rpx solid $xg-c-seg;
+        @include flex-x-middle();
+        @include flex-space-between();
+        .total {
+          text {
+            color: $xg-c-red;
+          }
+        }
+        .button-group {
+          @include flex-x();
+          button {
+            height: 56rpx;
+            line-height: 56rpx;
+            width: 164rpx;
+            background-color: transparent;
+            border: 1rpx solid #999;
+            color: #999;
+            border-radius: 4rpx;
+            font-size: $xg-size-3;
+          }
+          button:last-of-type {
+            margin-left: 20rpx;
+            color: $xg-c-red;
+            border-color: $xg-c-red;
+          }
+        }
+      }
+    }
+    .order-item:first-of-type {
+      margin-top: 20rpx;
+    }
+  }
+</style>
+<template>
+  <wxs src="./wxs/mine.wxs" module="mineWxs"/>
+  <view class="orders-titles">
+    <repeat for="{{typeList}}" item="i">
+      <view :class="{selected: type === i.type}"
+            @tap="onClickType({{i.type}})">{{i.name}}</view>
+    </repeat>
+  </view>
+  <scroll-view class="orders-area"
+               scroll-y="true"
+               bindscrolltolower="loadMore"
+               scroll-top="{{scrollTop}}">
+    <repeat for="{{orderList}}" item="order">
+      <view class="order-item" @tap="onClickOrder({{order}})">
+        <view class="top-part">
+          订单编号: {{order.order.orderId}}
+        </view>
+        <repeat for="{{order.orderExtRespList}}" item="i">
+          <view class="content">
+            <image src="{{i.goodsImg}}" alt="" mode="widthFix">
+              <view class="goods-info">
+                <text class="name">{{i.name}}</text>
+                <!--<view class="dim"  v-if="i.hasOwnProperty('saleValue') && JSON.parse(i.saleValue)">-->
+                  <!--<span v-for="i in JSON.parse(i.saleValue)">{{i.saleName + ': ' + i.value}}</span>-->
+                <!--</view>-->
+                <text class="price">￥{{mineWxs.formatFenPrice(i.nbPrice)}}</text>
+              </view>
+              <view class="state">
+                <text>{{mineWxs.status2CN(order.order.status)}}</text>
+              </view>
+          </view>
+        </repeat>
+        <view class="bottom-part">
+          <view class="total">应付: <text>￥{{mineWxs.formatFenPrice(order.order.nbAmount)}}</text></view>
+          <view class="button-group" wx:if="{{mineWxs.status2CN(order.order.status) === '未支付'}}">
+            <button @click.stop="cancelOrder">取消支付</button>
+            <button @click.stop="goPay">直接付款</button>
+          </view>
+        </view>
+      </view>
+    </repeat>
+  </scroll-view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {connect} from 'wepy-redux'
+  import NetworkManagerOrder from '../../network/NetworkManagerOrder';
+
+  @connect({
+    userInfo (state) {
+      return state.user.userInfo
+    }
+  })
+  export default class OrderList extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的订单'
+    }
+
+    components = {}
+
+    data = {
+      typeList: [
+        {
+          name: '全部',
+          type: 'all'
+        },
+        {
+          name: '待付款',
+          type: 'unpay'
+        },
+        {
+          name: '待收货',
+          type: 'wait'
+        },
+        {
+          name: '已完成',
+          type: 'finish'
+        }
+      ],
+      page: 1,
+      type: 'all',
+      orderList: [],
+      loading: true,
+      noMore: false
+    }
+
+    computed = {}
+
+    methods = {
+      loadMore() {
+        if (this.noMore) {
+          return
+        }
+        this.page = this.page + 1;
+        NetworkManagerOrder.fetchOrders(this.page, this.type)
+          .then((data) => {
+            if (data.orders.length === 0) {
+              this.noMore = true;
+              this.$apply();
+              return
+            }
+            this.orderList = this.orderList.concat(data.orders);
+            this.$apply();
+          }, err => {
+          })
+      },
+      onClickType(type) {
+        this.type = type;
+        this.page = 1;
+        this.orderList = [];
+        this.noMore = false;
+        this.$apply();
+        this.fetchOrders();
+      },
+      onClickOrder(order) {
+        wepy.navigateTo({
+            url: './order-detail?order=' + JSON.stringify(order)
+        })
+      }
+    }
+
+    onLoad() {
+        this.fetchOrders();
+    }
+
+    fetchOrders() {
+      NetworkManagerOrder.fetchOrders(this.page, this.type)
+        .then((data) => {
+          this.orderList = data.orders;
+          this.$apply();
+        }, err => {
+        })
+    }
+  }
+</script>

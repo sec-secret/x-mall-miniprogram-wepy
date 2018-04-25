@@ -33,6 +33,8 @@
     config = {
       pages: [
         // 'pages/other/other',
+        'pages/mine/order-list',
+        'pages/mine/order-detail',
         'pages/main/main',
         'pages/cart/cart-payment',
         'pages/mine/address-list',

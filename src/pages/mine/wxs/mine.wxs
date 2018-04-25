@@ -1,15 +1,80 @@
+//   下单失败(100, "下单失败"),
+//   待支付(110, "待支付"),
+//   未支付(120, "未支付"),
+//   未支付_取消订单_成功(121, "未支付_取消订单_成功"),
+//   未支付_取消订单_失败(122, "未支付_取消订单_失败"),
+//   支付中(130, "支付中"),
+//   支付失败_支付超时(140, "支付失败，支付超时"),
+//   支付失败_银行反馈(150, "支付失败，银行反馈"),
+//   支付失败_原因未知(160, "支付失败，原因未知"),
+//   支付失败_用券或积分不符合要求(170, "支支付失败,用券或积分不符合要求"),
+//   已支付(300, "已支付"),
+//   确认订单成功(310, "确认订单成功"),
+//   确认订单失败(320, "确认订单失败"),
+//   出库失败(330, "出库失败"),
+//   出库异常(340, "出库异常"),
+//   出库失败_退款失败(400, "出库失败，退款失败"),
+//   出库异常_退款失败(410, "出库异常，退款失败"),
+//   交易完成_退款失败(420, "交易完成，退款失败"),
+//   已支付_未通知出库_退款失败(430, "已支付_未通知出库_退款失败"),
+//   出库失败_已退款(450, "出库失败，已退款"),
+//   出库异常_已退款(460, "出库异常，已退款"),
+//   交易完成_已退款(470, "交易完成，已退款"),
+//   已支付_未通知出库_已退款(480, "已支付_未通知出库_已退款"),
+//   交易完成(600, "交易完成");
+var wzf = [100, 110, 120, 122];
+// 未支付
+var yqx = [121];
+// 已取消
+var zfz = [130];
+// 支付中
+var zfsb = [140, 150, 160, 170];
+// 支付失败
+var yzf = [300, 310];
+// 已支付
+var cksb = [330, 340];
+// 出库失败
+var tksb = [400, 410, 420, 430];
+// 退款失败
+var ytk = [450, 460, 470, 480];
+// 已退款
+var ywc = [600];
+// 已完成
+
+
 module.exports = {
   isSelected: function (selectedList, goods) {
     return selectedList.some(
-      function(cart) {
+      function (cart) {
         return cart.cartId === goods.cartId;
       })
   },
-  formatFenPrice: function(price){
+  formatFenPrice: function (price) {
     return Number(price / 100).toFixed(2)
   },
-  formatMobile: function(mobile) {
+  formatMobile: function (mobile) {
     var temp = getRegExp('(\d{3})\d{4}(\d{4})');
     return mobile.replace(temp, '$1****$2')
+  },
+  status2CN: function (status) {
+    if (wzf.indexOf(status) >= 0) {
+      return '未支付'
+    } else if (yqx.indexOf(status) >= 0) {
+      return '已取消'
+    } else if (zfz.indexOf(status) >= 0) {
+      return '支付中'
+    } else if (zfsb.indexOf(status) >= 0) {
+      return '支付失败'
+    } else if (yzf.indexOf(status) >= 0) {
+      return '已支付'
+    } else if (cksb.indexOf(status) >= 0) {
+      return '出库失败'
+    } else if (tksb.indexOf(status) >= 0) {
+      return '退款失败'
+    } else if (ytk.indexOf(status) >= 0) {
+      return '已退款'
+    } else if (ywc.indexOf(status) >= 0) {
+      return '已完成'
+    }
   }
 }
