@@ -1,0 +1,376 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import '../../assets/scss/index.scss';
+  page {
+    padding-bottom: 108rpx;
+    .pay-area {
+      @include flex-x-middle();
+      background: #fff;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 88rpx;
+      color: #999;
+      .amount {
+        flex: 1;
+        font-size: $xg-size-5;
+        text-align: left;
+        padding-left: 30rpx;
+        .price {
+          color: $xg-c-red;
+        }
+      }
+      .pay {
+        height: 88rpx;
+        line-height: 88rpx;
+        width: 212rpx;
+        font-size: $xg-size-5;
+        background: $xg-c-red;
+        text-align: center;
+        color: #fff;
+      }
+    }
+    .address-item {
+      @include flex-x();
+      padding: 0 30rpx;
+      height: 180rpx;
+      background-color: #fff;
+      width: 100%;
+      .left-part {
+        @include flex-y-center();
+        flex-shrink: 0;
+        padding-right: 30rpx;
+        image {
+          width: 34rpx;
+          height: 34rpx;
+        }
+      }
+      .center-part {
+        @include flex-y-center();
+        @include flex();
+        .first-line {
+          @include flex-x-middle();
+          .name {
+            font-weight: bold;
+            margin-right: 30rpx;
+          }
+          .mobile {
+            margin-right: 30rpx;
+          }
+          .default {
+            font-size: $xg-size-0;
+            color: $xg-c-red;
+            border: 1px solid $xg-c-red;
+            border-radius: 4rpx;
+            width: 70rpx;
+            text-align: center;
+            height: 30rpx;
+            line-height: 30rpx;
+          }
+        }
+        .address {
+          margin-top: 20rpx;
+          color: #666;
+          font-size: $xg-size-3;
+        }
+      }
+      .right-part {
+        @include flex-x-middle();
+        @include justify-content-end();
+        image {
+          width: 12rpx;
+        }
+      }
+    }
+    .set-address-area {
+      @include flex-x-middle();
+      height: 150rpx;
+      background-color: #fff;
+      .setAddress {
+        @include flex(1);
+        @include flex-x-center();
+      }
+      .icon {
+        width: 12rpx;
+      }
+    }
+    .amount-area {
+      margin-top: 20rpx;
+      background: #fff;
+      color: #333;
+      .amount-item {
+        height: 100rpx;
+        font-size: $xg-size-4;
+        border-bottom: 1px solid $xg-c-seg;
+        @include flex-x-middle();
+        padding: 0 30rpx;
+        .title {
+          flex: 1;
+        }
+      }
+    }
+    .goods-area {
+      margin-top: 20rpx;
+      .goods-item {
+        background: $color-white;
+        padding: 0 30rpx;
+        @include flex-x-middle();
+        .icon {
+          width: 146rpx;
+          height: 146rpx;
+          margin: 24rpx 0;
+        }
+        .info {
+          margin-left: 20rpx;
+          height: 100%;
+          @include flex(1);
+          @include flex-y-center();
+          .name {
+            @include ellipsis();
+            margin-bottom: 10rpx;
+            font-size: $xg-size-4;
+          }
+          .dim {
+            @include ellipsis();
+            font-size: $xg-size-2;
+            color: #999;
+          }
+          .price {
+            font-size: $xg-size-5;
+            margin-top: 10rpx;
+            color: $xg-c-red;
+          }
+        }
+        .count {
+          font-size: $xg-size-4;
+          color: #333;
+        }
+      }
+    }
+    .rule-area {
+      @include flex-x-middle();
+      color: #999;
+      font-size: $xg-size-4;
+      height: 20rpx;
+      margin-top: 20rpx;
+      padding: 0 30rpx;
+      image {
+        width: 30rpx;
+        height: 30rpx;
+        margin-right: 30rpx;
+      }
+      .rule {
+        color: #333;
+      }
+    }
+
+    .pay-way-area {
+      padding: 30rpx;
+      background-color: #fff;
+      margin-top: 20rpx;
+      font-size: $xg-size-4;
+      color: #333;
+      view {
+        @include flex-x-middle();
+        &:nth-of-type(2) {
+          margin: 10rpx 0;
+        }
+        text {
+          color: #999;
+          width: 150rpx;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <wxs src="./wxs/cart.wxs" module="cartWxs"></wxs>
+  <!--<address-cell v-if="hasAddress"-->
+                <!--:address="defaultAddress"-->
+                <!--:isFromList="false"-->
+                <!--@clickAddress="onClickAddress"></address-cell>-->
+  <view wx:if="{{hasAddress}}" class="address-item" @tap="onClickAddress">
+    <view class="center-part">
+      <view class="first-line">
+        <view class="name">{{defaultAddress.name}}</view>
+        <view class="mobile">{{cartWxs.formatMobile(defaultAddress.mobile)}}</view>
+        <view wx:if="{{address.isDefault === 1}}" class="default">默认</view>
+      </view>
+      <view class="second-line address">{{defaultAddress.provinceName + defaultAddress.cityName + defaultAddress.countyName +
+        defaultAddress.detailAddress}}
+      </view>
+    </view>
+    <view class="right-part">
+      <image class="icon" src="./img/right-arrow.png" mode="widthFix"/>
+    </view>
+  </view>
+  <view wx:else
+       @tap="onClickSetAddress"
+       class="set-address-area pl2 pr2">
+    <text class="setAddress">设置收货地址</text>
+      <image class="icon" src="../main/img/black-right-arrow.png" mode="widthFix"/>
+  </view>
+
+  <view class="amount-area">
+    <view class="amount-item">
+      <text class="title">商品合计</text>
+      <text>￥{{cartWxs.formatFenPrice(payInfo.total)}}</text>
+    </view>
+    <view class="amount-item">
+      <text class="title">运费</text>
+      <text>￥{{cartWxs.formatFenPrice(freight)}}</text>
+    </view>
+  </view>
+
+  <view class="goods-area">
+    <repeat for="{{goodsList}}" item="goods">
+      <view class="goods-item" @click="onClickGoods(goods)" >
+        <image class="icon" src="{{goods.goodsImg}}"/>
+        <view class="info">
+          <view class="name">
+            {{goods.name}}
+          </view>
+          <!--<view class="dim" v-if="goods.hasOwnProperty('saleValue') && JSON.parse(goods.saleValue)">-->
+            <!--<text v-for="i in JSON.parse(goods.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
+          <!--</view>-->
+          <text class="price">
+            ￥{{cartWxs.formatFenPrice(goods.nbPrice)}}
+          </text>
+        </view>
+        <view class="count">x {{goods.num}}</view>
+      </view>
+    </repeat>
+  </view>
+  <view class="rule-area"
+        @tap="onClickAgree">
+    <image wx:if="{{isAgree}}" src="./img/gouxuan.png" />
+    <image wx:else src="./img/meixuan.png" />
+    <view>我已同意 <text class="rule">《小呱GO物服务协议》</text></view>
+  </view>
+  <view class="pay-area">
+    <view class="amount">
+      实付：<text class="price">￥{{cartWxs.formatFenPrice(payTotal)}}</text>
+    </view>
+    <view class="pay" @click="actionClickPay">去付款</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerCart from '../../network/NetworkManagerCart';
+  import NetworkManagerMine from '../../network/NetworkManagerMine';
+  import NetworkManagerOrder from '../../network/NetworkManagerOrder';
+  import UnitTool from '../../tool/UnitTool';
+  export default class Cart extends wepy.page {
+    config = {
+      navigationBarTitleText: '确认订单'
+    }
+
+    components = {
+    }
+
+    data = {
+      payInfo: {},
+      goodsList: [],
+      freight: 0,
+      isAgree: true,
+      defaultAddress: {},
+      hasAddress: false,
+      noLimit: true
+    }
+
+    computed = {
+        payTotal() {
+            return this.payInfo.total + this.freight;
+        }
+    }
+
+    methods = {
+        onClickAgree() {
+            this.isAgree = !this.isAgree;
+        },
+      onClickAddress() {
+        wepy.navigateTo({
+            url: '../mine/address-list?from=order'
+        })
+      },
+      onClickSetAddress() {
+        wepy.navigateTo({
+          url: '../mine/address-list'
+        })
+      }
+    }
+
+    onLoad(option) {
+        console.log(option.payInfo);
+        this.payInfo = JSON.parse(option.payInfo);
+        this.getDefaultAddress();
+      this.goodsList = this.payInfo.selectedList;
+        this.$apply();
+    }
+
+    getDefaultAddress() {
+      NetworkManagerMine.getDefaultAddress()
+        .then(data => {
+          if (data) {
+            this.hasAddress = true;
+            this.defaultAddress = data;
+            this.$apply();
+            let skuReqs = [];
+            let skuIds = []
+            this.goodsList.forEach((item) => {
+              skuReqs.push({
+                num: item.num,
+                skuId: item.skuId
+              })
+              skuIds.push(item.skuId);
+            })
+            let freightReq =
+              {
+                'cityId': data.city,
+                'countyId': data.county,
+                'provinceId': data.province,
+                'skuReqs': skuReqs,
+                'townId': data.town
+              }
+            let limitReq = {
+              'cityId': data.city,
+              'countyId': data.county,
+              'provinceId': data.province,
+              'skuIds': skuIds,
+              'townId': data.town,
+
+            }
+            NetworkManagerOrder.checkAreaLimit(limitReq)
+              .then(data => {
+                this.noLimit = data.every(i => {
+                  return i.areaRestrict === false;
+                });
+                if (this.noLimit) {
+                  this.getFreight(freightReq);
+                } else {
+                  wepy.showToast('很抱歉,当前区域无法配送')
+                }
+              }, err => {
+                console.log(err);
+                wepy.showToast(err.message)
+              })
+          }
+        }, err => {
+          this.closeLoading();
+          Toast(err.message)
+        })
+    }
+
+    getFreight(params) {
+      NetworkManagerOrder.getFreight(params)
+        .then(data => {
+          this.freight = data.freight;
+          this.$apply();
+        }, err => {
+          console.log(err)
+        })
+    }
+
+  }
+</script>

@@ -34,9 +34,12 @@
       pages: [
         // 'pages/other/other',
         'pages/main/main',
-        'pages/category/category-detail',
+        'pages/cart/cart-payment',
+        'pages/mine/address-list',
+        'pages/mine/address-detail',
         'pages/main/goods-detail',
         'pages/category/category',
+        'pages/category/category-detail',
         'pages/cart/cart',
         'pages/mine/mine'
 

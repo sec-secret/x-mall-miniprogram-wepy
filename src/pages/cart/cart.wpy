@@ -194,7 +194,7 @@
               {{goods.name}}
             </label>
             <view class="info flex-middle-x">
-              <div class="price">￥{{goods.smartPrice}}</div>
+              <div class="price">￥{{cartWxs.formatFenPrice(goods.nbPrice)}}</div>
               <view class="input flex-middle-x">
                 <label class="count-button" data-goods="{{goods}}" @tap="actionClickMinus">-</label>
                 <input
@@ -223,10 +223,10 @@
         <view wx:else>已选({{selectedCount}})</view>
       </view>
       <view class="amount">
-        合计:<text class="price">￥{{totalPrice}}</text>
+        合计:<text class="price">￥{{cartWxs.formatFenPrice(totalPrice)}}</text>
       </view>
       <button class="pay {{selectedCount===0?'disabled':''}}"
-              @tap="actionClickPay">下单</button>
+              @tap="onClickPay">下单</button>
     </view>
   </view>
 </template>
@@ -262,7 +262,7 @@
         this.selectedList.forEach(item => {
           total += item.nbPrice * item.num;
         })
-        return UnitTool.formatFenPrice(total);
+        return total;
       },
       isSelectedAll() {
           return this.selectedCount === this.goodsList.length;
@@ -292,7 +292,7 @@
         }
         this.$apply();
       },
-      actionClickMinus: function (e) {
+      actionClickMinus(e) {
         let goods = e.currentTarget.dataset.goods;
         if (goods.num === 1) {
           return;
@@ -308,12 +308,7 @@
         NetworkManagerCart.deleteCartGoods(params).then(success => {
 //          更新购物车数据
           NetworkManagerCart.fetchCartGoods().then(data => {
-            this.goodsList = data.skus.map(_ => {
-              return {
-                ..._,
-                smartPrice: UnitTool.formatFenPrice(_.nbPrice)
-              }
-            });
+            this.goodsList = data.skus;
             /* 因为商品数量更新的原因要更新整个列表
              * 在已选择栏中删除旧数据 添加新数据 */
             let targetIndex = this.selectedList.findIndex(item => item.skuId === goods.skuId);
@@ -334,7 +329,7 @@
         }, err => {
         })
       },
-      actionClickPlus: function (e) {
+      actionClickPlus(e) {
         let goods = e.currentTarget.dataset.goods;
         let params = {
           'skuReqs': [
@@ -347,12 +342,7 @@
         NetworkManagerCart.addCart(params).then(success => {
 //          更新购物车数据
           NetworkManagerCart.fetchCartGoods().then(data => {
-            this.goodsList = data.skus.map(_ => {
-              return {
-                ..._,
-                smartPrice: UnitTool.formatFenPrice(_.nbPrice)
-              }
-            });
+            this.goodsList = data.skus;
             this.$apply();
             /* 因为商品数量更新的原因要更新整个列表
              * 在已选择栏中删除旧数据 添加新数据
@@ -378,7 +368,6 @@
         })
       },
       changeNum(e) {
-        console.log(e);
         let newVal = e.detail.value;
         let cart = e.currentTarget.dataset.goods;
         let difference = newVal - cart.num;
@@ -394,12 +383,7 @@
           NetworkManagerCart.addCart(params).then(data => {
 //          更新购物车数据
             NetworkManagerCart.fetchCartGoods().then(data => {
-              this.goodsList = data.skus.map(_ => {
-                return {
-                  ..._,
-                  smartPrice: UnitTool.formatFenPrice(_.nbPrice)
-                }
-              });
+              this.goodsList = data.skus;
               /* 因为商品数量更新的原因要更新整个列表
                * 在已选择栏中删除旧数据 添加新数据
                */
@@ -428,12 +412,7 @@
           NetworkManagerCart.deleteCartGoods(params).then(data => {
 //          更新购物车数据
             NetworkManagerCart.fetchCartGoods().then(data => {
-              this.goodsList = data.skus.map(_ => {
-                return {
-                  ..._,
-                  smartPrice: UnitTool.formatFenPrice(_.nbPrice)
-                }
-              });
+              this.goodsList = data.skus;
               /* 因为商品数量更新的原因要更新整个列表
                * 在已选择栏中删除旧数据 添加新数据 */
               let targetIndex = this.selectedList.findIndex(item => item.skuId === cart.skuId);
@@ -456,6 +435,18 @@
             console.log(err)
           })
         }
+      },
+      onClickPay() {
+        if (this.selectedList.length === 0) {
+          return
+        }
+        let payInfo = JSON.stringify({
+          total: this.totalPrice,
+          selectedList: this.selectedList
+        })
+        wepy.navigateTo({
+          url: './cart-payment?payInfo=' + payInfo
+        })
       }
     }
     fetchGoodsList() {
@@ -468,12 +459,7 @@
           goodsCountList[goods.skuId] = goods.num;
           goodsKeyList[goods.skuId] = goods;
         }
-        this.goodsList = data.skus.map(_ => {
-          return {
-            ..._,
-            smartPrice: UnitTool.formatFenPrice(_.nbPrice)
-          }
-        });
+        this.goodsList = data.skus;
         this.$apply();
         console.log(data)
       }, err => {
@@ -481,7 +467,7 @@
       })
     }
 
-    onLoad() {
+    onShow() {
       this.fetchGoodsList();
     }
   }

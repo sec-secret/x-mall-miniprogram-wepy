@@ -1,0 +1,481 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import '../../assets/scss/index.scss';
+  .address-area {
+    background: #fff;
+    padding-left: 30rpx;
+    .section {
+      @include flex-x-middle();
+      height: 100rpx;
+      padding-right: 30rpx;
+      border-bottom: 1rpx solid $xg-c-seg;
+      color: #333;
+      font-size: $xg-size-5;
+      input {
+        @include flex(1);
+        font-size: $xg-size-5;
+      }
+      .input-placeholder, .placeholder {
+        font-size: $xg-size-5;
+        color: $c-999;
+      }
+      &.address-street {
+        height: 200rpx;
+        padding: 20rpx 0;
+        textarea {
+          @include flex(1);
+          font-size: $xg-size-5;
+          resize: none;
+          height: 100%;
+          border: 0;
+        }
+      }
+      &.set-default {
+        @include flex-justify-content_space-between();
+        image {
+          width: 34rpx;
+          height: 34rpx;
+        }
+      }
+    }
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 148rpx;
+    background-color: #fff;
+    padding: 30rpx;
+    .save-button {
+      @include flex-center();
+      width: 100%;
+      height: 100%;
+      background-color: $xg-c-red;
+      font-size: $size-5;
+      color: #fff;
+      border-radius: 4rpx;
+    }
+  }
+  .popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+    .address-section {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background-color: white;
+      height: 900rpx;
+      width: 100%;
+      overflow: auto;
+      .title-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 80rpx;
+        width: 100%;
+        padding: 0 25rpx;
+        border-bottom: 1px solid $xg-c-seg;
+        background-color: #fff;
+        view {
+          display: inline-block;
+          margin-right: 20rpx;
+          height: 80rpx;
+          line-height: 80rpx;
+          &.selectedTitle {
+            color: $xg-c-red;
+            font-weight: blod;
+            border-bottom: 2rpx solid $xg-c-red;
+          }
+        }
+      }
+      .item-list {
+        margin-top: 80rpx;
+        .wrapper {
+          view {
+            height: 80rpx;
+            line-height: 80rpx;
+            margin-left: 25rpx;
+            width: 100%;
+            &.selectedArea {
+              color: $xg-c-red;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <wxs src="./wxs/mine.wxs" module="mineWxs"/>
+  <view class="address-area">
+    <view class="name section">
+      <input type="text"
+             placeholder="收货人姓名"
+             placeholder-class="input-placeholder"
+             value="{{name}}"
+             @input="onInputName">
+    </view>
+    <view class="mobile section">
+      <input type="number"
+             placeholder="收货人手机号"
+             placeholder-class="input-placeholder"
+             maxlength="11" value="{{mobile}}"
+             @input="onInputMobile">
+    </view>
+    <view class="address-city section" @tap="onClickAddress">
+      <view wx:if="{{province.areaId === 0}}" class="content placeholder">省份 城市 区县</view>
+      <view wx:else class="content">{{province.areaName}} {{city.areaName}} {{county.areaName}} {{town.areaName}}</view>
+    </view>
+    <view class="address-street section">
+      <textarea value="{{detailAddress}}"
+                row="3"
+                cols="4"
+                placeholder="详细地址"
+                placeholder-class="input-placeholder"
+                @input="onInputDetail"></textarea>
+    </view>
+    <view @tap="onClickDefault" class="set-default section">
+      <view>设为默认地址</view>
+      <image wx:if="{{isDefault}}" src="./img/gouxuan.png" mode="widthFix" />
+      <image wx:else src="./img/meixuan.png" mode="widthFix" />
+    </view>
+  </view>
+  <view class="footer">
+    <button class="save-button" @tap="onClickSave">保存</button>
+  </view>
+  <view wx:if="{{showAddress}}" class="popup">
+    <view class="address-section ">
+      <view class="title-list">
+        <repeat for="{{titleList}}" item="title">
+          <view :class="{selectedTitle: showLevel === index}"
+                @tap="onClickTitle({{index}})">
+            {{(longAddress[index].areaName !== '') ? longAddress[index].areaName : title}}
+          </view>
+        </repeat>
+      </view>
+      <view class="item-list">
+        <view class="wrapper" hidden="{{showLevel !== 0}}">
+          <repeat for="{{provinces}}" item="i">
+            <view
+              :class="{selectedArea: i.areaName === province.areaName}"
+              @tap="onClickProvince({{i}})">{{i.areaName}}</view>
+          </repeat>
+        </view>
+        <view class="wrapper" hidden="{{showLevel !== 1}}">
+          <repeat for="{{cities}}" item="i">
+            <view :class="{selectedArea: i.areaName === city.areaName}"
+                  @tap="onClickCity({{i}})">{{i.areaName}}</view>
+          </repeat>
+        </view>
+        <view class="wrapper" hidden="{{showLevel !== 2}}">
+          <repeat for="{{counties}}"
+                  item="i">
+            <view :class="{selectedArea: i.areaName === county.areaName}"
+                  @tap="onClickCounty({{i}})">{{i.areaName}}</view>
+          </repeat>
+        </view>
+        <view class="wrapper" hidden="{{showLevel !== 3}}">
+          <repeat for="{{towns}}"
+                  item="i">
+            <view :class="{selectedArea: i.areaName === town.areaName}"
+                  @tap="onClickTown({{i}})">{{i.areaName}}</view>
+          </repeat>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerMine from '../../network/NetworkManagerMine'
+  import StringTool from '../../tool/StringTool';
+  export default class AddressDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '编辑地址'
+    }
+    components = {
+    }
+
+    data = {
+      titleList: [
+        '省份',
+        '城市',
+        '乡镇'
+      ],
+    showLevel: 0,
+    provinces: [],
+    cities: [],
+    counties: [],
+    towns: [],
+    province: {
+      areaName: '',
+      areaId: 0
+    },
+    city: {
+      areaName: '',
+      areaId: 0
+    },
+    county: {
+      areaName: '',
+      areaId: 0
+    },
+    town: {
+      areaName: '',
+      areaId: 0
+    },
+    detailAddress: '',
+    name: '',
+    mobile: '',
+    showAddress: false,
+    isDefault: false
+    }
+
+    computed = {
+      longAddress() {
+        return [this.province, this.city, this.county, this.town]
+      }
+    }
+
+    methods = {
+        onClickDefault() {
+            this.isDefault = !this.isDefault;
+        },
+      onClickAddress() {
+        this.showAddress = true;
+        this.$apply();
+      },
+      onInputName(e) {
+           this.name =  e.detail.value;
+           this.$apply();
+      },
+      onInputMobile(e) {
+        this.mobile =  e.detail.value;
+        this.$apply();
+      },
+      onInputDetail(e) {
+        this.detailAddress =  e.detail.value;
+        this.$apply();
+      },
+      onClickTitle(index) {
+        this.showLevel = index;
+        this.$apply();
+      },
+      onClickProvince(item) {
+        NetworkManagerMine.fetchCities({provinceId: item.areaId})
+          .then(list => {
+//            document.querySelector('.address-section').scrollTop = 0;
+            this.showLevel = 1;
+            this.province = item;
+            this.cities = list;
+            this.city = {
+              areaName: '',
+              areaId: 0
+            };
+            this.counties = [];
+            this.county = {
+              areaName: '',
+              areaId: 0
+            };
+            this.$apply();
+          }, err => {
+            console.log(err)
+          })
+      },
+      onClickCity(item) {
+        NetworkManagerMine.fetchCounties({cityId: item.areaId})
+          .then(list => {
+//            document.querySelector('.address-section').scrollTop = 0;
+            this.showLevel = 2;
+            this.city = item;
+            this.counties = list;
+            this.county = {
+              areaName: '',
+              areaId: 0
+            };
+            this.$apply();
+          }, err => {
+            console.log(err)
+          })
+      },
+      onClickCounty(item) {
+//        document.querySelector('.address-section').scrollTop = 0;
+        this.county = item;
+        NetworkManagerMine.fetchTowns({countyId: item.areaId})
+          .then(list => {
+              if (list.length !== 0) {
+                this.titleList.push('区域');
+                this.showLevel = 3;
+                this.towns = list;
+                this.town = {
+                  areaName: '',
+                  areaId: 0
+                }
+              } else {
+                this.showLevel = 2;
+                this.towns = list;
+                this.town = {
+                  areaName: '',
+                  areaId: 0
+                }
+                this.titleList = this.titleList.slice(0, 3);
+                this.showAddress = false;
+              }
+              this.$apply();
+//              document.querySelector('.address-section').scrollTop = 0;
+            }
+            , err => {
+              console.log(err)
+            })
+      },
+      onClickTown(item) {
+//        document.querySelector('.address-section').scrollTop = 0;
+        this.town = item;
+        this.showAddress = false;
+        this.$apply();
+      },
+      onClickSave() {
+        if (this.name === '') {
+          wepy.showToast('请输入收件人姓名');
+          return
+        }
+        if (!StringTool.isMobile(this.mobile)) {
+          wepy.showToast('请输入正确的手机号');
+          return
+        }
+        if (this.county.areaId === 0 || (this.towns.length !== 0 && this.town.areaId === 0)) {
+          wepy.showToast('请选择收件地址');
+          return
+        }
+        if (this.detailAddress === '') {
+          wepy.showToast('请输入详细地址');
+          return
+        }
+        let address;
+        if (this.isEdit) {
+          address = {
+            'city': this.city.areaId,
+            'county': this.county.areaId,
+            'detailAddress': this.detailAddress,
+            'mobile': this.mobile,
+            'name': this.name,
+            'province': this.province.areaId,
+            'town': this.town.areaId,
+            'isDefault': this.isDefault ? 1 : 0,
+            'id': this.addressInfo.id
+          }
+        } else {
+          address = {
+            'city': this.city.areaId,
+            'county': this.county.areaId,
+            'detailAddress': this.detailAddress,
+            'mobile': this.mobile,
+            'name': this.name,
+            'province': this.province.areaId,
+            'town': this.town.areaId,
+            'isDefault': this.isDefault ? 1 : 0
+          }
+        }
+
+        NetworkManagerMine.saveAddress(address)
+          .then(data => {
+            wepy.navigateBack();
+          }, err => {
+            console.log(err)
+          })
+      }
+    }
+
+    onLoad(option) {
+      let query;
+        if (option.hasOwnProperty('query')) {
+          query = JSON.parse(option.query);
+          this.addressInfo = query.addressInfo;
+          this.isEdit = query.type === 'edit';
+        }
+
+      NetworkManagerMine.fetchProvince()
+        .then(list => {
+          this.provinces = list.sort(function (a, b) {
+            return a.areaId - b.areaId
+          });
+//          如果是编辑的情况
+          if (this.isEdit) {
+            let addressInfo = query.addressInfo;
+            this.name = addressInfo.name;
+            this.mobile = addressInfo.mobile;
+            this.detailAddress = addressInfo.detailAddress;
+            this.isDefault = addressInfo.isDefault;
+            this.province = list.find(item => {
+              return item.areaId === addressInfo.province;
+            })
+            this.$apply();
+            NetworkManagerMine.fetchCities({provinceId: addressInfo.province})
+              .then(list => {
+                this.cities = list.sort(function (a, b) {
+                  return a.areaId - b.areaId
+                });
+                this.city = list.find(item => {
+                  return item.areaId === addressInfo.city;
+                })
+                this.$apply();
+              }, err => {
+                console.log(err)
+              })
+
+            NetworkManagerMine.fetchCounties({cityId: addressInfo.city})
+              .then(list => {
+                this.showLevel = 2;
+                this.counties = list.sort(function (a, b) {
+                  return a.areaId - b.areaId
+                });
+                this.county = list.find(item => {
+                  return item.areaId === addressInfo.county;
+                })
+                this.$apply();
+              }, err => {
+                console.log(err)
+              })
+            if (addressInfo.town !== 0) {
+              NetworkManagerMine.fetchTowns({countyId: addressInfo.county})
+                .then(list => {
+                  this.showLevel = 3;
+                  this.titleList.push('区域');
+                  this.towns = list.sort(function (a, b) {
+                    return a.areaId - b.areaId
+                  });
+                  this.town = list.find(item => {
+                    return item.areaId === addressInfo.town;
+                  })
+                  this.$apply();
+                }, err => {
+                  console.log(err)
+                })
+            }
+          } else {
+            this.fetchProvinces()
+          }
+        }, err => {
+          console.log(err)
+        })
+    }
+
+    fetchProvinces() {
+      NetworkManagerMine.fetchProvince()
+        .then(list => {
+          this.provinces = list.sort(function (a, b) {
+            return a.areaId - b.areaId
+          });
+          this.$apply();
+        }, err => {
+          console.log(err)
+        })
+    }
+  }
+</script>

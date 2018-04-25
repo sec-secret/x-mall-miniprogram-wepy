@@ -258,7 +258,7 @@
         <view class="recommend-content"
               @touchstart="actionTouchCategoryStart"
               @touchmove="actionTouchCategoryMove"
-              @touchend="actionTouchCategoryEnd">>
+              @touchend="actionTouchCategoryEnd">
           <repeat for="{{group.goods}}" item="goods">
             <view class="goods-item"
                   @tap="actionClickHotGoods({{goods}})"
