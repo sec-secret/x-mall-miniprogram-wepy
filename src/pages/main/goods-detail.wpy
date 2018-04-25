@@ -365,8 +365,8 @@
     </view>
 
     <view class="goods-description">
-      <rich-text class="description" type="node" nodes="{{testRictText}}"></rich-text>
-      <!--<view>{{testRictText}}</view>-->
+      <rich-text class="description" type="node" nodes="{{testRichText}}"></rich-text>
+      <!--<view>{{testRichText}}</view>-->
       <!--<label wx:if="goodsExt.mobileDesc" v-html="goodsExt.mobileDesc">-->
       <!--</label>-->
     </view>
@@ -466,7 +466,7 @@
     }
 
     data = {
-      testRictText: '',
+      testRichText: '',
       isShowBuyPopArea: false,
       skuId: 0,
       goods: null,
@@ -663,7 +663,7 @@
       // this.fetchGoodsState();
       this.fetchGoodsDetail();
       this.fetchSimilarGoods();
-      // let stationName = TestRictText.BODY.replace(/[\r\n]/g, '').substring(9);
+      // let stationName = TestRichText.BODY.replace(/[\r\n]/g, '').substring(9);
       // stationName = JSON.parse(stationName.substring(0, stationName.length - 1));
       // let aimTree = CPParse.parse(stationName.content);
     }
@@ -719,7 +719,7 @@
         this.$apply();
         // TODO: 描述富文本的格式化
 
-        let stationName = data.goodsExt.goodsDetailDesc;
+        let stationName = data.goodsExt.mobileDesc;
         stationName = EncodeTool.reconvert(stationName);
         let aimTree = CPParse.parseString(stationName);
         let linkStyleList = [];
@@ -743,7 +743,7 @@
             cssString += cs;
           })
           CPParse.applyCss2Node(aimTree, cssString);
-          this.testRictText = aimTree.children;
+          this.testRichText = aimTree.children;
           console.log(aimTree);
           this.$apply();
         }, error => {

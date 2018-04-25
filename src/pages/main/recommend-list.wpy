@@ -1,0 +1,127 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .goods-area {
+    padding: 0 15rpx;
+    background-color: #fff;
+    height: 100vh;
+    .goods-item {
+      float: left;
+      width: 50%;
+      padding: 20rpx 10rpx;
+      background: #fff;
+      /*&:first-of-type {*/
+      /*width: ;*/
+      /*}*/
+      image {
+        width: 100%;
+        height: auto;
+      }
+      .info {
+        height: 150rpx;
+        justify-content: center;
+        color: $xg-c-black;
+        font-size: $xg-size-3;
+        .mall-product-name {
+          @include ellipsis(2);
+          margin-top: 16rpx;
+          padding: 0 10rpx;
+          font-weight: lighter;
+        }
+        .price {
+          display: block;
+          font-weight: bold;
+          font-size: $xg-size-5;
+          margin-top: 10rpx;
+          padding: 0 10rpx;
+        }
+        .fenqi {
+          color: #999;
+          padding: 0 10rpx;
+          i {
+            font-weight: bold;
+            color: $xg-c-red;
+            font-size: $xg-size-4;
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <wxs src="../main/wxs/main.wxs" module="mainwxs"></wxs>
+  <scroll-view class="goods-area" scroll-y="true" bindscrolltolower="loadMore" scroll-top="{{scrollTop}}">
+    <repeat for="{{goodsList}}" item="goods">
+      <view class="goods-item" @tap="onClickGoods({{goods}})">
+        <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
+        </image>
+        <view class="info">
+          <text class="name mall-product-name">{{goods.name}}</text>
+          <text class="price">￥{{mainwxs.formatFenPrice(goods.nbPrice)}}</text>
+          <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
+        </view>
+      </view>
+    </repeat>
+  </scroll-view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerMain from '../../network/NetworkManagerMain'
+  export default class RecommendList extends wepy.page {
+    config = {
+      navigationBarTitleText: '推荐'
+    }
+
+    data = {
+      category: {},
+      page: 1,
+      goodsList: [],
+      catId: '',
+      noMore: false,
+      catName: ''
+    }
+
+    computed = {}
+
+    methods = {
+      onClickGoods(goods) {
+        /* eslint-disable */
+        wepy.navigateTo({
+          url: '/pages/main/goods-detail?skuId=' + goods.skuId
+        })
+        /* eslint-enable */
+      },
+      loadMore() {
+        if (this.noMore) {
+          return
+        }
+        this.page = this.page + 1;
+        NetworkManagerMain.mallRecommend(this.catId, this.page)
+          .then(data => {
+            this.noMore = data.length === 0;
+            if (this.noMore) {
+              return
+            }
+            this.goodsList = this.goodsList.concat(data);
+            this.$apply();
+          }, err => {
+            console.log(err);
+          })
+      }
+    }
+
+    onLoad(option) {
+        this.category = JSON.parse(option.category);
+        this.catId = this.category.catId;
+        this.catName = this.category.catName;
+        wepy.setNavigationBarTitle({
+            title: this.catName + '推荐'
+        })
+      NetworkManagerMain.mallRecommend(this.catId, this.page).then(data => {
+        this.goodsList = data;
+        this.$apply();
+      }, err => {
+      });
+    }
+  }
+</script>
