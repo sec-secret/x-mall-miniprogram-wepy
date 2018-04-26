@@ -79,11 +79,11 @@
     <text class="text">{{payResult.text}}</text>
     <view class="btn-group">
       <view class="first">
-        <button @click="onClickOrder">查看订单</button>
+        <button @tap="onClickOrder">查看订单</button>
       </view>
       <view class="second">
-        <button wx:if="{{payResult.title === '支付取消' || payResult.title === '支付失败'}}" @click="onClickPay">继续支付</button>
-        <button wx:else @click="goHome">返回首页</button>
+        <button wx:if="{{payResult.title === '支付取消' || payResult.title === '支付失败'}}" @tap="onClickPay">继续支付</button>
+        <button wx:else @tap="onClickHome">返回首页</button>
       </view>
     </view>
   </view>
@@ -138,11 +138,26 @@
     }
 
     methods = {
+        onClickHome() {
+          wepy.switchTab({
+            url: '../main/main'
+          })
+        },
+      onClickOrder() {
+        wepy.switchTab({
+          url: '../mine/mine'
+        })
+      },
+      onClickPay() {
+            wepy.showToast({
+                title: '支付'
+            })
+      }
     }
 
     onLoad(option) {
         this.payInfo = JSON.parse('{"address":{"id":43,"city":2813,"county":51976,"isDefault":1,"priority":100000,"province":2,"town":0,"userId":4,"detailAddress":"远中产业园4期1号楼502","mobile":"15300928006","name":"张浩轩","provinceName":"上海","cityName":"徐汇区","countyName":"城区"},"payTotal":48902}');
-        this.result = 'success';
+        this.result = 'fail';
         this.orderId = 2018042614015395112288;
         this.$apply();
     }
