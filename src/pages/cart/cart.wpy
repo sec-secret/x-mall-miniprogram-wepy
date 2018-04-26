@@ -1,6 +1,7 @@
 <style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
   .cart{
+    background-color: $xg-c-bg;
     .cart-area {
       .tips {
         @include flex-x-middle();
@@ -9,6 +10,14 @@
         height: 80rpx;
         font-size: $xg-size-2;
         color: #999;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: $xg-c-bg;
+        z-index: 1;
+        border-top: 1px solid $xg-c-seg;
+        border-bottom: 1px solid $xg-c-seg;
         view {
           @include flex-x-middle();
           image {
@@ -18,89 +27,94 @@
           }
         }
       }
-      padding-bottom: $tab-bar-height;
-      background: $color-back;
-      .cart-item {
-        height: 190rpx;
-        background: #fff;
-        margin-bottom: 20rpx;
-        padding: 30rpx 30rpx 30rpx 0;
-        @include flex-x-middle();
-        .edit-select-space {
-          padding: 0 30rpx;
-          height: 100%;
-          @include flex-center();
-          .select-icon {
-            width: 34rpx;
-            height: 34rpx;
-          }
-        }
-        .icon {
-          margin-left: 10rpx;
-          width: 140rpx;
-          height: 140rpx;
-        }
-        .content {
-          margin-left: 20rpx;
-          flex: 1;
-          .name {
-            @include ellipsis();
-            font-size: $xg-size-4;
-            color: #333;
-          }
-          .cart-dim {
-            @include ellipsis(2);
-            font-size: $xg-size-2;
-            color: #999;
-            margin-top: .1rem;
-            label {
-              margin-right: .1rem;
+      .cart-list {
+        padding-top: 80rpx;
+        padding-bottom: 88rpx;
+        .cart-item {
+          height: 190rpx;
+          background: #fff;
+          margin-bottom: 20rpx;
+          padding: 30rpx 30rpx 30rpx 0;
+          @include flex-x-middle();
+          .edit-select-space {
+            padding: 0 30rpx;
+            height: 100%;
+            @include flex-center();
+            .select-icon {
+              width: 34rpx;
+              height: 34rpx;
             }
           }
-          .info {
-            margin-top: 10rpx;
-            height: 50rpx;
-            line-height: 50rpx;
-            .price {
+          .goods-part {
+            @include flex-x-middle();
+            .icon {
+              margin-left: 10rpx;
+              width: 140rpx;
+              height: 140rpx;
+            }
+            .content {
+              margin-left: 20rpx;
               flex: 1;
-              color: $xg-c-red;
-              font-weight: bold;
-              font-size: $xg-size-5;
-            }
-            input {
-              min-height: 0;
-            }
-            .input {
-              @include flex-x-middle();
-              z-index: 0;
-              .count-button {
-                @include flex(none);
-                @include flex-center();
-                height: 48rpx;
-                line-height: 48rpx;
-                width: 52rpx;
-                border-radius: 0 4rpx 4rpx 0;
-                border: 1px solid #999999;
+              .name {
+                @include ellipsis();
                 font-size: $xg-size-4;
-                font-weight: bold;
-                color: #999999;
-                border-left-width: 0;
+                color: #333;
               }
-              .count-button:first-of-type {
-                  border-radius: 4rpx 0 0 4rpx;
-                  border-right: 0;
-                  border-left-width: 1rpx;
+              .cart-dim {
+                @include ellipsis(2);
+                font-size: $xg-size-2;
+                color: #999;
+                margin-top: .1rem;
+                label {
+                  margin-right: .1rem;
+                }
               }
-              .count-number {
-                @include flex(none);
-                @include flex-center();
-                text-align: center;
-                border: 1px solid #999;
-                height: 48rpx;
-                line-height: 48rpx;
-                width: 70rpx;
-                font-weight: bold;
-                outline: 0;
+              .info {
+                margin-top: 10rpx;
+                height: 50rpx;
+                line-height: 50rpx;
+                .price {
+                  flex: 1;
+                  color: $xg-c-red;
+                  font-weight: bold;
+                  font-size: $xg-size-5;
+                }
+                input {
+                  min-height: 0;
+                }
+                .input {
+                  @include flex-x-middle();
+                  z-index: 0;
+                  .count-button {
+                    @include flex(none);
+                    @include flex-center();
+                    height: 48rpx;
+                    line-height: 48rpx;
+                    width: 52rpx;
+                    border-radius: 0 4rpx 4rpx 0;
+                    border: 1px solid #999999;
+                    font-size: $xg-size-4;
+                    font-weight: bold;
+                    color: #999999;
+                    border-left-width: 0;
+                  }
+                  .count-button:first-of-type {
+                    border-radius: 4rpx 0 0 4rpx;
+                    border-right: 0;
+                    border-left-width: 1rpx;
+                  }
+                  .count-number {
+                    @include flex(none);
+                    @include flex-center();
+                    text-align: center;
+                    border: 1px solid #999;
+                    height: 48rpx;
+                    line-height: 48rpx;
+                    width: 70rpx;
+                    font-weight: bold;
+                    outline: 0;
+                  }
+                }
               }
             }
           }
@@ -168,45 +182,52 @@
           </view>
         </repeat>
       </view>
-      <repeat for="{{goodsList}}"
-              item="goods"
-              key="goods.skuId">
-        <view class="cart-item">
-          <label wx:if="{{isEditing}}" @tap="delGoods(goods)">
-            删除
-          </label>
-          <label class="edit-select-space flex-center-x"
-                 data-goods="{{goods}}"
-                 @tap="actionClickGoodsSelected">
-            <image wx:if="{{cartWxs.isSelected(selectedList,goods)}}"
-                   class="select-icon"
-                   src="./img/gouxuan.png">
-            </image>
-            <image wx:else
-                   class="select-icon"
-                   src="./img/meixuan.png">
-            </image>
-          </label>
-          <image mode="aspectFit" class="icon" src="{{goods.goodsImg}}" alt="">
-          </image>
-          <view class="content flex-y">
-            <label class="name ellipsis-2">
-              {{goods.name}}
+      <view class="cart-list">
+        <repeat for="{{goodsList}}"
+                item="goods"
+                key="goods.skuId">
+          <view class="cart-item">
+            <label wx:if="{{isEditing}}" @tap="delGoods(goods)">
+              删除
             </label>
-            <view class="info flex-middle-x">
-              <div class="price">￥{{cartWxs.formatFenPrice(goods.nbPrice)}}</div>
-              <view class="input flex-middle-x">
-                <label class="count-button" data-goods="{{goods}}" @tap="actionClickMinus">-</label>
-                <input
-                  class="count-number"
-                  type="number"
-                  value="{{goods.num}}" @blur="changeNum" data-goods="{{goods}}"/>
-                <label class="count-button" data-goods="{{goods}}" @tap="actionClickPlus">+</label>
+            <label class="edit-select-space"
+                   data-goods="{{goods}}"
+                   @tap="actionClickGoodsSelected">
+              <image wx:if="{{cartWxs.isSelected(selectedList,goods)}}"
+                     class="select-icon"
+                     src="./img/gouxuan.png">
+              </image>
+              <image wx:else
+                     class="select-icon"
+                     src="./img/meixuan.png">
+              </image>
+            </label>
+            <view class="goods-part" @tap="onClickGoods({{goods}})">
+              <image mode="aspectFit" class="icon" src="{{goods.goodsImg}}" alt="">
+              </image>
+              <view class="content flex-y">
+                <label class="name ellipsis-2">
+                  {{goods.name}}
+                </label>
+                <view class="info flex-middle-x">
+                  <div class="price">￥{{cartWxs.formatFenPrice(goods.nbPrice)}}</div>
+                  <view class="input flex-middle-x">
+                    <label class="count-button" data-goods="{{goods}}" @tap="actionClickMinus">-</label>
+                    <input
+                      class="count-number"
+                      type="number"
+                      value="{{goods.num}}"
+                      @input.stop=""
+                      @blur="changeNum"
+                      data-goods="{{goods}}"/>
+                    <label class="count-button" data-goods="{{goods}}" @tap="actionClickPlus">+</label>
+                  </view>
+                </view>
               </view>
             </view>
           </view>
-        </view>
-      </repeat>
+        </repeat>
+      </view>
     </view>
     <view class="pay-area">
       <view class="select flex-center-x"

@@ -43,6 +43,7 @@
         'pages/mine/login',
         'pages/mine/order-list',
         'pages/mine/order-detail',
+        'pages/mine/order-track',
         'pages/mine/address-list',
         'pages/mine/address-detail',
         'pages/payment/payment',

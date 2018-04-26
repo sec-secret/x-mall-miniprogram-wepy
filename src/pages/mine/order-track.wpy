@@ -1,0 +1,105 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import '../../assets/scss/index.scss';
+ page {
+   background-color: #fff;
+   .order-id {
+     height: 100rpx;
+     line-height: 100rpx;
+     padding: 0 30rpx;
+     border-bottom: 1px solid $xg-c-seg;
+     font-size: $xg-size-5;
+   }
+   .tracks {
+     padding: 30rpx;
+     font-size: $xg-size-4;
+     color: #999;
+     .track-item {
+       @include flex-x-middle();
+       .left {
+         @include flex-center();
+         flex-shrink: 0;
+         view {
+           width: 10rpx;
+           height: 10rpx;
+           border-radius: 10rpx;
+           background-color: #999;
+         }
+       }
+       .right {
+         padding: 20rpx 0 20rpx 40rpx;
+       }
+     }
+     .track-item:first-of-type {
+       color: $xg-c-red;
+       .left {
+         view {
+           width: 20rpx;
+           height: 20rpx;
+           background-color: $xg-c-red;
+           border-radius: 40rpx;
+         }
+       }
+     }
+   }
+ }
+</style>
+<template>
+  <wxs src="./wxs/mine.wxs" module="mineWxs"/>
+  <view class="order-id">
+    <text>订单编号: {{orderId}}</text>
+  </view>
+  <view class="tracks">
+    <repeat for="{{tracks}}" item="track">
+      <view class="track-item">
+        <view class="left">
+          <view></view>
+        </view>
+        <view class="right">
+          <text>{{track.content}}</text>
+          <text>{{track.msgTime}}</text>
+        </view>
+      </view>
+    </repeat>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {connect} from 'wepy-redux'
+  import NetworkManagerOrder from '../../network/NetworkManagerOrder';
+
+  export default class OrderTrack extends wepy.page {
+    config = {
+      navigationBarTitleText: '物流信息'
+    }
+
+    components = {}
+
+    data = {
+      tracks: [],
+      trackNo:'',
+      orderId: ''
+    }
+
+    computed = {}
+
+    methods = {}
+
+    onLoad(option) {
+        this.orderId = option.orderId;
+        this.$apply();
+        this.fetchOrderTrack();
+    }
+
+    fetchOrderTrack() {
+      NetworkManagerOrder.fetchOrderTrack(this.orderId)
+        .then(data => {
+          this.tracks = data.orderTracks[0].skuTracks.reverse();
+          this.trackNo = data.trackNo;
+          this.$apply();
+        }, err => {
+          console.log(err)
+        })
+    }
+  }
+</script>

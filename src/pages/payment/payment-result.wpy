@@ -158,7 +158,7 @@
     onLoad(option) {
         this.payInfo = JSON.parse('{"address":{"id":43,"city":2813,"county":51976,"isDefault":1,"priority":100000,"province":2,"town":0,"userId":4,"detailAddress":"远中产业园4期1号楼502","mobile":"15300928006","name":"张浩轩","provinceName":"上海","cityName":"徐汇区","countyName":"城区"},"payTotal":48902}');
         this.result = 'fail';
-        this.orderId = 2018042614015395112288;
+        this.orderId = '2018042614015395112288';
         this.$apply();
     }
   }

@@ -148,8 +148,8 @@
         <view class="bottom-part">
           <view class="total">应付: <text>￥{{mineWxs.formatFenPrice(order.order.nbAmount)}}</text></view>
           <view class="button-group" wx:if="{{mineWxs.status2CN(order.order.status) === '未支付'}}">
-            <button @click.stop="cancelOrder">取消支付</button>
-            <button @click.stop="goPay">直接付款</button>
+            <button @tap.stop="onClickCancel({{order}})">取消支付</button>
+            <button @tap.stop="onClickPay({{order}})">直接付款</button>
           </view>
         </view>
       </view>
@@ -233,10 +233,18 @@
         wepy.navigateTo({
           url: './order-detail?order=' + JSON.stringify(order)
         })
+      },
+      onClickCancel(order) {
+        NetworkManagerOrder.cancelOrder(order.order.orderId)
+          .then(data => {
+              this.fetchOrders();
+          }, err => {
+            wepy.showToast({title: err.message, icon: 'none'})
+          })
       }
     }
 
-    onLoad() {
+    onShow() {
       this.fetchOrders();
     }
 

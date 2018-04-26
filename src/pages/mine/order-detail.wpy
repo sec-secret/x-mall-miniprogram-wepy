@@ -144,24 +144,27 @@
       left: 0;
       bottom: 0;
       width: 100%;
-      height: $xg-footer-height;
+      height: 88rpx;
       background-color: #fff;
-      padding-right: $padding;
+      padding-right: 30rpx;
       @include flex-x-middle();
       @include justify-content-end();
       border-top: 1px solid $xg-c-seg;
-      button {
-        width: 192rpx;
-        height: 64rpx;
-        border-radius: 4rpx;
-        border: 1rpx solid #999;
-        color: #999;
-        background-color: transparent;
-        font-size: $xg-size-3;
-        &:last-of-type {
-          color: $xg-c-red;
-          border-color: $xg-c-red;
-          margin-left: 20rpx;
+      view {
+        @include flex-x-middle();
+        button {
+          width: 192rpx;
+          height: 64rpx;
+          border-radius: 4rpx;
+          border: 1rpx solid #999;
+          color: #999;
+          background-color: transparent;
+          font-size: $xg-size-3;
+          &:last-of-type {
+            color: $xg-c-red;
+            border-color: $xg-c-red;
+            margin-left: 20rpx;
+          }
         }
       }
     }
@@ -182,7 +185,7 @@
       </view>
     </view>
   </view>
-    <view class="orderTrack" @click="onClickTrack()">
+    <view class="orderTrack" @tap="onClickTrack">
       点击查看物流信息
     </view>
     <view class="goods-info">
@@ -216,8 +219,8 @@
     </view>
     <view class="pay-info">
       <view wx:if="{{mineWxs.status2CN(orderInfo.order.status) === '未支付'}}">
-        <button @click="cancelOrder">取消订单</button>
-        <button @click="goPay">直接付款</button>
+        <button @tap="onClickCancel">取消订单</button>
+        <button @tap="onClickPay">直接付款</button>
       </view>
     </view>
 </template>
@@ -247,7 +250,25 @@
 
     computed = {}
 
-    methods = {}
+    methods = {
+      onClickTrack() {
+//        跳转物流页面
+        wepy.navigateTo({
+            url: './order-track?orderId=' + this.orderInfo.order.orderId
+        })
+      },
+      onClickCancel() {
+        NetworkManagerOrder.cancelOrder(this.orderInfo.order.orderId)
+          .then(data => {
+              wepy.navigateBack()
+          }, err => {
+            wepy.showToast({title: err.message, icon: 'none'})
+          })
+      },
+      onClickPay() {
+        wepy.showToast({title: 'TODO', icon: 'none'})
+      }
+    }
 
     onLoad(option) {
       console.log(option);
