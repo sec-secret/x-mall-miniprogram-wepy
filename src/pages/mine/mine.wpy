@@ -81,7 +81,7 @@
       </view>
     </view>
     <repeat for="{{mineItems}}">
-      <view class="mine-item" @tap="onClickOrders">
+      <view class="mine-item" @tap="onClickItem({{index}})">
         <view class="name">
           <image src="{{item.icon}}" mode="widthFix">
           </image>
@@ -111,19 +111,6 @@
     components = {}
 
     data = {
-      orderMenuList: [{
-        name: '待付款',
-        icon: './img/daifukuan.png'
-      }, {
-        name: '待收货',
-        icon: './img/daishouhuo.png'
-      }, {
-        name: '已发货',
-        icon: './img/yifahuo.png'
-      }, {
-        name: '已完成',
-        icon: './img/yiwancheng.png'
-      }],
       mineItems: [
         {
           name: '我的订单',
@@ -142,13 +129,11 @@
     computed = {}
 
     methods = {
-      actionClickOrders() {
-        this.$router.push({name: 'MallMineOrders'})
-      },
-      actionClickMenu(e){
-        let index = e.currentTarget.dataset.index;
-        let menuNameList = ['', '', '', 'MallMineAddress', '']
-        this.$router.push({name: menuNameList[index]});
+      onClickItem(index) {
+         let pathList= ['./order-list', '', ''];
+         wepy.navigateTo({
+             url: pathList[index]
+         })
       }
     }
 
