@@ -92,9 +92,9 @@
 </style>
 <template>
   <view class="category page flex-y">
-    <view class="top-search">
+    <view class="top-search" @tap="onClickSearch">
       <view class="search-input">
-        <image src="./img/icon-search.png"></image>
+        <image src="./img/icon-search.png" mode="widthFix"/>
         <text>搜索商品，共99999款商品</text>
       </view>
     </view>
@@ -140,7 +140,7 @@
   import NetworkManagerCategory from '../../network/NetworkManagerCategory';
   export default class Category extends wepy.page {
     config = {
-      navigationBarTitleText: '类别'
+      navigationBarTitleText: '分类'
     }
 
     data = {
@@ -169,6 +169,11 @@
           url: 'category-detail?catId=' + category.catId
         })
         /* eslint-enable */
+      },
+      onClickSearch() {
+        wepy.navigateTo({
+          url: '../other/search'
+        })
       }
     }
 

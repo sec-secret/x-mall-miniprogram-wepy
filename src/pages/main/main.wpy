@@ -202,7 +202,7 @@
   <wxs src="./wxs/main.wxs" module="mainwxs">
   </wxs>
   <view class="top-search">
-    <view class="search-input">
+    <view class="search-input" @tap="onClickSearch">
       <image src="./img/icon-search.png"></image>
       <text>搜索商品，共99999款商品</text>
     </view>
@@ -436,6 +436,11 @@
           }
         }
         this.touchMoveRecordList.push({clientX: anyTouch.clientX, clientY: anyTouch.clientY})
+      },
+      onClickSearch() {
+          wepy.navigateTo({
+              url: '../other/search'
+          })
       }
     }
 

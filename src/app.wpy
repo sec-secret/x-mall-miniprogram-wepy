@@ -34,6 +34,7 @@
       pages: [
         // 'pages/other/other',
         'pages/main/main',
+        'pages/other/search',
         'pages/main/recommend-list',
         'pages/mine/order-list',
         'pages/mine/order-detail',
@@ -45,7 +46,6 @@
         'pages/category/category-detail',
         'pages/cart/cart',
         'pages/mine/mine'
-
       ],
       window: {
         backgroundTextStyle: 'light',

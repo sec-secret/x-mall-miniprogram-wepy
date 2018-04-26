@@ -1,0 +1,367 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .form {
+    height: 88rpx;
+    padding-left: 30rpx;
+    background-color: #fff;
+    border-bottom: 1px solid $xg-c-seg;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    @include flex-x-middle();
+    image {
+      position: absolute;
+      width: 27rpx;
+      height: auto;
+      left: 50rpx;
+      top: 31rpx;
+      z-index: 1;
+    }
+    input {
+      @include flex(1);
+      background-color: $color-back;
+      border-radius: 4rpx;
+      height: 60rpx;
+      line-height: 60rpx;
+      padding-left: 60rpx;
+      padding-right: 20rpx;
+      font-size: $size-5;
+      position: relative;
+    }
+    .input-placeholder {
+      font-size: $xg-size-2;
+      color: $c-999;
+    }
+    text {
+      padding: 30rpx;
+    }
+    .suggestions {
+      position: absolute;
+      left: 0;
+      top: 88rpx;
+      width: 100%;
+      background-color: white;
+      padding-left: 30rpx;
+      z-index: 1000;
+      view {
+        height: 70rpx;
+        line-height: 70rpx;
+        border-bottom: 1px solid $xg-c-seg;
+      }
+    }
+  }
+  .history-list {
+    padding: 30rpx;
+    padding-bottom: 10rpx;
+    position: absolute;
+    top: 88rpx;
+    left: 0;
+    width: 100%;
+    image {
+      position: absolute;
+      width: 30rpx;
+      height: 30rpx;
+      right: 30rpx;
+      top: 40rpx;
+    }
+    .title {
+      color: #333;
+      font-size: $xg-size-3;
+      padding-top: 10rpx;
+      padding-bottom: 40rpx;
+    }
+    .content {
+      view {
+        display: inline-block;
+        background-color: #f5f5f5;
+        border-radius: 4rpx;
+        margin-right: 20rpx;
+        height: 52rpx;
+        line-height: 52rpx;
+        padding: 0 20rpx;
+        margin-bottom: 20rpx;
+      }
+    }
+  }
+  .result-list {
+    height: 100vh;
+    padding: 0 15rpx;
+    padding-top: 88rpx;
+    background-color: #fff;
+    .result-item {
+        float: left;
+        width: 50%;
+        padding: 20rpx 10rpx;
+        background: #fff;
+        /*&:first-of-type {*/
+        /*width: ;*/
+        /*}*/
+        image {
+          width: 100%;
+          height: auto;
+        }
+        .info {
+          height: 150rpx;
+          justify-content: center;
+          color: $xg-c-black;
+          font-size: $xg-size-3;
+          .mall-product-name {
+            @include ellipsis(2);
+            margin-top: 16rpx;
+            padding: 0 10rpx;
+            font-weight: lighter;
+          }
+          .price {
+            display: block;
+            font-weight: bold;
+            font-size: $xg-size-5;
+            margin-top: 10rpx;
+            padding: 0 10rpx;
+          }
+          .fenqi {
+            color: #999;
+            padding: 0 10rpx;
+            i {
+              font-weight: bold;
+              color: $xg-c-red;
+              font-size: $xg-size-4;
+            }
+          }
+        }
+    }
+  }
+</style>
+<template>
+    <view class="form">
+      <image src="./img/search.png" mode="widthFix"/>
+      <input id="search-input"
+             type="text"
+             confirm-type="搜索"
+             placeholder="请输入关键词搜索"
+             placeholder-style="input-placeholder"
+             maxlength="25"
+             value="{{searchVal}}"
+             @confirm="onSearch"
+             @input="onChange"/>
+      <text @tap="onClickCancel">取消</text>
+      <view class="suggestions">
+        <repeat for="{{suggestions}}">
+          <view @tap="onClickSuggestion({{item}})">{{item.keywords}}</view>
+        </repeat>
+      </view>
+    </view>
+    <view wx:if="{{historyList.length !== 0}}" class="history-list">
+      <image src="./img/deletehei.png" model="widthFix" @click="clearHistory"/>
+      <view class="title">搜索历史</view>
+      <view class="content">
+        <repeat for="{{historyList}}" item="i">
+          <view @tap="onClickHotWord(i)">{{i}}</view>
+        </repeat>
+      </view>
+    </view>
+    <scroll-view class="result-list"
+                   scroll-y="true"
+                   bindscrolltolower="loadMore"
+                   scroll-top="{{scrollTop}}">
+        <repeat for="{{resultList}}" item="goods">
+          <view class="result-item" @tap="onClickGoods({{goods}})">
+            <image class="image" src="{{goods.goodsImg}}" mode="widthFix"/>
+            <view class="info">
+              <text class="name mall-product-name">{{goods.name}}</text>
+              <text class="price">￥{{mainwxs.formatFenPrice(goods.nbPrice)}}</text>
+              <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
+            </view>
+          </view>
+        </repeat>
+      </scroll-view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerOther from '../../network/NetworkManagerOther'
+  export default class Search extends wepy.page {
+    config = {
+      navigationBarTitleText: '搜索'
+    }
+    components = {
+    }
+
+    data = {
+      searchVal: '',
+      resultList: [],
+      page: 1,
+      type: 0,
+      loading: true,
+      historyList: [],
+      suggestions: [],
+      resultType: 'input',
+      firstCatId: 0,
+      secondCatId: 0,
+      thirdCatId: 0,
+    }
+
+    computed = {}
+
+    methods = {
+      onChange(e) {
+        this.searchVal = e.detail.value;
+        NetworkManagerOther.mallSuggestions(this.searchVal)
+          .then(data => {
+            this.suggestions = data.suggestions;
+            this.$apply()
+          }, err => {
+            this.suggestions = [];
+            this.$apply()
+          })
+      },
+      onSearch(e) {
+        this.searchVal = e.detail.value;
+        this.page = 1;
+        this.resultList = [];
+        this.resultType = 'input';
+        this.firstCatId = 0;
+        this.secondCatId = 0;
+        this.thirdCatId = 0;
+        let req = {
+          'firstCatId': this.firstCatId,
+          'page': this.page,
+          'query': this.searchVal,
+          'secondCatId': this.secondCatId,
+          'thirdCatId': this.thirdCatId,
+          'type': this.type
+        };
+        if (this.searchVal === 'zkUserId') {
+          return
+        }
+        if (this.searchVal.replace(/\s/g, '').length === 0) {
+//            过滤空格
+          this.searchVal = '';
+          this.$apply();
+        } else if (this.searchVal !== '' && this.searchVal !== undefined) {
+          this.setHistory(this.searchVal);
+          NetworkManagerOther.mallSearch(req)
+            .then(list => {
+              this.suggestions = [];
+              this.resultList = list.goods;
+              this.$apply();
+            }, err => {
+              this.suggestions = [];
+              this.resultList = [];
+              this.$apply();
+            })
+        }
+      },
+      loadMore() {
+          if (this.noMore) {
+              return
+          }
+        this.loading = true;
+        this.page = this.page + 1;
+        let req = {
+          'firstCatId': this.firstCatId,
+          'page': this.page,
+          'query': this.searchVal,
+          'secondCatId': this.secondCatId,
+          'thirdCatId': this.thirdCatId,
+          'type': this.type
+        };
+        if (this.resultType === 'input') {
+          NetworkManagerOther.mallSearch(req)
+            .then(data => {
+                if (data.goods.length === 0) {
+                    this.noMore = true;
+                    return
+                }
+              this.resultList = this.resultList.concat(data.goods);
+                this.$apply();
+            }, err => {
+              this.loading = true;
+            })
+        } else {
+          NetworkManagerOther.searchBySuggestions(req)
+            .then(data => {
+              if (data.goods.length === 0) {
+                this.noMore = true;
+                return
+              }
+              this.resultList = this.resultList.concat(data.goods);
+              this.$apply();
+            }, err => {
+              this.loading = true;
+            })
+        }
+      },
+      onClickSuggestion(item) {
+        this.resultType = 'suggestion';
+        this.searchVal = item.keywords;
+        this.setHistory(this.searchVal);
+        this.page = 1;
+        this.resultList = [];
+        this.suggestions = [];
+        this.firstCatId = item.firstCatId || 0;
+        this.secondCatId = item.secondCatId || 0;
+        this.thirdCatId = item.thirdCatId || 0;
+        let req = {
+          'firstCatId': this.firstCatId,
+          'page': this.page,
+          'query': this.searchVal,
+          'secondCatId': this.secondCatId,
+          'thirdCatId': this.thirdCatId,
+          'type': this.type
+        };
+        NetworkManagerOther.searchBySuggestions(req)
+          .then(data => {
+            this.resultList = data.goods;
+            this.$apply();
+          }, err => {
+          })
+      },
+      onClickCancel() {
+        this.searchVal = '';
+        this.suggestions = [];
+        this.resultList = [];
+        this.$apply();
+      },
+      onClickHotWord(val) {
+        this.searchVal = val;
+        this.onSearch();
+      }
+    }
+
+    onLoad() {
+      this.getHistory();
+    }
+
+    getHistory() {
+      if (wepy.getStorage({key: 'searchHistory'}) && wepy.getStorage({key: 'searchHistory'}) !== '') {
+        let localStr = wepy.getStorage({key: 'searchHistory'});
+        this.historyList = localStr;
+        this.$apply();
+      }
+    }
+
+    setHistory(val) {
+      this.getHistory();
+      if (val !== '') {
+        if (this.historyList.indexOf(val) !== -1) {
+//              搜索记录里面的排序
+          let sameIndex = this.historyList.indexOf(val);
+          this.historyList.unshift(this.historyList[sameIndex]);
+          this.historyList.splice(sameIndex + 1, 1);
+        } else {
+          this.historyList.unshift(val);
+        }
+        this.historyList.splice(10, 1);
+        this.$apply();
+        wepy.setStorage({key: 'searchHistory', data: this.historyList})
+      }
+    }
+
+    clearHistory() {
+      this.historyList = [];
+      wepy.removeStorage({key: 'searchHistory'});
+    }
+  }
+</script>
