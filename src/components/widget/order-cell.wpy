@@ -1,0 +1,147 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .order-item {
+    background-color: $c-white;
+    padding-left: $padding;
+    margin-bottom: 20rpx;
+    .top-part {
+      height: 90rpx;
+      line-height: 90rpx;
+      border-bottom: 1rpx solid $xg-c-seg;
+    }
+    .content {
+      padding-right: 30rpx;
+      @include flex-x-middle();
+      image {
+        width: 146rpx;
+        height: 146rpx;
+        margin: 24rpx 0;
+      }
+      .goods-info {
+        margin-left: 20rpx;
+        padding-right: 20rpx;
+        height: 100%;
+        @include flex(1);
+        @include flex-y-center();
+        .name {
+          @include ellipsis();
+          margin-bottom: 10rpx;
+          font-size: $xg-size-4;
+        }
+        .dim {
+          @include ellipsis();
+          font-size: $xg-size-2;
+          color: #999;
+        }
+        .price {
+          font-size: $xg-size-5;
+          margin-top: 10rpx;
+          color: $xg-c-red;
+        }
+      }
+      .count {
+        font-size: $xg-size-4;
+        color: #333;
+      }
+      .state {
+        font-size: $xg-size-2;
+      }
+    }
+
+    .bottom-part {
+      height: 90rpx;
+      padding-right: $padding;
+      border-top: 1rpx solid $xg-c-seg;
+      @include flex-x-middle();
+      @include flex-space-between();
+      .total {
+        text {
+          color: $xg-c-red;
+        }
+      }
+      .button-group {
+        @include flex-x();
+        button {
+          height: 56rpx;
+          line-height: 56rpx;
+          width: 164rpx;
+          background-color: transparent;
+          border: 1rpx solid #999;
+          color: #999;
+          border-radius: 4rpx;
+          font-size: $xg-size-3;
+        }
+        button:last-of-type {
+          margin-left: 20rpx;
+          color: $xg-c-red;
+          border-color: $xg-c-red;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="order-item" @tap="onClickOrder">
+    <view class="top-part">
+      订单编号: {{order.order.orderId}}
+    </view>
+    <repeat for="{{order.orderExtRespList}}" item="i">
+      <view class="content">
+        <image src="{{i.goodsImg}}" alt="" mode="widthFix">
+        </image>
+        <view class="goods-info">
+          <text class="name">{{i.name}}</text>
+          <!--<view class="dim"  v-if="i.hasOwnProperty('saleValue') && JSON.parse(i.saleValue)">-->
+          <!--<span v-for="i in JSON.parse(i.saleValue)">{{i.saleName + ': ' + i.value}}</span>-->
+          <!--</view>-->
+          <text class="price">￥{{globalWxs.formatFenPrice(i.nbPrice)}}</text>
+        </view>
+        <view class="state">
+          <text>{{mineWxs.status2CN(order.order.status)}}</text>
+        </view>
+      </view>
+    </repeat>
+    <view class="bottom-part">
+      <view class="total">应付: <text>￥{{globalWxs.formatFenPrice(order.order.nbAmount)}}</text></view>
+      <view class="button-group" wx:if="{{mineWxs.status2CN(order.order.status) === '未支付'}}">
+        <button @tap.stop="onClickCancel">取消支付</button>
+        <button @tap.stop="onClickPay">直接付款</button>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  // import UnitTool from '../../tool/UnitTool';
+  import globalWxs from '../../wxs/global.wxs'
+  import mineWxs from '../../wxs/mine.wxs'
+  export default class GoodsCell extends wepy.component {
+    props = {
+      order: Object
+    }
+
+    data = {}
+
+    wxs = {
+        globalWxs,
+      mineWxs
+    }
+
+    computed = {}
+
+    methods = {
+      onClickOrder(){
+        this.$emit('clickOrder', this.order);
+      },
+      onClickCancel() {
+        this.$emit('clickCancel', this.order);
+      },
+      onClickPay() {
+        this.$emit('clickPay', this.order);
+      }
+    }
+
+    onLoad() {
+    }
+  }
+</script>

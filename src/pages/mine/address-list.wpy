@@ -96,32 +96,13 @@
   }
 </style>
 <template>
-  <wxs src="./wxs/mine.wxs" module="mineWxs"/>
   <view class="address-area">
     <repeat for="{{addressList}}" item="address">
-      <view class="address-item list-item">
-        <!--<div v-if="isFromList" class="left-part" @click="onClickDefault">-->
-        <!--<img v-if="address.isDefault === 1" src="./img/gouxuan.png" alt="">-->
-        <!--<img v-else src="./img/meixuan.png" alt="">-->
-        <!--</div>-->
-        <view class="center-part">
-          <view class="first-line">
-            <view class="name">{{address.name}}</view>
-            <view class="mobile">{{mineWxs.formatMobile(address.mobile)}}</view>
-            <view wx:if="{{address.isDefault === 1}}" class="default">默认</view>
-          </view>
-          <view class="second-line address">{{address.provinceName + address.cityName + address.countyName +
-            address.detailAddress}}
-          </view>
-        </view>
-        <view class="right-part">
-          <image class="edit"
-                 src="./img/bianji.png"
-                 data-address="{{address}}"
-                 @tap="onClickEdit"/>
-          <image class="icon" src="../main/img/black-right-arrow.png"/>
-        </view>
-      </view>
+      <address-cell class="list-item"
+                    :address="address"
+                    :showEdit="true"
+                    @clickAddress.user="onClickAddress"
+                    @clickEdit.user="onClickEdit"></address-cell>
     </repeat>
   </view>
   <view class="footer">
@@ -133,12 +114,17 @@
 
 <script>
   import wepy from 'wepy'
-  import NetworkManagerMine from '../../network/NetworkManagerMine'
+  import NetworkManagerMine from '@/network/NetworkManagerMine'
+  import AddressCell from '@/components/widget/address-cell';
   export default class AddressList extends wepy.page {
     config = {
       navigationBarTitleText: '我的地址'
     }
     components = {
+      'address-cell': AddressCell
+    }
+
+    wxs = {
     }
 
     data = {
@@ -149,8 +135,15 @@
     }
 
     methods = {
-      onClickEdit: function (e) {
-          let addressInfo = e.target.dataset.address;
+        onClickAddress(address) {
+          if (this.from === 'order') {
+            NetworkManagerMine.setDefaultAddress({id: address.id}).then(data => {
+              wepy.navigateBack();
+            }, err => {
+            })
+          }
+        },
+      onClickEdit(addressInfo) {
           let query = JSON.stringify({addressInfo: addressInfo, type: 'edit'})
         wepy.navigateTo({
             url: './address-detail?query=' + query
@@ -163,7 +156,14 @@
       }
     }
 
+    onLoad(option) {
+      if (option.hasOwnProperty('from')) {
+        this.from = option.from;
+        this.$apply();
+      }
+    }
     onShow() {
+//        从我的页面和从订单进入地址列表两种情况的点击跳转不同
         NetworkManagerMine.fetchAddressList()
           .then(data => {
             this.addressList = data;

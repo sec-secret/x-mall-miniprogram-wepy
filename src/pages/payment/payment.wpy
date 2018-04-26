@@ -184,7 +184,7 @@
   }
 </style>
 <template>
-  <wxs src="./wxs/payment.wxs" module="paymentWxs"></wxs>
+  <wxs src="./wxs/cart.wxs" module="cartWxs"></wxs>
   <!--<address-cell v-if="hasAddress"-->
                 <!--:address="defaultAddress"-->
                 <!--:isFromList="false"-->
@@ -193,7 +193,7 @@
     <view class="center-part">
       <view class="first-line">
         <view class="name">{{defaultAddress.name}}</view>
-        <view class="mobile">{{paymentWxs.formatMobile(defaultAddress.mobile)}}</view>
+        <view class="mobile">{{cartWxs.formatMobile(defaultAddress.mobile)}}</view>
         <view wx:if="{{address.isDefault === 1}}" class="default">默认</view>
       </view>
       <view class="second-line address">{{defaultAddress.provinceName + defaultAddress.cityName + defaultAddress.countyName +
@@ -214,11 +214,11 @@
   <view class="amount-area">
     <view class="amount-item">
       <text class="title">商品合计</text>
-      <text>￥{{paymentWxs.formatFenPrice(payInfo.total)}}</text>
+      <text>￥{{cartWxs.formatFenPrice(payInfo.total)}}</text>
     </view>
     <view class="amount-item">
       <text class="title">运费</text>
-      <text>￥{{paymentWxs.formatFenPrice(freight)}}</text>
+      <text>￥{{cartWxs.formatFenPrice(freight)}}</text>
     </view>
   </view>
 
@@ -234,7 +234,7 @@
             <!--<text v-for="i in JSON.parse(goods.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
           <!--</view>-->
           <text class="price">
-            ￥{{paymentWxs.formatFenPrice(goods.nbPrice)}}
+            ￥{{cartWxs.formatFenPrice(goods.nbPrice)}}
           </text>
         </view>
         <view class="count">x {{goods.num}}</view>
@@ -249,7 +249,7 @@
   </view>
   <view class="pay-area">
     <view class="amount">
-      实付：<text class="price">￥{{paymentWxs.formatFenPrice(payTotal)}}</text>
+      实付：<text class="price">￥{{cartWxs.formatFenPrice(payTotal)}}</text>
     </view>
     <view class="pay" @click="actionClickPay">去付款</view>
   </view>
@@ -261,7 +261,7 @@
   import NetworkManagerMine from '../../network/NetworkManagerMine';
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
   import UnitTool from '../../tool/UnitTool';
-  export default class Payment extends wepy.page {
+  export default class Cart extends wepy.page {
     config = {
       navigationBarTitleText: '确认订单'
     }
@@ -301,10 +301,13 @@
       }
     }
 
+    onShow() {
+      this.getDefaultAddress();
+    }
+
     onLoad(option) {
         console.log(option.payInfo);
         this.payInfo = JSON.parse(option.payInfo);
-        this.getDefaultAddress();
       this.goodsList = this.payInfo.selectedList;
         this.$apply();
     }

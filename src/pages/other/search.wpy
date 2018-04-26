@@ -166,14 +166,7 @@
                    bindscrolltolower="loadMore"
                    scroll-top="{{scrollTop}}">
         <repeat for="{{resultList}}" item="goods">
-          <view class="result-item" @tap="onClickGoods({{goods}})">
-            <image class="image" src="{{goods.goodsImg}}" mode="widthFix"/>
-            <view class="info">
-              <text class="name mall-product-name">{{goods.name}}</text>
-              <text class="price">￥{{mainwxs.formatFenPrice(goods.nbPrice)}}</text>
-              <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
-            </view>
-          </view>
+          <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
         </repeat>
       </scroll-view>
 </template>
@@ -181,11 +174,14 @@
 <script>
   import wepy from 'wepy'
   import NetworkManagerOther from '../../network/NetworkManagerOther'
+  import GoodsCell from '@/components/widget/goods-cell';
   export default class Search extends wepy.page {
     config = {
       navigationBarTitleText: '搜索'
     }
+
     components = {
+      'goods-cell': GoodsCell
     }
 
     data = {
@@ -327,6 +323,11 @@
       onClickHotWord(val) {
         this.searchVal = val;
         this.onSearch();
+      },
+      onClickGoods(goods) {
+        wepy.navigateTo({
+          url: '../main/goods-detail?skuId=' + goods.skuId
+        })
       }
     }
 

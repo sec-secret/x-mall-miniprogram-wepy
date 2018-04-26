@@ -170,7 +170,6 @@
   }
 </style>
 <template>
-  <wxs src="./wxs/cart.wxs" module="cartWxs"></wxs>
   <view class="cart">
     <view class="cart-area top-seg">
       <view class="tips">
@@ -186,52 +185,19 @@
         <repeat for="{{goodsList}}"
                 item="goods"
                 key="goods.skuId">
-          <view class="cart-item">
-            <label wx:if="{{isEditing}}" @tap="delGoods(goods)">
-              删除
-            </label>
-            <label class="edit-select-space"
-                   data-goods="{{goods}}"
-                   @tap="actionClickGoodsSelected">
-              <image wx:if="{{cartWxs.isSelected(selectedList,goods)}}"
-                     class="select-icon"
-                     src="./img/gouxuan.png">
-              </image>
-              <image wx:else
-                     class="select-icon"
-                     src="./img/meixuan.png">
-              </image>
-            </label>
-            <view class="goods-part" @tap="onClickGoods({{goods}})">
-              <image mode="aspectFit" class="icon" src="{{goods.goodsImg}}" alt="">
-              </image>
-              <view class="content flex-y">
-                <label class="name ellipsis-2">
-                  {{goods.name}}
-                </label>
-                <view class="info flex-middle-x">
-                  <div class="price">￥{{cartWxs.formatFenPrice(goods.nbPrice)}}</div>
-                  <view class="input flex-middle-x">
-                    <label class="count-button" data-goods="{{goods}}" @tap="actionClickMinus">-</label>
-                    <input
-                      class="count-number"
-                      type="number"
-                      value="{{goods.num}}"
-                      @input.stop=""
-                      @blur="changeNum"
-                      data-goods="{{goods}}"/>
-                    <label class="count-button" data-goods="{{goods}}" @tap="actionClickPlus">+</label>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
+          <cart-cell :goods="goods"
+                     :isSelected="cartWxs.isSelected(selectedList,goods)"
+                     @clickGoods.user="onClickGoods"
+                     @clickGoodsSelected.user="onClickGoodsSelected"
+                     @clickPlus.user="onClickPlus"
+                     @clickMinus.user="onClickMinus"
+                     @changeNum.user="onChangeNum"></cart-cell>
         </repeat>
       </view>
     </view>
     <view class="pay-area">
       <view class="select flex-center-x"
-           @tap="actionClickSelectAll">
+           @tap="onClickSelectAll">
         <image wx:if="{{isSelectedAll}}"
              class="select-icon"
              src="./img/gouxuan.png">
@@ -244,7 +210,7 @@
         <view wx:else>已选({{selectedCount}})</view>
       </view>
       <view class="amount">
-        合计:<text class="price">￥{{cartWxs.formatFenPrice(totalPrice)}}</text>
+        合计:<text class="price">￥{{globalWxs.formatFenPrice(totalPrice)}}</text>
       </view>
       <button class="pay {{selectedCount===0?'disabled':''}}"
               @tap="onClickPay">下单</button>
@@ -256,11 +222,21 @@
   import wepy from 'wepy'
   import NetworkManagerCart from '../../network/NetworkManagerCart';
   import UnitTool from '../../tool/UnitTool';
+  import CartCell from '@/components/widget/cart-cell';
+  import globalWxs from '../../wxs/global.wxs'
+  import cartWxs from '../../wxs/cart.wxs'
   export default class Cart extends wepy.page {
     config = {
       navigationBarTitleText: '购物车'
     }
+
     components = {
+      'cart-cell': CartCell
+    }
+
+    wxs = {
+        globalWxs,
+        cartWxs
     }
 
     data = {
@@ -291,9 +267,7 @@
     }
 
     methods = {
-      actionClickGoodsSelected(e){
-        let goods = e.currentTarget.dataset.goods;
-        console.log(goods);
+      onClickGoodsSelected(goods){
         if (this.selectedList.findIndex(item => {
             return item.cartId === goods.cartId;
           }) >= 0) {
@@ -304,7 +278,12 @@
         }
         this.$apply();
       },
-      actionClickSelectAll() {
+      onClickGoods(goods) {
+        wepy.navigateTo({
+          url: '../main/goods-detail?skuId=' + goods.skuId
+        })
+      },
+      onClickSelectAll() {
         if (this.selectedList.length === this.goodsList.length) {
           this.selectedList = [];
         } else {
@@ -313,8 +292,7 @@
         }
         this.$apply();
       },
-      actionClickMinus(e) {
-        let goods = e.currentTarget.dataset.goods;
+      onClickMinus(goods) {
         if (goods.num === 1) {
           return;
         }
@@ -350,8 +328,7 @@
         }, err => {
         })
       },
-      actionClickPlus(e) {
-        let goods = e.currentTarget.dataset.goods;
+      onClickPlus(goods) {
         let params = {
           'skuReqs': [
             {
@@ -388,9 +365,9 @@
           console.log(err)
         })
       },
-      changeNum(e) {
-        let newVal = e.detail.value;
-        let cart = e.currentTarget.dataset.goods;
+      onChangeNum(option) {
+        let newVal = option.newVal;
+        let cart = option.goods;
         let difference = newVal - cart.num;
         let params = {
           'skuReqs': [

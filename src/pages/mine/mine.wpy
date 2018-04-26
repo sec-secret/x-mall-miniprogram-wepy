@@ -130,7 +130,7 @@
 
     methods = {
       onClickItem(index) {
-         let pathList= ['./order-list', '', ''];
+         let pathList= ['./order-list', './address-list', ''];
          wepy.navigateTo({
              url: pathList[index]
          })

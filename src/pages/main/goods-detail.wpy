@@ -457,12 +457,17 @@
   import EncodeTool from '../../tool/EncodeTool';
   import CPParse from '../../parse/CPParse'
   import NetworkManager from '../../network/NetworkManager';
+  import globalWxs from '../../wxs/global.wxs'
   export default class GoodsDetail extends wepy.page {
     config = {
       navigationBarTitleText: '商品详情'
     }
 
     components = {
+    }
+
+    wxs = {
+        globalWxs
     }
 
     data = {

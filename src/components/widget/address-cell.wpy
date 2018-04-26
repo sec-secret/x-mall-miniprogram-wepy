@@ -1,0 +1,115 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .address-item {
+    @include flex-x();
+    padding: 0 30rpx;
+    height: 180rpx;
+    background-color: #fff;
+    width: 100%;
+    .left-part {
+      @include flex-y-center();
+      flex-shrink: 0;
+      padding-right: 30rpx;
+      image {
+        width: 34rpx;
+        height: 34rpx;
+      }
+    }
+    .center-part {
+      @include flex-y-center();
+      @include flex();
+      .first-line {
+        @include flex-x-middle();
+        .name {
+          font-weight: bold;
+          margin-right: 30rpx;
+        }
+        .mobile {
+          margin-right: 30rpx;
+        }
+        .default {
+          font-size: $xg-size-0;
+          color: $xg-c-red;
+          border: 1px solid $xg-c-red;
+          border-radius: 4rpx;
+          width: 70rpx;
+          text-align: center;
+          height: 30rpx;
+          line-height: 30rpx;
+        }
+      }
+      .address {
+        margin-top: 20rpx;
+        color: #666;
+        font-size: $xg-size-3;
+      }
+    }
+    .right-part {
+      @include flex-x-middle();
+      @include justify-content-end();
+      image {
+        width: 12rpx;
+        height: auto;
+        &.edit {
+          width: 30rpx;
+          height: 30rpx;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="address-item" @tap="onClickAddress">
+    <view class="center-part">
+      <view class="first-line">
+        <view class="name">{{address.name}}</view>
+        <view wx:if="{{address.mobile}}" class="mobile">{{globalWxs.formatMobile(address.mobile)}}</view>
+        <view wx:if="{{address.isDefault === 1}}" class="default">默认</view>
+      </view>
+      <view class="second-line address">{{address.provinceName + address.cityName + address.countyName +
+        address.detailAddress}}
+      </view>
+    </view>
+    <view class="right-part">
+      <image wx:if="{{showEdit}}"
+             class="edit"
+             src="./img/bianji.png"
+             @tap.stop="onClickEdit"/>
+      <image wx:else class="icon" src="./img/black-right-arrow.png"/>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  // import UnitTool from '../../tool/UnitTool';
+  import globalWxs from '../../wxs/global.wxs';
+  export default class AddressCell extends wepy.component {
+    props = {
+      address: Object,
+      showEdit: Boolean
+    }
+
+    data = {
+    }
+
+    wxs = {
+        globalWxs
+    }
+
+    computed = {
+    }
+
+    methods = {
+        onClickAddress() {
+            this.$emit('clickAddress', this.address)
+        },
+      onClickEdit(){
+        this.$emit('clickEdit', this.address);
+      }
+    }
+
+    onLoad() {
+        console.log(this.address);
+    }
+  }
+</script>

@@ -4,62 +4,12 @@
     padding: 0 15rpx;
     background-color: #fff;
     height: 100vh;
-    .goods-item {
-      float: left;
-      width: 50%;
-      padding: 20rpx 10rpx;
-      background: #fff;
-      /*&:first-of-type {*/
-      /*width: ;*/
-      /*}*/
-      image {
-        width: 100%;
-        height: auto;
-      }
-      .info {
-        height: 150rpx;
-        justify-content: center;
-        color: $xg-c-black;
-        font-size: $xg-size-3;
-        .mall-product-name {
-          @include ellipsis(2);
-          margin-top: 16rpx;
-          padding: 0 10rpx;
-          font-weight: lighter;
-        }
-        .price {
-          display: block;
-          font-weight: bold;
-          font-size: $xg-size-5;
-          margin-top: 10rpx;
-          padding: 0 10rpx;
-        }
-        .fenqi {
-          color: #999;
-          padding: 0 10rpx;
-          i {
-            font-weight: bold;
-            color: $xg-c-red;
-            font-size: $xg-size-4;
-          }
-        }
-      }
-    }
   }
 </style>
 <template>
-  <wxs src="../main/wxs/main.wxs" module="mainwxs"></wxs>
   <scroll-view class="goods-area" scroll-y="true" bindscrolltolower="loadMore" scroll-top="{{scrollTop}}">
     <repeat for="{{goodsList}}" item="goods">
-      <view class="goods-item" @tap="onClickGoods({{goods}})">
-        <image class="image" src="{{goods.goodsImg}}" mode="widthFix">
-        </image>
-        <view class="info">
-          <text class="name mall-product-name">{{goods.name}}</text>
-          <text class="price">￥{{mainwxs.formatFenPrice(goods.nbPrice)}}</text>
-          <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
-        </view>
-      </view>
+      <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
     </repeat>
   </scroll-view>
 </template>
@@ -67,9 +17,14 @@
 <script>
   import wepy from 'wepy'
   import NetworkManagerMain from '../../network/NetworkManagerMain'
+  import GoodsCell from '@/components/widget/goods-cell';
   export default class RecommendList extends wepy.page {
     config = {
       navigationBarTitleText: '推荐'
+    }
+
+    components = {
+      'goods-cell': GoodsCell
     }
 
     data = {
@@ -85,11 +40,9 @@
 
     methods = {
       onClickGoods(goods) {
-        /* eslint-disable */
         wepy.navigateTo({
           url: '/pages/main/goods-detail?skuId=' + goods.skuId
         })
-        /* eslint-enable */
       },
       loadMore() {
         if (this.noMore) {
