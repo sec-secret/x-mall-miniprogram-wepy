@@ -38,14 +38,15 @@
         'pages/main/recommend-list',
         'pages/mine/order-list',
         'pages/mine/order-detail',
-        'pages/cart/cart-payment',
         'pages/mine/address-list',
         'pages/mine/address-detail',
         'pages/main/goods-detail',
         'pages/category/category',
         'pages/category/category-detail',
         'pages/cart/cart',
-        'pages/mine/mine'
+        'pages/mine/mine',
+        'pages/payment/payment',
+        'pages/payment/payment-result'
       ],
       window: {
         backgroundTextStyle: 'light',

@@ -1,0 +1,150 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import '../../assets/scss/index.scss';
+  .result {
+    @include flex-y-middle();
+    background-color: #fff;
+    padding-bottom: 40rpx;
+    image {
+      width: 80rpx;
+      height: 80rpx;
+      margin-top: 40rpx;
+    }
+    .title {
+      font-size: $xg-size-10;
+      color: $xg-c-red;
+      margin-top: 40rpx;
+    }
+    .text {
+      margin-top: 20rpx;
+      font-size: $xg-size-3;
+      color: #999;
+    }
+    .btn-group {
+      margin-top: 40rpx;
+      padding: 0 15rpx;
+      width: 100%;
+      @include clearfix();
+      view {
+        float: left;
+        width: 50%;
+        padding: 0 15rpx;
+        height: 70rpx;
+        &:first-of-type button {
+          background-color: #fff;
+          border: 1px solid $xg-c-red;
+          color: $xg-c-red;
+        }
+        button {
+          background-color: $xg-c-red;
+          width: 100%;
+          height: 100%;
+          border-radius: 4rpx;
+          color: #fff;
+          font-size: $xg-size-5;
+        }
+      }
+    }
+  }
+  .pay-info {
+    margin-top: 20rpx;
+    padding: 30rpx;
+    background-color: #fff;
+    font-size: $xg-size-4;
+    color: #333;
+    .name {
+      font-size: $xg-size-5;
+      font-weight: bold;
+      margin-right: 30rpx;
+    }
+    .address {
+      margin: 20rpx 0;
+    }
+    .total {
+      span {
+        color: $xg-c-red;
+      }
+    }
+  }
+</style>
+<template>
+  <wxs src="./wxs/payment.wxs" module="paymentWxs"></wxs>
+  <view class="result">
+    <image wx:if="payResult.title === '支付成功'"
+           src="./img/zhifuchenggong.png"
+           mode="widthFix"/>
+    <image wx:else
+         src="./img/zhifushibai.png"
+         mode="widthFix"/>
+    <text class="title">{{payResult.title}}</text>
+    <text class="text">{{payResult.text}}</text>
+    <view class="btn-group">
+      <view class="first">
+        <button @click="onClickOrder">查看订单</button>
+      </view>
+      <view class="second">
+        <button wx:if="{{payResult.title === '支付取消' || payResult.title === '支付失败'}}" @click="onClickPay">继续支付</button>
+        <button wx:else @click="goHome">返回首页</button>
+      </view>
+    </view>
+  </view>
+  <view class="pay-info">
+    <view>
+      <text class="name">{{payInfo.address.name}}</text><text class="mobile" wx:if="{{payInfo.address}}">{{paymentWxs.formatMobile(payInfo.address.mobile)}}</text>
+    </view>
+    <view class="address">{{payInfo.address.provinceName + payInfo.address.cityName + payInfo.address.countyName +
+      payInfo.address.detailAddress}}
+    </view>
+    <view class="total">实付：<text>￥{{paymentWxs.formatFenPrice(payInfo.payTotal)}}</text></view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerCart from '../../network/NetworkManagerCart';
+  import UnitTool from '../../tool/UnitTool';
+  export default class Payment extends wepy.page {
+    config = {
+      navigationBarTitleText: '支付结果'
+    }
+
+    components = {
+    }
+
+    data = {
+      payInfo:{},
+      orderId: '',
+      result: ''
+    }
+
+    computed = {
+      payResult() {
+        if (this.result === 'success') {
+          return {
+            title: '支付成功',
+            text: ''
+          }
+        } else if (this.result === 'cancel') {
+          return {
+            title: '支付取消',
+            text: '请在1小时内完成付款，否则订单会被系统取消'
+          }
+        } else {
+          return {
+            title: '支付失败',
+            text: '请在1小时内完成付款，否则订单会被系统取消'
+          }
+        }
+      }
+    }
+
+    methods = {
+    }
+
+    onLoad(option) {
+        this.payInfo = JSON.parse('{"address":{"id":43,"city":2813,"county":51976,"isDefault":1,"priority":100000,"province":2,"town":0,"userId":4,"detailAddress":"远中产业园4期1号楼502","mobile":"15300928006","name":"张浩轩","provinceName":"上海","cityName":"徐汇区","countyName":"城区"},"payTotal":48902}');
+        this.result = 'success';
+        this.orderId = 2018042614015395112288;
+        this.$apply();
+    }
+  }
+</script>

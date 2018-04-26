@@ -445,7 +445,7 @@
           selectedList: this.selectedList
         })
         wepy.navigateTo({
-          url: './cart-payment?payInfo=' + payInfo
+          url: '../payment/payment?payInfo=' + payInfo
         })
       }
     }
