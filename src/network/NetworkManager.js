@@ -56,7 +56,7 @@ export default class NetworkManager{
             } else {
               let errorCode = responseJson.errorCode;
               if (errorCode === 10022) {
-                reject(NetworkManager.notLoginError(100022));
+                reject(NetworkManager.notLoginError(10022));
               } else {
                 reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
               }

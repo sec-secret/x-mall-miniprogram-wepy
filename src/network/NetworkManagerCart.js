@@ -1,8 +1,8 @@
-import NetworkManager from "./NetworkManager";
+import NetworkManager from './NetworkManager';
 
 export default class NetworkManagerCart extends NetworkManager{
     static addCart(params) {
-        return this.instance().POST('/order/addToShoppingCart',  {'userId': 123, ...params}, {'Content-Type': 'application/json'})
+        return this.instance().POST('/order/addToShoppingCart', {'userId': 123, ...params}, {'Content-Type': 'application/json'})
     }
 
     static fetchCartGoods() {

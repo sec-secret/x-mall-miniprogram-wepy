@@ -132,16 +132,17 @@
         <repeat for="{{order.orderExtRespList}}" item="i">
           <view class="content">
             <image src="{{i.goodsImg}}" alt="" mode="widthFix">
-              <view class="goods-info">
-                <text class="name">{{i.name}}</text>
-                <!--<view class="dim"  v-if="i.hasOwnProperty('saleValue') && JSON.parse(i.saleValue)">-->
-                  <!--<span v-for="i in JSON.parse(i.saleValue)">{{i.saleName + ': ' + i.value}}</span>-->
-                <!--</view>-->
-                <text class="price">￥{{mineWxs.formatFenPrice(i.nbPrice)}}</text>
-              </view>
-              <view class="state">
-                <text>{{mineWxs.status2CN(order.order.status)}}</text>
-              </view>
+            </image>
+            <view class="goods-info">
+              <text class="name">{{i.name}}</text>
+              <!--<view class="dim"  v-if="i.hasOwnProperty('saleValue') && JSON.parse(i.saleValue)">-->
+              <!--<span v-for="i in JSON.parse(i.saleValue)">{{i.saleName + ': ' + i.value}}</span>-->
+              <!--</view>-->
+              <text class="price">￥{{mineWxs.formatFenPrice(i.nbPrice)}}</text>
+            </view>
+            <view class="state">
+              <text>{{mineWxs.status2CN(order.order.status)}}</text>
+            </view>
           </view>
         </repeat>
         <view class="bottom-part">
@@ -216,7 +217,8 @@
             }
             this.orderList = this.orderList.concat(data.orders);
             this.$apply();
-          }, err => {
+          }, error => {
+            console.log(error);
           })
       },
       onClickType(type) {
@@ -229,13 +231,13 @@
       },
       onClickOrder(order) {
         wepy.navigateTo({
-            url: './order-detail?order=' + JSON.stringify(order)
+          url: './order-detail?order=' + JSON.stringify(order)
         })
       }
     }
 
     onLoad() {
-        this.fetchOrders();
+      this.fetchOrders();
     }
 
     fetchOrders() {
@@ -243,7 +245,8 @@
         .then((data) => {
           this.orderList = data.orders;
           this.$apply();
-        }, err => {
+        }, error => {
+          console.log(error);
         })
     }
   }

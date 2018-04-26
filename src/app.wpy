@@ -86,6 +86,7 @@
         ]
       }
     }
+
     globalData = {
       userInfo: null
     }
