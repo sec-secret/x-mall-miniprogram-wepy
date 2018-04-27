@@ -122,6 +122,7 @@
   <scroll-view class="orders-area"
                scroll-y="true"
                bindscrolltolower="loadMore"
+               lower-threshold="150"
                scroll-top="{{scrollTop}}">
     <repeat for="{{orderList}}" item="order">
       <order-cell :order="order"
@@ -186,6 +187,7 @@
           return
         }
         this.page = this.page + 1;
+        wepy.showNavigationBarLoading();
         NetworkManagerOrder.fetchOrders(this.page, this.type)
           .then((data) => {
             if (data.orders.length === 0) {
@@ -195,8 +197,10 @@
             }
             this.orderList = this.orderList.concat(data.orders);
             this.$apply();
-          }, error => {
-            console.log(error);
+            wepy.hideNavigationBarLoading();
+          }, err => {
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       },
       onClickType(type) {
@@ -213,11 +217,14 @@
         })
       },
       onClickCancel(order) {
+        wepy.showNavigationBarLoading();
         NetworkManagerOrder.cancelOrder(order.order.orderId)
           .then(data => {
+            wepy.hideNavigationBarLoading();
               this.fetchOrders();
           }, err => {
             wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       },
       onClickPay(order) {
@@ -230,12 +237,15 @@
     }
 
     fetchOrders() {
+      wepy.showNavigationBarLoading();
       NetworkManagerOrder.fetchOrders(this.page, this.type)
         .then((data) => {
           this.orderList = data.orders;
           this.$apply();
-        }, error => {
-          console.log(error);
+          wepy.hideNavigationBarLoading();
+        }, err => {
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
         })
     }
   }

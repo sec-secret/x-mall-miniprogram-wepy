@@ -573,20 +573,22 @@
         this.goodsImageIndex = data.detail.current;
       },
       actionClickTypeValue(e){
-        console.log(e.currentTarget);
+        wepy.showNavigationBarLoading();
         let typeIndex = e.currentTarget.dataset.typeIndex;
         this.selectedTypeList[typeIndex] = e.currentTarget.dataset.typeValue;
-
         let skuId = this.currentSelectedGoodsSkuId();
         if (skuId !== this.skuId){
           NetworkManagerGoods.goodsPrice(skuId).then(data => {
             this.popAreaPrice = UnitTool.formatFenPrice(data);
             this.$apply();
+            wepy.hideNavigationBarLoading();
           }, err => {
-            console.log(err);
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
         } else {
           this.popAreaPrice = UnitTool.formatFenPrice(this.originGoodsPrice);
+          wepy.hideNavigationBarLoading();
         }
       },
       actionClickDown() {
@@ -683,6 +685,7 @@
         ],
         'userId': 123
       };
+      wepy.showNavigationBarLoading();
       NetworkManagerGoods.goodsAddToCart(buyParams).then(data => {
         this.isShowBuyPopArea = false;
         wepy.showToast({
@@ -690,8 +693,10 @@
           icon: 'success'
         })
         this.$apply();
-      }, error => {
-        console.log(error)
+        wepy.hideNavigationBarLoading();
+      }, err => {
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
       })
     }
 
@@ -701,6 +706,7 @@
       NetworkManagerGoods.goodsCheckSale(this.skuId).then((info) => {
         console.log(info);
       }).catch(err => {
+        wepy.showToast({title: err.message, icon: 'none'})
         console.log(err);
       })
     }
@@ -709,19 +715,21 @@
       NetworkManagerGoods.goodsState(this.skuId).then((info) => {
         console.log(info);
       }).catch(err => {
+        wepy.showToast({title: err.message, icon: 'none'})
         console.log(err)
       })
     }
 
     fetchGoodsDetail() {
+      wepy.showNavigationBarLoading();
       NetworkManagerGoods.goodsDetail(this.skuId).then((data) => {
-        console.log(data);
         this.goods = {...data.goods, smartPrice: UnitTool.formatFenPrice(data.goods.nbPrice)};
         this.goodsExt = data.goodsExt;
         this.originGoodsPrice = data.goods.nbPrice;
         this.popAreaPrice = UnitTool.formatFenPrice(this.originGoodsPrice);
         this.fetchGoodsImages();
         this.$apply();
+        wepy.hideNavigationBarLoading();
         // TODO: 描述富文本的格式化
 
         let stationName = data.goodsExt.mobileDesc;
@@ -756,7 +764,7 @@
         })
       }, error => {
         console.log(error);
-        this.closeLoading()
+        wepy.hideNavigationBarLoading();
       })
     }
 
@@ -818,7 +826,7 @@
         this.selectedTypeList = this.getSelectedNodeList(this.skuId).map(_ => _.saleValue);
         this.$apply();
       }).catch((err) => {
-        console.log(err);
+        wepy.showToast({title: err.message, icon: 'none'})
       })
     }
 

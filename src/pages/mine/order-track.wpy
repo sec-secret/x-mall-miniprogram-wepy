@@ -44,7 +44,6 @@
  }
 </style>
 <template>
-  <wxs src="./wxs/mine.wxs" module="mineWxs"/>
   <view class="order-id">
     <text>订单编号: {{orderId}}</text>
   </view>
@@ -92,13 +91,16 @@
     }
 
     fetchOrderTrack() {
+      wepy.showNavigationBarLoading();
       NetworkManagerOrder.fetchOrderTrack(this.orderId)
         .then(data => {
           this.tracks = data.orderTracks[0].skuTracks.reverse();
           this.trackNo = data.trackNo;
           this.$apply();
+          wepy.hideNavigationBarLoading();
         }, err => {
-          console.log(err)
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
         })
     }
   }

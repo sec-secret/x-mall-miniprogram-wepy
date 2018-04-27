@@ -258,10 +258,13 @@
         })
       },
       onClickCancel() {
+        wepy.showNavigationBarLoading();
         NetworkManagerOrder.cancelOrder(this.orderInfo.order.orderId)
           .then(data => {
+            wepy.hideNavigationBarLoading();
               wepy.navigateBack()
           }, err => {
+            wepy.hideNavigationBarLoading();
             wepy.showToast({title: err.message, icon: 'none'})
           })
       },
@@ -271,7 +274,6 @@
     }
 
     onLoad(option) {
-      console.log(option);
       this.orderInfo = JSON.parse(option.order);
       this.addressInfo = this.orderInfo.address;
       this.payTotal = this.orderInfo.order.freightAmount + this.orderInfo.order.nbAmount;

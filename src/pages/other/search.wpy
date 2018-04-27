@@ -162,9 +162,10 @@
       </view>
     </view>
     <scroll-view class="result-list"
-                   scroll-y="true"
-                   bindscrolltolower="loadMore"
-                   scroll-top="{{scrollTop}}">
+                 scroll-y="true"
+                 bindscrolltolower="loadMore"
+                 lower-threshold="150"
+                 scroll-top="{{scrollTop}}">
         <repeat for="{{resultList}}" item="goods">
           <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
         </repeat>
@@ -237,15 +238,19 @@
           this.$apply();
         } else if (this.searchVal !== '' && this.searchVal !== undefined) {
           this.setHistory(this.searchVal);
+          wepy.showNavigationBarLoading();
           NetworkManagerOther.mallSearch(req)
             .then(list => {
               this.suggestions = [];
               this.resultList = list.goods;
               this.$apply();
+          wepy.hideNavigationBarLoading();
             }, err => {
               this.suggestions = [];
               this.resultList = [];
               this.$apply();
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
             })
         }
       },
@@ -263,6 +268,7 @@
           'thirdCatId': this.thirdCatId,
           'type': this.type
         };
+        wepy.showNavigationBarLoading();
         if (this.resultType === 'input') {
           NetworkManagerOther.mallSearch(req)
             .then(data => {
@@ -272,8 +278,11 @@
                 }
               this.resultList = this.resultList.concat(data.goods);
                 this.$apply();
+          wepy.hideNavigationBarLoading();
             }, err => {
               this.loading = true;
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
             })
         } else {
           NetworkManagerOther.searchBySuggestions(req)
@@ -283,9 +292,12 @@
                 return
               }
               this.resultList = this.resultList.concat(data.goods);
+          wepy.hideNavigationBarLoading();
               this.$apply();
             }, err => {
               this.loading = true;
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
             })
         }
       },
@@ -307,11 +319,15 @@
           'thirdCatId': this.thirdCatId,
           'type': this.type
         };
+        wepy.showNavigationBarLoading();
         NetworkManagerOther.searchBySuggestions(req)
           .then(data => {
             this.resultList = data.goods;
             this.$apply();
+        wepy.hideNavigationBarLoading();
           }, err => {
+          wepy.showToast({title: err.message, icon: 'none'});
+          wepy.hideNavigationBarLoading();
           })
       },
       onClickCancel() {

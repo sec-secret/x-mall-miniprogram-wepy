@@ -251,7 +251,7 @@
     <view class="amount">
       实付：<text class="price">￥{{globalWxs.formatFenPrice(payTotal)}}</text>
     </view>
-    <view class="pay" @click="actionClickPay">去付款</view>
+    <view class="pay" @tap="onClickPay">去付款</view>
   </view>
 </template>
 
@@ -303,6 +303,45 @@
         wepy.navigateTo({
           url: '../mine/address-list'
         })
+      },
+      onClickPay() {
+        if (!this.isAgree) {
+          wepy.showToast({title: '请选择同意《小呱GO物服务协议》', icon: 'none'})
+          return
+        }
+        wepy.showNavigationBarLoading();
+        let skuReqs = [];
+        let catData = [];
+//      格式化参数
+        this.payInfo.selectedList.forEach(item => {
+          skuReqs.push({
+            needYanbao: false,
+            skuId: Number(item.skuId),
+            num: item.num,
+            saleValue: item.saleValue
+          })
+          catData.push({
+            skuId: Number(item.skuId),
+            num: item.num
+          })
+        })
+        let payData = {
+          'addressId': this.defaultAddress.id,
+          'remark': '',
+          'skuReqs': skuReqs
+        }
+        NetworkManagerOrder.submitOrder(payData)
+          .then(data => {
+            wepy.hideNavigationBarLoading();
+//          删除对应购物车
+            this.deleteCat(catData);
+//          调支付
+            this.goPay();
+//            this.goPay(this.userId, String(data), this.openId, this.defaultWay.id);
+          }, err => {
+            wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+          })
       }
     }
 
@@ -311,13 +350,13 @@
     }
 
     onLoad(option) {
-        console.log(option.payInfo);
         this.payInfo = JSON.parse(option.payInfo);
       this.goodsList = this.payInfo.selectedList;
         this.$apply();
     }
 
     getDefaultAddress() {
+      wepy.showNavigationBarLoading();
       NetworkManagerMine.getDefaultAddress()
         .then(data => {
           if (data) {
@@ -355,18 +394,18 @@
                   return i.areaRestrict === false;
                 });
                 if (this.noLimit) {
-                  this.getFreight(freightReq);
+                  this.getFreight(freightReq)
                 } else {
-                  wepy.showToast('很抱歉,当前区域无法配送')
+                  wepy.showToast({title: '很抱歉,当前区域无法配送', icon: 'none'})
                 }
+                wepy.hideNavigationBarLoading();
               }, err => {
-                console.log(err);
-                wepy.showToast(err.message)
+                wepy.showToast({title: err.message, icon: 'none'})
+                wepy.hideNavigationBarLoading();
               })
           }
         }, err => {
-          this.closeLoading();
-          Toast(err.message)
+          wepy.showToast({title: err.message, icon: 'none'})
         })
     }
 
@@ -376,8 +415,21 @@
           this.freight = data.freight;
           this.$apply();
         }, err => {
-          console.log(err)
+          wepy.showToast({title: err.message, icon: 'none'})
         })
+    }
+
+    deleteCat(cat) {
+      NetworkManagerCart.deleteCartGoods({skuReqs: cat})
+        .then(() => {
+          console.log('删除成功')
+        }, err => {
+          console.log(err);
+        })
+    }
+
+    goPay() {
+      wepy.showToast({title: '下单成功去支付', icon: 'success'})
     }
 
   }

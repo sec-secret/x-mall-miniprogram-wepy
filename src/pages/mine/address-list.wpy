@@ -145,9 +145,13 @@
     methods = {
         onClickAddress(address) {
           if (this.from === 'order') {
+            wepy.showNavigationBarLoading();
             NetworkManagerMine.setDefaultAddress({id: address.id}).then(data => {
+              wepy.hideNavigationBarLoading();
               wepy.navigateBack();
             }, err => {
+              wepy.showToast({title: err.message, icon: 'none'})
+              wepy.hideNavigationBarLoading();
             })
           }
         },
@@ -158,11 +162,14 @@
         })
       },
       onClickDel(address) {
+        wepy.showNavigationBarLoading();
         NetworkManagerMine.deleteAddress({id: address.id})
           .then(data => {
+            wepy.hideNavigationBarLoading();
             this.fetchAddressList()
           }, err => {
-            console.log(err)
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       },
       onClickAdd() {
@@ -171,7 +178,6 @@
         })
       },
       touchS:function(option){
-            console.log(option);
         let e = option.event;
         let index = option.index;
         if(e.touches.length == 1){
@@ -235,20 +241,23 @@
     }
 
     fetchAddressList() {
+      wepy.showNavigationBarLoading();
       NetworkManagerMine.fetchAddressList()
         .then(data => {
           this.addressList = data;
           this.$apply();
+          wepy.hideNavigationBarLoading();
         }, err => {
-          console.log(err)
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
         })
     }
 
     getEleWidth(w) {
-      var real = 0;
+      let real = 0;
       try {
-        var res = wepy.getSystemInfoSync().windowWidth;
-        var scale = (750/2)/(w/2);//以宽度750px设计稿做宽度的自适应
+        let res = wepy.getSystemInfoSync().windowWidth;
+        let scale = (750/2)/(w/2);//以宽度750px设计稿做宽度的自适应
         // console.log(scale);
         real = Math.floor(res/scale);
         return real;
@@ -259,7 +268,7 @@
     }
 
     initEleWidth() {
-      var delBtnWidth = this.getEleWidth(this.data.delBtnWidth);
+      let delBtnWidth = this.getEleWidth(this.data.delBtnWidth);
       this.delBtnWidth = delBtnWidth;
       this.$apply();
     }

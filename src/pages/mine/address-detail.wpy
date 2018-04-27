@@ -13,6 +13,7 @@
       input {
         @include flex(1);
         font-size: $xg-size-5;
+        z-index: 10;
       }
       .input-placeholder, .placeholder {
         font-size: $xg-size-5;
@@ -133,7 +134,8 @@
       <view wx:else class="content">{{province.areaName}} {{city.areaName}} {{county.areaName}} {{town.areaName}}</view>
     </view>
     <view class="address-street section">
-      <textarea value="{{detailAddress}}"
+      <textarea hidden="{{showAddress}}"
+                value="{{detailAddress}}"
                 row="3"
                 cols="4"
                 placeholder="详细地址"
@@ -149,8 +151,8 @@
   <view class="footer">
     <button class="save-button" @tap="onClickSave">保存</button>
   </view>
-  <view wx:if="{{showAddress}}" class="popup">
-    <view class="address-section ">
+  <view wx:if="{{showAddress}}" class="popup" @tap="onCloseAddress">
+    <view class="address-section" @tap.stop="onClickContent">
       <view class="title-list">
         <repeat for="{{titleList}}" item="title">
           <view :class="{selectedTitle: showLevel === index}"
@@ -244,11 +246,19 @@
     }
 
     methods = {
-        onClickDefault() {
+      onClickDefault() {
             this.isDefault = !this.isDefault;
         },
       onClickAddress() {
         this.showAddress = true;
+        this.$apply();
+      },
+      onClickContent() {
+        console.log('nothing')
+      },
+      onCloseAddress() {
+          console.log('close')
+        this.showAddress = false;
         this.$apply();
       },
       onInputName(e) {
@@ -382,14 +392,16 @@
             'isDefault': this.isDefault ? 1 : 0
           }
         }
-
+        wepy.showNavigationBarLoading();
         NetworkManagerMine.saveAddress(address)
           .then(data => {
+            wepy.hideNavigationBarLoading();
             wepy.navigateBack();
           }, err => {
-            console.log(err)
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
-      }
+      },
     }
 
     onLoad(option) {
@@ -399,7 +411,6 @@
           this.addressInfo = query.addressInfo;
           this.isEdit = query.type === 'edit';
         }
-
       NetworkManagerMine.fetchProvince()
         .then(list => {
           this.provinces = list.sort(function (a, b) {
@@ -426,7 +437,7 @@
                 })
                 this.$apply();
               }, err => {
-                console.log(err)
+                wepy.showToast({title: err.message, icon: 'none'})
               })
 
             NetworkManagerMine.fetchCounties({cityId: addressInfo.city})
@@ -440,7 +451,7 @@
                 })
                 this.$apply();
               }, err => {
-                console.log(err)
+                wepy.showToast({title: err.message, icon: 'none'})
               })
             if (addressInfo.town !== 0) {
               NetworkManagerMine.fetchTowns({countyId: addressInfo.county})
@@ -455,7 +466,7 @@
                   })
                   this.$apply();
                 }, err => {
-                  console.log(err)
+                  wepy.showToast({title: err.message, icon: 'none'})
                 })
             }
           } else {
@@ -467,14 +478,17 @@
     }
 
     fetchProvinces() {
+      wepy.showNavigationBarLoading();
       NetworkManagerMine.fetchProvince()
         .then(list => {
           this.provinces = list.sort(function (a, b) {
             return a.areaId - b.areaId
           });
           this.$apply();
+          wepy.hideNavigationBarLoading();
         }, err => {
-          console.log(err)
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
         })
     }
   }

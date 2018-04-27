@@ -7,7 +7,11 @@
   }
 </style>
 <template>
-  <scroll-view class="goods-area" scroll-y="true" bindscrolltolower="loadMore" scroll-top="{{scrollTop}}">
+  <scroll-view class="goods-area"
+               scroll-y="true"
+               bindscrolltolower="loadMore"
+               lower-threshold="150"
+               scroll-top="{{scrollTop}}">
     <repeat for="{{goodsList}}" item="goods">
       <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
     </repeat>
@@ -49,6 +53,7 @@
           return
         }
         this.page = this.page + 1;
+        wepy.showNavigationBarLoading();
         NetworkManagerMain.mallRecommend(this.catId, this.page)
           .then(data => {
             this.noMore = data.length === 0;
@@ -57,8 +62,10 @@
             }
             this.goodsList = this.goodsList.concat(data);
             this.$apply();
+            wepy.hideNavigationBarLoading();
           }, err => {
-            console.log(err);
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       }
     }
@@ -70,10 +77,14 @@
         wepy.setNavigationBarTitle({
             title: this.catName + '推荐'
         })
+      wepy.showNavigationBarLoading();
       NetworkManagerMain.mallRecommend(this.catId, this.page).then(data => {
         this.goodsList = data;
         this.$apply();
+        wepy.hideNavigationBarLoading();
       }, err => {
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
       });
     }
   }

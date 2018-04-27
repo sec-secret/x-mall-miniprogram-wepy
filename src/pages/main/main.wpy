@@ -355,18 +355,20 @@
 
     onLoad() {
       this.createAnimation();
+      wepy.showNavigationBarLoading();
       NetworkManagerMain.main().then(data => {
-        console.log(data);
         this.hotGoods = data.hotGoods;
         this.recommendGoods = data.hotGoods;
         this.categoryGroup = data.hotCategoryAndGoodsResp.items;
         this.$apply();
+        wepy.hideNavigationBarLoading();
       }, error => {
-        console.log(error);
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
       });
     }
     onPullDownRefresh() {
-      wx.showNavigationBarLoading();
+      wepy.showNavigationBarLoading();
       wepy.setNavigationBarTitle({
         title: '正在为您智能推荐...'
       })
@@ -378,11 +380,11 @@
         wepy.setNavigationBarTitle({
           title: '首页'
         })
-        wx.hideNavigationBarLoading()
-        wx.stopPullDownRefresh()
+        wepy.hideNavigationBarLoading();
+        wepy.stopPullDownRefresh();
         this.$apply();
       }, error => {
-        console.log(error);
+        wepy.showToast({title: err.message, icon: 'none'})
       });
     }
   }

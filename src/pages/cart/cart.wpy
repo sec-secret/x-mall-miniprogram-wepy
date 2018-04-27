@@ -279,7 +279,6 @@
         if (this.selectedList.findIndex(item => {
             return item.cartId === goods.cartId;
           }) >= 0) {
-          console.log('好')
           this.selectedList.splice(this.selectedList.findIndex(item => item.cartId === goods.cartId), 1)
         } else {
           this.selectedList.push(goods)
@@ -312,6 +311,7 @@
             }
           ]
         }
+        wepy.showNavigationBarLoading();
         NetworkManagerCart.deleteCartGoods(params).then(success => {
 //          更新购物车数据
           NetworkManagerCart.fetchCartGoods().then(data => {
@@ -331,9 +331,14 @@
               }))
             }
             this.$apply();
+            wepy.hideNavigationBarLoading();
           }, err => {
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
         }, err => {
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
         })
       },
       onClickPlus(goods) {
@@ -345,6 +350,7 @@
             }
           ]
         }
+        wepy.showNavigationBarLoading();
         NetworkManagerCart.addCart(params).then(success => {
 //          更新购物车数据
           NetworkManagerCart.fetchCartGoods().then(data => {
@@ -366,11 +372,14 @@
               }))
             }
             this.$apply();
+            wepy.hideNavigationBarLoading();
           }, err => {
-            console.log(err)
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
         }, err => {
-          console.log(err)
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
         })
       },
       onClickDel(goods) {
@@ -382,13 +391,16 @@
             }
           ]
         };
+        wepy.showNavigationBarLoading();
         NetworkManagerCart.deleteCartGoods(params)
           .then(data => {
             this.selectedList.splice(
               this.selectedList.findIndex(item => item.skuId === goods.skuId), 1);
+            wepy.hideNavigationBarLoading();
             this.fetchGoodsList();
           }, err => {
-            console.log(err);
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       },
       onChangeNum(option) {
@@ -404,6 +416,7 @@
           ]
         }
         if (difference > 0) {
+          wepy.showNavigationBarLoading();
           NetworkManagerCart.addCart(params).then(data => {
 //          更新购物车数据
             NetworkManagerCart.fetchCartGoods().then(data => {
@@ -424,15 +437,17 @@
                 }))
               }
               this.$apply();
+              wepy.hideNavigationBarLoading();
             }, err => {
-              console.log(err)
-              this.closeLoading();
+              wepy.showToast({title: err.message, icon: 'none'})
+              wepy.hideNavigationBarLoading();
             })
           }, err => {
-            console.log(err)
-            this.closeLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
         } else {
+          wepy.showNavigationBarLoading();
           NetworkManagerCart.deleteCartGoods(params).then(data => {
 //          更新购物车数据
             NetworkManagerCart.fetchCartGoods().then(data => {
@@ -452,11 +467,14 @@
                 }))
               }
               this.$apply();
+              wepy.hideNavigationBarLoading();
             }, err => {
-              console.log(err)
+              wepy.showToast({title: err.message, icon: 'none'})
+              wepy.hideNavigationBarLoading();
             })
           }, err => {
-            console.log(err)
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
         }
       },
@@ -473,7 +491,6 @@
         })
       },
       touchS:function(option){
-        console.log(option);
         let e = option.event;
         let index = option.index;
         if(e.touches.length == 1){
@@ -523,6 +540,7 @@
       }
     }
     fetchGoodsList() {
+      wepy.showNavigationBarLoading();
       NetworkManagerCart.fetchCartGoods().then(data => {
         let selectedJudgeMap = {};
         let goodsCountList = {};
@@ -534,13 +552,18 @@
         }
         this.goodsList = data.skus;
         this.$apply();
+        wepy.hideNavigationBarLoading();
         console.log(data)
       }, err => {
-        console.log(err)
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
       })
     }
 
     onShow() {
+        this.selcetedList = [];
+        this.apply();
+//        TODO 更改逻辑，后退列表更新优化需要吧selectedList换为selectedIDs，最后提交时找到selectedList
       this.fetchGoodsList();
     }
 
