@@ -100,9 +100,15 @@
     <repeat for="{{addressList}}" item="address">
       <address-cell class="list-item"
                     :address="address"
+                    :index="index"
                     :showEdit="true"
+                    :txtStyle="address.txtStyle"
                     @clickAddress.user="onClickAddress"
-                    @clickEdit.user="onClickEdit"></address-cell>
+                    @clickEdit.user="onClickEdit"
+                    @clickDel.user="onClickDel"
+                    @touchS.user="touchS"
+                    @touchM.user="touchM"
+                    @touchE.user="touchE"></address-cell>
     </repeat>
   </view>
   <view class="footer">
@@ -128,7 +134,9 @@
     }
 
     data = {
-        addressList: []
+        addressList: [],
+      delBtnWidth: 120,
+      startX: 0
     }
 
     computed = {
@@ -149,10 +157,67 @@
             url: './address-detail?query=' + query
         })
       },
+      onClickDel(address) {
+        NetworkManagerMine.deleteAddress({id: address.id})
+          .then(data => {
+            this.fetchAddressList()
+          }, err => {
+            console.log(err)
+          })
+      },
       onClickAdd() {
         wepy.navigateTo({
           url: './address-detail'
         })
+      },
+      touchS:function(option){
+            console.log(option);
+        let e = option.event;
+        let index = option.index;
+        if(e.touches.length == 1){
+          //设置触摸起始点水平方向位置
+          this.startX = e.touches[0].clientX;
+          this.$apply();
+        }
+      },
+      touchM:function(option){
+          let e = option.event;
+          let index = option.index;
+        if(e.touches.length==1){
+          //手指移动时水平方向位置
+          let moveX = e.touches[0].clientX;
+          //手指起始点位置与移动期间的差值
+          let disX = this.startX - moveX;
+          let delBtnWidth = this.data.delBtnWidth;
+          let txtStyle = "";
+          if(disX == 0 || disX < 0){//如果移动距离小于等于0，文本层位置不变
+            txtStyle = "left:0px";
+          }else if(disX > 0 ){//移动距离大于0，文本层left值等于手指移动距离
+            txtStyle = "left:-" + disX + "rpx";
+            if(disX>=delBtnWidth){
+              //控制手指移动距离最大值为删除按钮的宽度
+              txtStyle = "left:-"+delBtnWidth+"rpx";
+            }
+          }
+//          this.[this.index] = txtStyle;
+          this.addressList[index].txtStyle = txtStyle;
+          this.$apply();
+        }
+      },
+      touchE:function(option){
+        let e = option.event;
+        let index = option.index;
+        if(e.changedTouches.length == 1){
+          //手指移动结束后水平位置
+          let endX = e.changedTouches[0].clientX;
+          //触摸开始与结束，手指移动的距离
+          let disX = this.startX - endX;
+          let delBtnWidth = this.data.delBtnWidth;
+          //如果距离小于删除按钮的1/2，不显示删除按钮
+          let txtStyle = disX > delBtnWidth/2 ? "left:-"+delBtnWidth+"px":"left:0px";
+          this.addressList[index].txtStyle = txtStyle;
+          this.$apply();
+        }
       }
     }
 
@@ -161,16 +226,42 @@
         this.from = option.from;
         this.$apply();
       }
+      this.initEleWidth();
     }
+
     onShow() {
 //        从我的页面和从订单进入地址列表两种情况的点击跳转不同
-        NetworkManagerMine.fetchAddressList()
-          .then(data => {
-            this.addressList = data;
-            this.$apply();
-          }, err => {
-            console.log(err)
-          })
+        this.fetchAddressList();
+    }
+
+    fetchAddressList() {
+      NetworkManagerMine.fetchAddressList()
+        .then(data => {
+          this.addressList = data;
+          this.$apply();
+        }, err => {
+          console.log(err)
+        })
+    }
+
+    getEleWidth(w) {
+      var real = 0;
+      try {
+        var res = wepy.getSystemInfoSync().windowWidth;
+        var scale = (750/2)/(w/2);//以宽度750px设计稿做宽度的自适应
+        // console.log(scale);
+        real = Math.floor(res/scale);
+        return real;
+      } catch (e) {
+        return false;
+        // Do something when catch error
+      }
+    }
+
+    initEleWidth() {
+      var delBtnWidth = this.getEleWidth(this.data.delBtnWidth);
+      this.delBtnWidth = delBtnWidth;
+      this.$apply();
     }
   }
 </script>

@@ -193,7 +193,7 @@
     <view class="center-part">
       <view class="first-line">
         <view class="name">{{defaultAddress.name}}</view>
-        <view class="mobile">{{cartWxs.formatMobile(defaultAddress.mobile)}}</view>
+        <view wx:if="{{defaultAddress.mobile}}" class="mobile">{{globalWxs.formatMobile(defaultAddress.mobile)}}</view>
         <view wx:if="{{address.isDefault === 1}}" class="default">默认</view>
       </view>
       <view class="second-line address">{{defaultAddress.provinceName + defaultAddress.cityName + defaultAddress.countyName +
@@ -214,11 +214,11 @@
   <view class="amount-area">
     <view class="amount-item">
       <text class="title">商品合计</text>
-      <text>￥{{cartWxs.formatFenPrice(payInfo.total)}}</text>
+      <text>￥{{globalWxs.formatFenPrice(payInfo.total)}}</text>
     </view>
     <view class="amount-item">
       <text class="title">运费</text>
-      <text>￥{{cartWxs.formatFenPrice(freight)}}</text>
+      <text>￥{{globalWxs.formatFenPrice(freight)}}</text>
     </view>
   </view>
 
@@ -234,7 +234,7 @@
             <!--<text v-for="i in JSON.parse(goods.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
           <!--</view>-->
           <text class="price">
-            ￥{{cartWxs.formatFenPrice(goods.nbPrice)}}
+            ￥{{globalWxs.formatFenPrice(goods.nbPrice)}}
           </text>
         </view>
         <view class="count">x {{goods.num}}</view>
@@ -249,7 +249,7 @@
   </view>
   <view class="pay-area">
     <view class="amount">
-      实付：<text class="price">￥{{cartWxs.formatFenPrice(payTotal)}}</text>
+      实付：<text class="price">￥{{globalWxs.formatFenPrice(payTotal)}}</text>
     </view>
     <view class="pay" @click="actionClickPay">去付款</view>
   </view>
@@ -261,12 +261,17 @@
   import NetworkManagerMine from '../../network/NetworkManagerMine';
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
   import UnitTool from '../../tool/UnitTool';
+  import globalWxs from '../../wxs/global.wxs'
   export default class Cart extends wepy.page {
     config = {
       navigationBarTitleText: '确认订单'
     }
 
     components = {
+    }
+
+    wxs = {
+        globalWxs
     }
 
     data = {
