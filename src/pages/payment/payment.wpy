@@ -205,7 +205,7 @@
     </view>
   </view>
   <view wx:else
-       @tap="onClickSetAddress"
+       @tap="onClickAddress"
        class="set-address-area pl2 pr2">
     <text class="setAddress">设置收货地址</text>
       <image class="icon" src="../main/img/black-right-arrow.png" mode="widthFix"/>
@@ -299,11 +299,6 @@
             url: '../mine/address-list?from=order'
         })
       },
-      onClickSetAddress() {
-        wepy.navigateTo({
-          url: '../mine/address-list'
-        })
-      },
       onClickPay() {
         if (!this.isAgree) {
           wepy.showToast({title: '请选择同意《小呱GO物服务协议》', icon: 'none'})
@@ -395,6 +390,7 @@
                 });
                 if (this.noLimit) {
                   this.getFreight(freightReq)
+                  wepy.showToast({title: '很抱歉,当前区域无法配送', icon: 'none'})
                 } else {
                   wepy.showToast({title: '很抱歉,当前区域无法配送', icon: 'none'})
                 }
@@ -403,6 +399,12 @@
                 wepy.showToast({title: err.message, icon: 'none'})
                 wepy.hideNavigationBarLoading();
               })
+          }
+          else {
+            this.hasAddress = false;
+            this.defaultAddress = data;
+            this.$apply();
+            wepy.hideNavigationBarLoading();
           }
         }, err => {
           wepy.showToast({title: err.message, icon: 'none'})
