@@ -132,13 +132,16 @@
         this.lastKey = '';
         this.goodsList = [];
         this.$apply();
+        wepy.showNavigationBarLoading();
         NetworkManagerGoods.goodsList(this.catId, this.lastKey)
           .then(data => {
             this.goodsList = data.goods;
             this.lastKey = data.lastKey;
             this.$apply();
+        wepy.hideNavigationBarLoading();
           }, err => {
-            console.log(err);
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
           })
       },
       onClickGoods(goods) {
@@ -152,6 +155,7 @@
         if (this.getBottom) {
           return
         }
+        wepy.showNavigationBarLoading();
         NetworkManagerGoods.goodsList(this.catId, this.lastKey)
           .then(data => {
             this.getBottom = data.goods.length === 0;
@@ -161,8 +165,10 @@
             this.goodsList = this.goodsList.concat(data.goods);
             this.lastKey = data.lastKey;
             this.$apply();
+        wepy.hideNavigationBarLoading();
           }, err => {
-            console.log(err);
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
           })
       }
 //      fetchGoodsList(catId, lastKey) {
@@ -182,6 +188,7 @@
 
     onLoad(option) {
         this.catId = option.catId;
+      wepy.showNavigationBarLoading();
       NetworkManagerCategory.secondCategories(this.catId).then(data => {
         this.categoryList = data;
         this.catId = data[0].catId;
@@ -191,11 +198,14 @@
             this.goodsList = data.goods;
             this.lastKey = data.lastKey;
             this.$apply();
+      wepy.hideNavigationBarLoading();
           }, err => {
-            console.log(err);
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
           })
-      }, error => {
-        console.log(error);
+      }, err => {
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
       })
       console.log(option);
     }

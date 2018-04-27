@@ -178,23 +178,27 @@
     }
 
     fetchSecondCategories(parentId){
+      wepy.showNavigationBarLoading();
       NetworkManagerCategory.secondCategories(parentId).then(data => {
         this.secondCategoryList = data;
         this.$apply();
-        console.log(data);
-      }, error => {
-        console.log(error);
+        wepy.hideNavigationBarLoading();
+      }, err=> {
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
       })
     }
 
     onLoad() {
+      wepy.showNavigationBarLoading();
       NetworkManagerCategory.moreCategories().then(data => {
         this.categoryList = data;
         this.$apply();
         this.fetchSecondCategories(data[0].catId);
-        console.log(data);
-      }, error => {
-        console.log(error);
+        wepy.hideNavigationBarLoading();
+      }, err => {
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
       })
     }
   }
