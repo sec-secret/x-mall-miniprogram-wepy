@@ -186,7 +186,7 @@
                 item="goods"
                 key="goods.skuId">
           <cart-cell :goods="goods"
-                     :isSelected="cartWxs.isSelected(selectedList,goods)"
+                     :isSelected="cartWxs.isSelected(selectedIds,goods)"
                      :index="index"
                      :txtStyle="goods.txtStyle"
                      @clickGoods.user="onClickGoods"
@@ -247,7 +247,7 @@
 
     data = {
       isEditing: false,
-      selectedList: [],
+      selectedIds: [],
       goodsList: [],
       tips: [
         '7天无忧退货',
@@ -260,14 +260,21 @@
 
     computed = {
       selectedCount(){
-        return this.selectedList.length;
+        return this.selectedIds.length;
       },
       totalPrice(){
         let total = 0;
-        this.selectedList.forEach(item => {
-          total += item.nbPrice * item.num;
-        })
-        return total;
+        if (this.selectedIds.length > 0) {
+          this.selectedIds.forEach(id => {
+            let index = this.goodsList.findIndex(item => item.cartId === id);
+            let goods = this.goodsList[index];
+            total += goods.nbPrice * goods.num;
+          })
+          return total;
+        } else {
+            return 0
+        }
+
       },
       isSelectedAll() {
           return this.selectedCount === this.goodsList.length;
@@ -276,12 +283,12 @@
 
     methods = {
       onClickGoodsSelected(goods){
-        if (this.selectedList.findIndex(item => {
-            return item.cartId === goods.cartId;
+        if (this.selectedIds.findIndex(id => {
+            return id === goods.cartId;
           }) >= 0) {
-          this.selectedList.splice(this.selectedList.findIndex(item => item.cartId === goods.cartId), 1)
+          this.selectedIds.splice(this.selectedIds.findIndex(id => id === goods.cartId), 1)
         } else {
-          this.selectedList.push(goods)
+          this.selectedIds.push(goods.cartId)
         }
         this.$apply();
       },
@@ -291,11 +298,12 @@
         })
       },
       onClickSelectAll() {
-        if (this.selectedList.length === this.goodsList.length) {
-          this.selectedList = [];
+        if (this.selectedIds.length === this.goodsList.length) {
+          this.selectedIds = [];
         } else {
-//          数组深拷贝
-          [...this.selectedList] = this.goodsList;
+          this.goodsList.forEach(goods => {
+              this.selectedIds.push(goods.cartId);
+          })
         }
         this.$apply();
       },
@@ -318,17 +326,9 @@
             this.goodsList = data.skus;
             /* 因为商品数量更新的原因要更新整个列表
              * 在已选择栏中删除旧数据 添加新数据 */
-            let targetIndex = this.selectedList.findIndex(item => item.skuId === goods.skuId);
-            if (targetIndex >= 0) {
-              this.selectedList.splice(
-                this.selectedList.findIndex(item => item.skuId === goods.skuId), 1,
-                data.skus.find(i => {
-                  return i.skuId === goods.skuId;
-                }))
-            } else {
-              this.selectedList.push(this.goodsList.find(i => {
-                return i.skuId === goods.skuId;
-              }))
+            let targetIndex = this.selectedIds.findIndex(id=> id === goods.cartId);
+            if (targetIndex < 0) {
+              this.selectedIds.push(goods.cartId)
             }
             this.$apply();
             wepy.hideNavigationBarLoading();
@@ -359,17 +359,9 @@
             /* 因为商品数量更新的原因要更新整个列表
              * 在已选择栏中删除旧数据 添加新数据
              */
-            let targetIndex = this.selectedList.findIndex(item => item.skuId === goods.skuId);
-            if (targetIndex >= 0) {
-              this.selectedList.splice(
-                this.selectedList.findIndex(item => item.skuId === goods.skuId), 1,
-                data.skus.find(i => {
-                  return i.skuId === goods.skuId;
-                }))
-            } else {
-              this.selectedList.push(this.goodsList.find(i => {
-                return i.skuId === goods.skuId;
-              }))
+            let targetIndex = this.selectedIds.findIndex(id=> id === goods.cartId);
+            if (targetIndex < 0) {
+              this.selectedIds.push(goods.cartId)
             }
             this.$apply();
             wepy.hideNavigationBarLoading();
@@ -394,8 +386,8 @@
         wepy.showNavigationBarLoading();
         NetworkManagerCart.deleteCartGoods(params)
           .then(data => {
-            this.selectedList.splice(
-              this.selectedList.findIndex(item => item.skuId === goods.skuId), 1);
+            this.selectedIds.splice(
+              this.selectedIds.findIndex(id => id === goods.cartId), 1);
             wepy.hideNavigationBarLoading();
             this.fetchGoodsList();
           }, err => {
@@ -405,13 +397,13 @@
       },
       onChangeNum(option) {
         let newVal = option.newVal;
-        let cart = option.goods;
-        let difference = newVal - cart.num;
+        let goods = option.goods;
+        let difference = newVal - goods.num;
         let params = {
           'skuReqs': [
             {
               'num': Math.abs(difference),
-              'skuId': cart.skuId
+              'skuId': goods.skuId
             }
           ]
         }
@@ -424,17 +416,9 @@
               /* 因为商品数量更新的原因要更新整个列表
                * 在已选择栏中删除旧数据 添加新数据
                */
-              let targetIndex = this.selectedList.findIndex(item => item.skuId === cart.skuId);
-              if (targetIndex >= 0) {
-                this.selectedList.splice(
-                  this.selectedList.findIndex(item => item.skuId === cart.skuId), 1,
-                  data.skus.find(i => {
-                    return i.skuId === cart.skuId;
-                  }))
-              } else {
-                this.selectedList.push(this.goodsList.find(i => {
-                  return i.skuId === cart.skuId;
-                }))
+              let targetIndex = this.selectedIds.findIndex(id=> id === goods.cartId);
+              if (targetIndex < 0) {
+                this.selectedIds.push(goods.cartId)
               }
               this.$apply();
               wepy.hideNavigationBarLoading();
@@ -454,17 +438,9 @@
               this.goodsList = data.skus;
               /* 因为商品数量更新的原因要更新整个列表
                * 在已选择栏中删除旧数据 添加新数据 */
-              let targetIndex = this.selectedList.findIndex(item => item.skuId === cart.skuId);
-              if (targetIndex >= 0) {
-                this.selectedList.splice(
-                  this.selectedList.findIndex(item => item.skuId === cart.skuId), 1,
-                  data.skus.find(i => {
-                    return i.skuId === cart.skuId;
-                  }))
-              } else {
-                this.selectedList.push(this.goodsList.find(i => {
-                  return i.skuId === cart.skuId;
-                }))
+              let targetIndex = this.selectedIds.findIndex(id=> id === goods.cartId);
+              if (targetIndex < 0) {
+                this.selectedIds.push(goods.cartId)
               }
               this.$apply();
               wepy.hideNavigationBarLoading();
@@ -479,12 +455,18 @@
         }
       },
       onClickPay() {
-        if (this.selectedList.length === 0) {
+        if (this.selectedIds.length === 0) {
           return
         }
+        let selectedList = [];
+        this.selectedIds.forEach(id => {
+          let index = this.goodsList.findIndex(item => item.cartId === id);
+          let goods = this.goodsList[index];
+          selectedList.push(goods);
+        })
         let payInfo = JSON.stringify({
           total: this.totalPrice,
-          selectedList: this.selectedList
+          selectedList: selectedList
         })
         wepy.navigateTo({
           url: '../payment/payment?payInfo=' + payInfo
@@ -542,14 +524,14 @@
     fetchGoodsList() {
       wepy.showNavigationBarLoading();
       NetworkManagerCart.fetchCartGoods().then(data => {
-        let selectedJudgeMap = {};
-        let goodsCountList = {};
-        let goodsKeyList = {};
-        for (let goods of data.skus) {
-          selectedJudgeMap[goods.skuId] = false;
-          goodsCountList[goods.skuId] = goods.num;
-          goodsKeyList[goods.skuId] = goods;
-        }
+//        let selectedJudgeMap = {};
+//        let goodsCountList = {};
+//        let goodsKeyList = {};
+//        for (let goods of data.skus) {
+//          selectedJudgeMap[goods.skuId] = false;
+//          goodsCountList[goods.skuId] = goods.num;
+//          goodsKeyList[goods.skuId] = goods;
+//        }
         this.goodsList = data.skus;
         this.$apply();
         wepy.hideNavigationBarLoading();
@@ -561,10 +543,25 @@
     }
 
     onShow() {
-        this.selcetedList = [];
-        this.apply();
-//        TODO 更改逻辑，后退列表更新优化需要吧selectedList换为selectedIDs，最后提交时找到selectedList
-      this.fetchGoodsList();
+      wepy.showNavigationBarLoading();
+      NetworkManagerCart.fetchCartGoods().then(data => {
+        this.goodsList = data.skus;
+        let newIds = [];
+//        找到刚刚删除的商品，更新已选列表
+        this.selectedIds.forEach((id, index) => {
+          if (this.goodsList.some(goods => {
+              return goods.cartId === id
+            })) {
+              newIds.push(id);
+          }
+        })
+        this.selectedIds = newIds;
+        this.$apply();
+        wepy.hideNavigationBarLoading();
+      }, err => {
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
+      })
     }
 
     onLoad() {
