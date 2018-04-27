@@ -2,134 +2,166 @@
   @import "../../assets/scss/index.scss";
   .cart-item {
     height: 190rpx;
-    background: #fff;
-    margin-bottom: 20rpx;
-    padding: 30rpx 30rpx 30rpx 0;
-    @include flex-x-middle();
-    .edit-select-space {
-      padding: 0 30rpx;
-      height: 100%;
-      @include flex-center();
-      .select-icon {
-        width: 34rpx;
-        height: 34rpx;
+    position: relative;
+    .content-item {
+      height: 190rpx;
+      background: #fff;
+      margin-bottom: 20rpx;
+      padding: 30rpx 30rpx 30rpx 0;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      z-index: 1;
+      @include flex-x-middle();
+      .edit-select-space {
+        padding: 0 30rpx;
+        height: 100%;
+        @include flex-center();
+        .select-icon {
+          width: 34rpx;
+          height: 34rpx;
+        }
+      }
+      .goods-part {
+        @include flex-x-middle();
+        .icon {
+          margin-left: 10rpx;
+          width: 140rpx;
+          height: 140rpx;
+        }
+        .content {
+          margin-left: 20rpx;
+          flex: 1;
+          .name {
+            @include ellipsis();
+            font-size: $xg-size-4;
+            color: #333;
+          }
+          .cart-dim {
+            @include ellipsis(2);
+            font-size: $xg-size-2;
+            color: #999;
+            margin-top: .1rem;
+            label {
+              margin-right: .1rem;
+            }
+          }
+          .info {
+            margin-top: 10rpx;
+            height: 50rpx;
+            line-height: 50rpx;
+            .price {
+              flex: 1;
+              color: $xg-c-red;
+              font-weight: bold;
+              font-size: $xg-size-5;
+            }
+            input {
+              min-height: 0;
+            }
+            .input {
+              @include flex-x-middle();
+              z-index: 0;
+              .count-button {
+                @include flex(none);
+                @include flex-center();
+                height: 48rpx;
+                line-height: 48rpx;
+                width: 52rpx;
+                border-radius: 0 4rpx 4rpx 0;
+                border: 1px solid #999999;
+                font-size: $xg-size-4;
+                font-weight: bold;
+                color: #999999;
+                border-left-width: 0;
+              }
+              .count-button:first-of-type {
+                border-radius: 4rpx 0 0 4rpx;
+                border-right: 0;
+                border-left-width: 1rpx;
+              }
+              .count-number {
+                @include flex(none);
+                @include flex-center();
+                text-align: center;
+                border: 1px solid #999;
+                height: 48rpx;
+                line-height: 48rpx;
+                width: 70rpx;
+                font-weight: bold;
+                outline: 0;
+              }
+            }
+          }
+        }
       }
     }
-    .goods-part {
-      @include flex-x-middle();
-      .icon {
-        margin-left: 10rpx;
-        width: 140rpx;
-        height: 140rpx;
-      }
-      .content {
-        margin-left: 20rpx;
-        flex: 1;
-        .name {
-          @include ellipsis();
-          font-size: $xg-size-4;
-          color: #333;
-        }
-        .cart-dim {
-          @include ellipsis(2);
-          font-size: $xg-size-2;
-          color: #999;
-          margin-top: .1rem;
-          label {
-            margin-right: .1rem;
-          }
-        }
-        .info {
-          margin-top: 10rpx;
-          height: 50rpx;
-          line-height: 50rpx;
-          .price {
-            flex: 1;
-            color: $xg-c-red;
-            font-weight: bold;
-            font-size: $xg-size-5;
-          }
-          input {
-            min-height: 0;
-          }
-          .input {
-            @include flex-x-middle();
-            z-index: 0;
-            .count-button {
-              @include flex(none);
-              @include flex-center();
-              height: 48rpx;
-              line-height: 48rpx;
-              width: 52rpx;
-              border-radius: 0 4rpx 4rpx 0;
-              border: 1px solid #999999;
-              font-size: $xg-size-4;
-              font-weight: bold;
-              color: #999999;
-              border-left-width: 0;
-            }
-            .count-button:first-of-type {
-              border-radius: 4rpx 0 0 4rpx;
-              border-right: 0;
-              border-left-width: 1rpx;
-            }
-            .count-number {
-              @include flex(none);
-              @include flex-center();
-              text-align: center;
-              border: 1px solid #999;
-              height: 48rpx;
-              line-height: 48rpx;
-              width: 70rpx;
-              font-weight: bold;
-              outline: 0;
-            }
-          }
-        }
+    .del-item {
+      position: absolute;
+      right: 0;
+      width: 120rpx;
+      height: 180rpx;
+      background-color: $xg-c-red;
+      z-index: 0;
+      @include flex-center();
+      image {
+        width: 30rpx;
+        height: 30rpx;
       }
     }
   }
 </style>
 <template>
   <view class="cart-item">
-    <label wx:if="{{isEditing}}" @tap="delGoods(goods)">
-      删除
-    </label>
-    <label class="edit-select-space"
-           data-goods="{{goods}}"
-           @tap="onClickGoodsSelected">
-      <image wx:if="{{isSelected}}"
-             class="select-icon"
-             src="./img/gouxuan.png">
-      </image>
-      <image wx:else
-             class="select-icon"
-             src="./img/meixuan.png">
-      </image>
-    </label>
-    <view class="goods-part" @tap="onClickGoods">
-      <image mode="aspectFit" class="icon" src="{{goods.goodsImg}}" alt="">
-      </image>
-      <view class="content flex-y">
-        <label class="name ellipsis-2">
-          {{goods.name}}
-        </label>
-        <view class="info flex-middle-x">
-          <div class="price">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</div>
-          <view class="input flex-middle-x">
-            <label class="count-button"
-                   @tap.stop="onClickMinus">-</label>
-            <input
-              class="count-number"
-              type="number"
-              value="{{goods.num}}"
-              @tap.stop=""
-              @blur="onChangeNum"
-              data-goods="{{goods}}"/>
-            <label class="count-button"
-                   @tap.stop="onClickPlus">+</label>
+    <view class="content-item"
+          @touchstart="touchS"
+          @touchmove="touchM"
+          @touchend="touchE"
+          style="{{txtStyle}}"
+          data-index="{{index}}">
+      <label class="edit-select-space"
+             data-goods="{{goods}}"
+             @tap="onClickGoodsSelected">
+        <image wx:if="{{isSelected}}"
+               class="select-icon"
+               src="./img/gouxuan.png">
+        </image>
+        <image wx:else
+               class="select-icon"
+               src="./img/meixuan.png">
+        </image>
+      </label>
+      <view class="goods-part" @tap="onClickGoods">
+        <image mode="aspectFit" class="icon" src="{{goods.goodsImg}}" alt="">
+        </image>
+        <view class="content flex-y">
+          <label class="name ellipsis-2">
+            {{goods.name}}
+          </label>
+          <view class="info flex-middle-x">
+            <div class="price">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</div>
+            <view class="input flex-middle-x">
+              <label class="count-button"
+                     @tap.stop="onClickMinus">-</label>
+              <input
+                class="count-number"
+                type="number"
+                value="{{goods.num}}"
+                @tap.stop=""
+                @blur="onChangeNum"
+                data-goods="{{goods}}"/>
+              <label class="count-button"
+                     @tap.stop="onClickPlus">+</label>
+            </view>
           </view>
         </view>
+      </view>
+    </view>
+    <view @tap.stop="onClickDel" class="del-item">
+      <view class="del"
+            data-addressid="{{address.id}}"
+            data-index="{{index}}">
+        <image src="./img/deletebai.png" alt="">
       </view>
     </view>
   </view>
@@ -141,7 +173,8 @@
   export default class CartCell extends wepy.component {
     props = {
       goods: Object,
-      isSelected: Boolean
+      isSelected: Boolean,
+      index: Number
     }
 
     data = {
@@ -171,8 +204,20 @@
       onClickPlus() {
         this.$emit('clickPlus', this.goods)
       },
+      onClickDel() {
+        this.$emit('clickDel', this.goods);
+      },
       onChangeNum(e) {
-          this.$emit('changeNum', {goods: this.goods, newVal: e.detail.value})
+        this.$emit('changeNum', {goods: this.goods, newVal: e.detail.value})
+      },
+      touchS:function(e){
+        this.$emit('touchS', {event: e, index: this.index})
+      },
+      touchM:function(e){
+        this.$emit('touchM', {event: e, index: this.index})
+      },
+      touchE:function(e){
+        this.$emit('touchE', {event: e, index: this.index})
       }
     }
 
