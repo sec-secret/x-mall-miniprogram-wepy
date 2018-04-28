@@ -184,7 +184,7 @@
   }
 </style>
 <template>
-  <wxs src="./wxs/cart.wxs" module="cartWxs"></wxs>
+  <!--<wxs src="./wxs/cart.wxs" module="cartWxs"></wxs>-->
   <!--<address-cell v-if="hasAddress"-->
                 <!--:address="defaultAddress"-->
                 <!--:isFromList="false"-->
@@ -260,7 +260,7 @@
   import NetworkManagerCart from '../../network/NetworkManagerCart';
   import NetworkManagerMine from '../../network/NetworkManagerMine';
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
-  import UnitTool from '../../tool/UnitTool';
+  // import UnitTool from '../../tool/UnitTool';
   import globalWxs from '../../wxs/global.wxs'
   export default class Cart extends wepy.page {
     config = {
@@ -380,8 +380,7 @@
               'countyId': data.county,
               'provinceId': data.province,
               'skuIds': skuIds,
-              'townId': data.town,
-
+              'townId': data.town
             }
             NetworkManagerOrder.checkAreaLimit(limitReq)
               .then(data => {
@@ -399,8 +398,7 @@
                 wepy.showToast({title: err.message, icon: 'none'})
                 wepy.hideNavigationBarLoading();
               })
-          }
-          else {
+          } else {
             this.hasAddress = false;
             this.defaultAddress = data;
             this.$apply();
@@ -433,6 +431,5 @@
     goPay() {
       wepy.showToast({title: '下单成功去支付', icon: 'success'})
     }
-
   }
 </script>

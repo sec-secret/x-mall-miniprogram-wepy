@@ -22,7 +22,7 @@
   import { setStore } from 'wepy-redux'
   import configStore from './store'
   import {UPDATE_USER_INFO} from './store/types/user'
-  import NetworkManagerAuth from './network/NetworkManagerAuth'
+  // import NetworkManagerAuth from './network/NetworkManagerAuth'
 
   const store = configStore()
   setStore(store)
@@ -108,34 +108,37 @@
         }
       })
       wepy.login({
-          success: (res) => {
-            wepy.code = res.code;
-            console.log(res);
+        success: (res) => {
+          wepy.code = res.code;
+          console.log('login 获取到的数据: ');
+          console.log(res);
 //              获取登录code成功
-            if (res.code) {
-              wepy.getSetting({
-                success: function (option) {
-                  console.log(option);
-                }
-              });
-              wepy.getUserInfo({
-                withCredentials: true,
-                success: function (option) {
-                  console.log(option);
-                }
-              })
+          if (res.code) {
+            wepy.getSetting({
+              success: function (option) {
+                console.log('getSetting 获取到的数据: ');
+                console.log(option);
+              }
+            });
+            wepy.getUserInfo({
+              withCredentials: true,
+              success: function (option) {
+                console.log('getUserInfo 获取到的数据: ');
+                console.log(option);
+              }
+            })
 //              NetworkManagerAuth.getUserInfo(String(res.code))
 //                .then(data => {
 //                  let userData = data;
 //                  wepy.userData = data;
-////                  this.$store.commit('UPDATE_USER_MUTATION', this.userData);
+//                  this.$store.commit('UPDATE_USER_MUTATION', this.userData);
 //                }, err => {
 //                  console.log(err);
 //                })
-            } else {
-              console.log('登录失败！' + res.errMsg)
-            }
+          } else {
+            console.log('登录失败！' + res.errMsg)
           }
+        }
       })
     }
 
