@@ -19,4 +19,16 @@ export default class JNetworkMallAuth extends NetworkManager{
   static getVerifyCode(mobile, openId) {
     return this.instance().POST('/login/getVerifyCode', {mobile, openId}, {}, {isAuth:true})
   }
+
+  static miniprogramCode2Session(code){
+    return this.instance().freedomPOST('http://10.1.1.63:7000', '/wxmini/miniUserInfoByCode', {code}, {}, {}, true)
+  }
+
+  static miniprogramDecrypt(sessionKey, encryptedData, iv){
+    return this.instance().freedomPOST('http://10.1.1.63:7000', '/wxmini/miniDecrypt', {
+      session_key: sessionKey,
+      encryptedData: encryptedData,
+      iv: iv
+    }, {}, {}, true)
+  }
 }
