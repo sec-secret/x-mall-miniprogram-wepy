@@ -138,7 +138,7 @@
   <view class="main page">
     <swiper class="banner">
       <swiper-item key="index" class="banner-item">
-        <image class="image" src="/assets/main/temp_banner.png">
+        <image @tap="onClickBanner" class="image" src="/assets/main/temp_banner.png">
         </image>
       </swiper-item>
     </swiper>
@@ -299,6 +299,9 @@
     }
 
     methods = {
+        onClickBanner() {
+
+        },
       onClickGoods(goods){
         wepy.navigateTo({
           url: 'goods-detail?skuId=' + goods.skuId

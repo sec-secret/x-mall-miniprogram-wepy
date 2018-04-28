@@ -88,6 +88,16 @@
           color: $xg-c-red;
           font-weight: bold;
         }
+        .fenqi {
+          color: #999;
+          padding: 0 0.1rem;
+          font-size: $xg-size-4;
+          text {
+            font-weight: bold;
+            color: $xg-c-red;
+            font-size: $xg-size-7;
+          }
+        }
       }
     }
     .service-info {
@@ -342,6 +352,7 @@
       <!--<label class="description" v-html="goods.goodsDetailDesc"></label>-->
       <view class="price flex-middle-x">
         <label class="new">￥{{goods.smartPrice}}</label>
+        <view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>
       </view>
     </view>
 

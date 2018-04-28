@@ -31,7 +31,7 @@
       .fenqi {
         color: #999;
         padding: 0 10rpx;
-        i {
+        text {
           font-weight: bold;
           color: $xg-c-red;
           font-size: $xg-size-4;
@@ -47,7 +47,7 @@
     <view class="info">
       <text class="name mall-product-name">{{goods.name}}</text>
       <text class="price">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</text>
-      <!--<text class="fenqi" v-if="fenqiData.num !== 1"><i>￥{{fenqiData.price}}</i> x {{fenqiData.num}}期</text>-->
+      <view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>
     </view>
   </view>
 </template>
@@ -75,6 +75,7 @@
     }
 
     onLoad() {
+        console.log(this);
     }
   }
 </script>

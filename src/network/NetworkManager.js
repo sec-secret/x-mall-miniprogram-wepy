@@ -1,7 +1,8 @@
 import wepy from 'wepy'
 export default class NetworkManager{
   static _instance = null
-  baseUrl = 'http://mall.beta.zookainet.com/b-nb-mall';
+  mallbaseUrl = 'http://mall.beta.zookainet.com/gateway/mall';
+  authbaseUrl = 'http://mall.beta.zookainet.com/gateway/auth';
   timeout = 10 * 1000;
   delegate = null;
 
@@ -46,23 +47,28 @@ export default class NetworkManager{
         header: {
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': wepy.authToken || '',
           ...headers
         },
         success: function(res) {
-          let responseJson = res.data;
-          if (isStandard){
-            if (!responseJson.errorCode) {
-              resolve(responseJson.data);
-            } else {
-              let errorCode = responseJson.errorCode;
-              if (errorCode === 10022) {
-                reject(NetworkManager.notLoginError(10022));
-              } else {
-                reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
-              }
-            }
+          if (res.statusCode === 401) {
+            reject('notLogin')
           } else {
-            resolve(responseJson);
+            let responseJson = res.data;
+            if (isStandard){
+              if (!responseJson.errorCode) {
+                resolve(responseJson.data);
+              } else {
+                let errorCode = responseJson.errorCode;
+                if (errorCode === 10022) {
+                  reject(NetworkManager.notLoginError(10022));
+                } else {
+                  reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+                }
+              }
+            } else {
+              resolve(responseJson);
+            }
           }
         },
         fail: function (error) {
@@ -77,8 +83,9 @@ export default class NetworkManager{
     return this.fetchRequest('POST', baseUrl, url, parameters, headers, otherObject, isStandard);
   }
 
-  POST(url, parameters, headers, otherObject){
-    return this.freedomPOST(this.baseUrl, url, {
+  POST(url, parameters, headers, otherObject = {}){
+    let baseUrl = otherObject.hasOwnProperty('isAuth') ? this.authbaseUrl : this.mallbaseUrl;
+    return this.freedomPOST(baseUrl, url, {
         ...this.getCarryData(),
         ...parameters
       },
@@ -91,8 +98,9 @@ export default class NetworkManager{
     return this.fetchRequest('GET', baseUrl, url, parameters, headers, otherObject, isStandard);
   }
 
-  GET(url, parameters, headers, otherObject){
-    return this.freedomGET(this.baseUrl, url, {
+  GET(url, parameters, headers, otherObject = {}){
+      let baseUrl = otherObject.hasOwnProperty('isAuth') ? this.authbaseUrl : this.mallbaseUrl;
+    return this.freedomGET(baseUrl, url, {
         ...this.getCarryData(),
         ...parameters
       },

@@ -1,9 +1,27 @@
-module.exports = {
+var globalWxs = {
   formatFenPrice: function (price) {
     return Number(price / 100).toFixed(2)
   },
   formatMobile: function (mobile) {
     var temp = getRegExp('(\d{3})\d{4}(\d{4})');
     return mobile.replace(temp, '$1****$2')
+  },
+  formatFenqi: function(goods) {
+    var totalPrice = goods.nbPrice;
+    var num;
+    var price;
+    if (totalPrice >= 50000 && totalPrice < 100000) {
+      num = 3;
+    } else if (totalPrice >= 100000 && totalPrice < 200000) {
+      num = 6;
+    } else if (totalPrice >= 200000) {
+      num = 12;
+    } else {
+      num = 1;
+    }
+    price = globalWxs.formatFenPrice(totalPrice / num);
+    return {price: price, num: num}
   }
 }
+
+module.exports = globalWxs;

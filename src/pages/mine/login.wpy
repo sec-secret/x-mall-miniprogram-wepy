@@ -88,15 +88,16 @@
   import wepy from 'wepy'
   import {connect} from 'wepy-redux'
   import StringTool from '../../tool/StringTool'
+  import NetworkManagerAuth from '../../network/NetworkManagerAuth'
 
   @connect({
     userInfo (state) {
       return state.user.userInfo
     }
   })
-  export default class Mine extends wepy.page {
+  export default class Login extends wepy.page {
     config = {
-      navigationBarTitleText: '我的'
+      navigationBarTitleText: '登录'
     }
     components = {}
 
@@ -129,48 +130,38 @@
           wepy.showToast({title: '请输入正确验证码', icon: 'none'});
           return
         }
-//        NetworkMallMine.userLogin(this.mobile, this.verifyCode, this.verifyKey, this.userInfo.openId, this.userInfo.nickName)
-//          .then(data => {
-//            this.$store.commit('UPDATE_USER_MUTATION', data);
-//            this.$router.go(-1);
-//          }, err => {
-//            Toast(err.message)
-//          })
+        let openId;
+        let password;
+        NetworkManagerAuth.userLogin(password, this.mobile, openId)
+          .then(data => {
+              wepy.authToken = 'Bearer ' + data.access_token;
+          }, err => {
+          })
       },
       onClickVerify() {
         if (!StringTool.isMobile(this.mobile)) {
           wepy.showToast({title: '请输入正确的手机号', icon: 'none'});
           return
         }
-//        NetworkMallMine.getVerifyCode(this.mobile, this.userInfo.openId)
-//          .then(data => {
-//            this.closeLoading();
-//            this.verifyKey = data;
-//            this.showDJS = true;
-//            let djs = setInterval(() => {
-//              if (this.timeout === 1) {
-//                this.showDJS = false;
-//                this.timeout = 60;
-//                clearInterval(djs);
-//                return
-//              }
-//              this.timeout--
-//            }, 1000)
-//          }, err => {
-//            this.closeLoading();
-//          })
+        NetworkManagerAuth.getVerifyCode(this.mobile, this.userInfo.openId)
+          .then(data => {
+            this.closeLoading();
+            this.verifyKey = data;
         this.showDJS = true;
         this.djs = setInterval(() => {
-              if (this.timeout === 1) {
-                this.showDJS = false;
-                this.timeout = 60;
-                this.$apply();
-                clearInterval(this.djs);
-                return
-              }
-              this.timeout--
-              this.$apply();
-            }, 1000)
+            if (this.timeout === 1) {
+          this.showDJS = false;
+          this.timeout = 60;
+          this.$apply();
+          clearInterval(this.djs);
+          return
+        }
+        this.timeout--
+        this.$apply();
+      }, 1000)
+          }, err => {
+            this.closeLoading();
+          })
       }
     }
 

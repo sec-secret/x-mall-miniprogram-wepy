@@ -201,7 +201,9 @@
           }, err => {
             wepy.showToast({title: err.message, icon: 'none'})
             wepy.hideNavigationBarLoading();
-          })
+          }).catch(err => {
+          wepy.hideNavigationBarLoading();
+        })
       },
       onClickType(type) {
         this.type = type;
@@ -246,7 +248,9 @@
         }, err => {
           wepy.showToast({title: err.message, icon: 'none'})
           wepy.hideNavigationBarLoading();
-        })
+        }).catch(err => {
+        wepy.hideNavigationBarLoading();
+      })
     }
   }
 </script>

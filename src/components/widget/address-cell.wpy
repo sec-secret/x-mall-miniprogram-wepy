@@ -150,7 +150,7 @@
 
     methods = {
       onClickAddress() {
-            this.$emit('clickAddress', this.address)
+        this.$emit('clickAddress', this.address)
         },
       onClickEdit(){
         this.$emit('clickEdit', this.address);
