@@ -1,8 +1,7 @@
 import wepy from 'wepy'
 export default class NetworkManager{
   static _instance = null
-  mallbaseUrl = 'http://mall.beta.zookainet.com/gateway/mall';
-  authbaseUrl = 'http://mall.beta.zookainet.com/gateway/auth';
+  baseUrl = 'http://mall.beta.zookainet.com/b-nb-mall';
   timeout = 10 * 1000;
   delegate = null;
 
@@ -83,9 +82,8 @@ export default class NetworkManager{
     return this.fetchRequest('POST', baseUrl, url, parameters, headers, otherObject, isStandard);
   }
 
-  POST(url, parameters, headers, otherObject = {}){
-    let baseUrl = otherObject.hasOwnProperty('isAuth') ? this.authbaseUrl : this.mallbaseUrl;
-    return this.freedomPOST(baseUrl, url, {
+  POST(url, parameters, headers, otherObject){
+    return this.freedomPOST(this.baseUrl, url, {
         ...this.getCarryData(),
         ...parameters
       },
@@ -98,9 +96,8 @@ export default class NetworkManager{
     return this.fetchRequest('GET', baseUrl, url, parameters, headers, otherObject, isStandard);
   }
 
-  GET(url, parameters, headers, otherObject = {}){
-      let baseUrl = otherObject.hasOwnProperty('isAuth') ? this.authbaseUrl : this.mallbaseUrl;
-    return this.freedomGET(baseUrl, url, {
+  GET(url, parameters, headers, otherObject){
+    return this.freedomGET(this.baseUrl, url, {
         ...this.getCarryData(),
         ...parameters
       },

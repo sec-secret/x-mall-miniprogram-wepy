@@ -352,7 +352,7 @@
       <!--<label class="description" v-html="goods.goodsDetailDesc"></label>-->
       <view class="price flex-middle-x">
         <label class="new">￥{{goods.smartPrice}}</label>
-        <view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>
+        <!--<view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>-->
       </view>
     </view>
 
