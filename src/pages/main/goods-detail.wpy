@@ -782,7 +782,7 @@
     fetchSimilarGoods() {
       NetworkManagerGoods.goodsSimilar(this.skuId).then((data) => {
         let similarGoodsTypeList = data.similarProducts;
-        similarGoodsTypeList = [];
+//        similarGoodsTypeList = [];
         // if (similarGoodsTypeList.length === 0){
         //   similarGoodsTypeList.push({
         //     dim: 1,

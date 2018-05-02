@@ -378,7 +378,7 @@
         this.categoryGroup = data.hotCategoryAndGoodsResp.items;
         this.$apply();
         wepy.hideNavigationBarLoading();
-      }, error => {
+      }, err => {
         wepy.showToast({title: err.message, icon: 'none'})
         wepy.hideNavigationBarLoading();
       });
