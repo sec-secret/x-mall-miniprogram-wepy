@@ -162,6 +162,7 @@
             data-addressid="{{address.id}}"
             data-index="{{index}}">
         <image src="./img/deletebai.png" alt="">
+        </image>
       </view>
     </view>
   </view>
@@ -177,8 +178,7 @@
       index: Number
     }
 
-    data = {
-    }
+    data = {}
 
     wxs = {
         globalWxs

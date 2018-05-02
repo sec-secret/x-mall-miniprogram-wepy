@@ -112,6 +112,7 @@
             data-addressid="{{address.id}}"
             data-index="{{index}}">
         <image src="./img/deletebai.png" alt="">
+        </image>
       </view>
     </view>
   </view>
@@ -170,14 +171,10 @@
 
     }
 
-    onLoad() {
-
-    }
+    onLoad() {}
 
     moved() {
         console.log('我变了')
     }
-
-
   }
 </script>
