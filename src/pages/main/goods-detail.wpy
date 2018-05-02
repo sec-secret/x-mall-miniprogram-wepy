@@ -210,34 +210,39 @@
           color: $color-2;
           height: 60rpx;
         }
-        .type-row{
+        .type-group{
           margin-top: 25rpx;
-          .type-item {
-            &.active{
-              color: #ffffff !important;
-              background-color: #a63533 !important;
+          .title {
+
+          }
+          .item-group {
+            .type-item {
+              &.active{
+                color: #ffffff !important;
+                background-color: #a63533 !important;
+              }
+              display: inline-block;
+              height: 70rpx;
+              line-height: 70rpx;
+              padding: 0 20rpx;
+              font-size: $xg-size-4;
+              color: #333;
+              background-color: #f5f5f5;
+              border-radius: 4px;
+              margin-right: 30rpx;
+              margin-bottom: 20rpx;
+              word-break: keep-all;
+              /*&.selected {
+                color: $color-yellow !important;
+                border-color: $color-yellow !important;
+                border-style: solid !important;
+              }
+              &.haveNot {
+                border-style: dashed;
+                border-color: $color-3;
+                color: $color-3;
+              }*/
             }
-            display: inline-block;
-            height: 70rpx;
-            line-height: 70rpx;
-            padding: 0 20rpx;
-            font-size: $xg-size-4;
-            color: #333;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-            margin-right: 30rpx;
-            margin-bottom: 20rpx;
-            word-break: keep-all;
-            /*&.selected {
-              color: $color-yellow !important;
-              border-color: $color-yellow !important;
-              border-style: solid !important;
-            }
-            &.haveNot {
-              border-style: dashed;
-              border-color: $color-3;
-              color: $color-3;
-            }*/
           }
         }
         .number-select{
@@ -402,20 +407,22 @@
           <view class="type-select flex-y">
             <repeat for="{{goodsSimilarDisplayTypeCount}}"
                     index="typeIndex">
-              <view class="type-row flex-middle-x">
+              <view class="type-group">
                 <view class="title">{{item.saleName}}</view>
-                <repeat for="{{goodsSimilarDisplayBlob[typeIndex]}}"
-                        item="typeValue"
-                        index="typeValueIndex">
-                  <view class="type-item"
-                        :class="{'active':selectedTypeList[typeIndex]===typeValue}"
-                        data-type-index="{{typeIndex}}"
-                        data-type-value-index="{{typeValueIndex}}"
-                        data-type-value="{{typeValue}}"
-                        @tap="actionClickTypeValue">
-                    {{typeValue}}
-                  </view>
-                </repeat>
+                <view class="item-group">
+                  <repeat for="{{goodsSimilarDisplayBlob[typeIndex]}}"
+                          item="typeValue"
+                          index="typeValueIndex">
+                    <view class="type-item"
+                          :class="{'active':selectedTypeList[typeIndex]===typeValue}"
+                          data-type-index="{{typeIndex}}"
+                          data-type-value-index="{{typeValueIndex}}"
+                          data-type-value="{{typeValue}}"
+                          @tap="actionClickTypeValue">
+                      {{typeValue}}
+                    </view>
+                  </repeat>
+                </view>
               </view>
             </repeat>
           </view>
@@ -671,7 +678,7 @@
           }
         }
       };
-      treeSearcher(this.goodsSimilarTree, skuId);
+      treeSearcher(this.goodsSimilarTree, Number(skuId));
       return selectedNodeList;
     }
 

@@ -123,11 +123,9 @@
             wepy.getUserInfo({
               withCredentials: true,
               success: function (options) {
-                console.log('getUserInfo 获取到的数据: ');
+                console.log('getUserInfo 获取到的数据: ' + options);
                 console.log(options);
                 NetworkManagerAuth.miniprogramCode2Session(res.code).then(data => {
-                  // console.log(data.openid);
-                  // console.log(data.session_key);
                   console.log(data);
                   NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
                     console.log(data);
@@ -141,9 +139,7 @@
             })
 //              NetworkManagerAuth.getUserInfo(String(res.code))
 //                .then(data => {
-//                  let userData = data;
-//                  wepy.userData = data;
-//                  this.$store.commit('UPDATE_USER_MUTATION', this.userData);
+//                  getApp().globalData.userInfo = data;
 //                }, err => {
 //                  console.log(err);
 //                })
