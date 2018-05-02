@@ -509,7 +509,7 @@
       originGoodsPrice: 0,
       selectedTypeList: [],
       goodsCount: 1,
-      goodsInventory: Number.MAX_VALUE,
+      goodsInventory: 9999,
       isSale: true
     }
 
@@ -683,6 +683,7 @@
     }
 
     onLoad(options) {
+      console.log(wepy.$instance.globalData);
       this.skuId = options.skuId;
       // this.fetchCheckIsSale();
       // this.fetchGoodsState();
