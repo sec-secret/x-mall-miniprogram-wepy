@@ -569,14 +569,17 @@
         })
         return goodsSimilarDisplayBlob;
       },
-      goodsSimilarDisplayTypeCount(){
+      goodsSimilarDisplayTypeTitle(){
+        let titleList = [];
         if (this.goodsSimilarTree.levelCursor){
-          let depth = 0;
-          for (let levelCursor = this.goodsSimilarTree.levelCursor; levelCursor; levelCursor = levelCursor.next, depth++){
+          for (let levelCursor = this.goodsSimilarTree.levelCursor; levelCursor; levelCursor = levelCursor.next){
+            titleList.push(levelCursor.name)
           }
-          return depth;
         }
-        return 0;
+        return titleList;
+      },
+      goodsSimilarDisplayTypeCount(){
+       return this.goodsSimilarDisplayTypeTitle.length
       }
     }
 
@@ -678,13 +681,13 @@
           }
         }
       };
-      treeSearcher(this.goodsSimilarTree, Number(skuId));
+      treeSearcher(this.goodsSimilarTree, skuId);
       return selectedNodeList;
     }
 
     onLoad(options) {
+      this.skuId = parseInt(options.skuId);
       console.log(wepy.$instance.globalData);
-      this.skuId = options.skuId;
       // this.fetchCheckIsSale();
       // this.fetchGoodsState();
       this.fetchGoodsDetail();
@@ -835,10 +838,12 @@
           })
           if (levelCursor){
             levelCursor.next = childLevelList;
+            levelCursor.next.name = goodsType.saleName;
             levelCursor = levelCursor.next;
           } else {
             levelCursor = childLevelList;
             goodsSimilarTree.levelCursor = levelCursor;
+            levelCursor.name = goodsType.saleName;
           }
         })
         this.goodsSimilarTree = goodsSimilarTree;
