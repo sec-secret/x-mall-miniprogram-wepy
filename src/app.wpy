@@ -120,14 +120,6 @@
                 console.log(option);
               }
             });
-            NetworkManagerAuth.getUserInfo(String(res.code))
-              .then(data => {
-//                  let userData = data;
-//                  wepy.userData = data;
-//                  this.$store.commit('UPDATE_USER_MUTATION', this.userData);
-              }, err => {
-                console.log(err);
-              })
             wepy.getUserInfo({
               withCredentials: true,
               success: function (options) {

@@ -39,3 +39,4 @@ module.exports = {
     'vue/require-v-for-key': 'off'
   }
 }
+

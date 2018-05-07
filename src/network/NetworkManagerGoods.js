@@ -12,12 +12,14 @@ export default class NetworkManagerGoods extends NetworkManager{
     return this.instance().POST('/goods/similarSku', {skuId});
   }
 
-  static goodsCheckSale(skuId) {
-    return this.instance().POST('/goods/checkSale', {skuId});
+  static goodsCheckSale(req) {
+    // 可售信息
+    return this.instance().POST('/goods/checkSale', req, {'Content-Type': 'application/json'});
   }
 
-  static goodsState(skuId) {
-    return this.instance().POST('/goods/skuState', {skuId});
+  static goodsState(req) {
+    // 上下架信息
+    return this.instance().POST('/goods/skuState', req, {'Content-type': 'application/json'});
   }
 
   static goodsPrice(skuId) {

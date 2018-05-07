@@ -130,10 +130,18 @@
 
     methods = {
       onClickItem(index) {
+          if (!wepy.$instance.globalData.hasLogin) {
+            wepy.showToast({title: '敬请期待', icon: 'none'})
+            return
+          }
          let pathList= ['./order-list', './address-list', ''];
          wepy.navigateTo({
              url: pathList[index]
          })
+      },
+      onClickLogin() {
+          console.log(wepy.$instance.globalData.hasLogin);
+        wepy.showToast({title: '敬请期待', icon: 'none'})
       }
     }
 

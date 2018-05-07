@@ -69,7 +69,7 @@
 <template>
   <!--<wxs src="./wxs/payment.wxs" module="paymentWxs"></wxs>-->
   <view class="result">
-    <image wx:if="payResult.title === '支付成功'"
+    <image wx:if="{{payResult.title === '支付成功'}}"
            src="./img/zhifuchenggong.png"
            mode="widthFix"/>
     <image wx:else
