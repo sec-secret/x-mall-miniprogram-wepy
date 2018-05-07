@@ -149,15 +149,15 @@
       background-color: white;
     }
 
-    .goods-description {
-      background-color: white;
-      .description{
-        background: #ff0000;
-        width: 100%;
-        margin-left: 50rpx;
-        margin-right: 50rpx;
-      }
-    }
+    /*.goods-description {*/
+      /*background-color: white;*/
+      /*.description{*/
+        /*background: #ff0000;*/
+        /*width: 100%;*/
+        /*margin-left: 50rpx;*/
+        /*margin-right: 50rpx;*/
+      /*}*/
+    /*}*/
   }
 
   .buy-pop-section {
@@ -332,6 +332,40 @@
       }
     }
   }
+  .scale-box {
+    transform-origin: 0px 0px 0px;
+    font-size: 29px;
+  }
+
+  #wareInfo {
+    margin: 0;
+    padding: 5px 0 0;
+  }
+
+  .btm-detail {
+    background-color: #fff;
+  }
+
+  .detail {
+    overflow: hidden;
+    position: relative;
+    margin: 0 10px 12px;
+    height: 100%;
+    font-size: 12px;
+    color: #5a5a5a;
+  }
+  .scale-box {
+    display: table;
+    word-wrap: break-word;
+    word-break: break-all
+  }
+
+  .scale-box image {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none
+  }
 </style>
 <template>
   <view class="mall-goods-detail page">
@@ -380,11 +414,15 @@
       </view>
     </view>
 
-    <view class="goods-description">
-      <rich-text class="description" type="node" nodes="{{testRichText}}"></rich-text>
-      <!--<view>{{testRichText}}</view>-->
-      <!--<label wx:if="goodsExt.mobileDesc" v-html="goodsExt.mobileDesc">-->
-      <!--</label>-->
+    <view wx:if="{{goodsExt.introduction}}" id="btmDetail" class="btm-detail">
+      <view class="detail" id="wareInfo" style="display:block;">
+        <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
+          <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
+            <rich-text class="description" type="node" nodes="{{testRichText}}"></rich-text>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
 
     <!--<view class="goods-param">-->
@@ -510,7 +548,9 @@
       selectedTypeList: [],
       goodsCount: 1,
       goodsInventory: 9999,
-      isSale: true
+      isSale: true,
+      scaling: 1,
+      scaleH: 'auto'
     }
 
     computed = {
@@ -779,7 +819,8 @@
           })
           CPParse.applyCss2Node(aimTree, cssString);
           this.testRichText = aimTree.children;
-          console.log(aimTree);
+          console.log('detail');
+          this.formatDetail();
           this.$apply();
         }, error => {
           console.log(error);
@@ -878,6 +919,21 @@
       }, error => {
         console.log(error);
       })
+    }
+
+
+    formatDetail() {
+      let query = wx.createSelectorQuery();
+//      let parentWrapper = query.select('#scale-parent');
+      let scaleWrapper = query.select('.scale-box');
+      setTimeout(() => {
+          let _this = this;
+        scaleWrapper.boundingClientRect((res) => {
+          _this.scaling = (wepy.getSystemInfoSync().windowWidth - 20) / res.width;
+          _this.scaleH = res.height * _this.scaling;
+          _this.$apply();
+        }).exec();
+      }, 500)
     }
     /* **************************************************************************************************************** */
     // goods = {
