@@ -50,24 +50,20 @@ export default class NetworkManager{
           ...headers
         },
         success: function(res) {
-          if (res.statusCode === 401) {
-            reject('notLogin')
-          } else {
-            let responseJson = res.data;
-            if (isStandard){
-              if (!responseJson.errorCode) {
-                resolve(responseJson.data);
-              } else {
-                let errorCode = responseJson.errorCode;
-                if (errorCode === 10022) {
-                  reject(NetworkManager.notLoginError(10022));
-                } else {
-                  reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
-                }
-              }
+          let responseJson = res.data;
+          if (isStandard){
+            if (!responseJson.errorCode) {
+              resolve(responseJson.data);
             } else {
-              resolve(responseJson);
+              let errorCode = responseJson.errorCode;
+              if (errorCode === 10022) {
+                reject(NetworkManager.notLoginError(10022));
+              } else {
+                reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+              }
             }
+          } else {
+            resolve(responseJson);
           }
         },
         fail: function (error) {
