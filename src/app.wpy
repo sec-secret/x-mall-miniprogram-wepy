@@ -93,12 +93,12 @@
     globalData = {
 //      userInfo: {userId: 4},
       hasLogin: false,
-      authToken: 'Basic bmItc2VydmljZTpQSUFPaGFvMTkxQA==',
-      userInfo: {
-        'openId': 'oMBXg1FVVt1l1mOdeXqc-5wKjwE4',
-        'nickName': '鞋生',
-        'headImg': 'http://thirdwx.qlogo.cn/mmopen/oriamiaebV7gib8PE1nf32Wwrkbk17BfnbBADsvl8210z4ZVyQ1iaLRwdewG0mtm8sw4nX4OqgVMpNORb3aBt9libpyT3h7icsb9B6/132'}
-    }
+      authToken: 'Basic bmItc2VydmljZTpQSUFPaGFvMTkxQA=='
+//      userInfo: {
+//        'openId': 'oMBXg1FVVt1l1mOdeXqc-5wKjwE4',
+//        'nickName': '鞋生',
+//        'headImg': 'http://thirdwx.qlogo.cn/mmopen/oriamiaebV7gib8PE1nf32Wwrkbk17BfnbBADsvl8210z4ZVyQ1iaLRwdewG0mtm8sw4nX4OqgVMpNORb3aBt9libpyT3h7icsb9B6/132'}
+//    }
 
     constructor () {
       super()
@@ -107,52 +107,52 @@
 
     onLaunch(options) {
       this.testAsync()
-      wepy.getSystemInfo({
-        success: function (object) {
-          console.log(object);
-        }
-      })
-      wepy.login({
-        success: (res) => {
-          wepy.code = res.code;
-          console.log('login 获取到的数据: ');
-          console.log(res);
-//              获取登录code成功
-          if (res.code) {
-            wepy.getSetting({
-              success: function (option) {
-                console.log('getSetting 获取到的数据: ');
-                console.log(option);
-              }
-            });
-            wepy.getUserInfo({
-              withCredentials: true,
-              success: function (options) {
-                console.log('getUserInfo 获取到的数据: ' + options);
-                console.log(options);
-                NetworkManagerAuth.miniprogramCode2Session(res.code).then(data => {
-                  console.log(data);
-                  NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
-                    console.log(data);
-                  }, error => {
-                    console.log(error);
-                  })
-                }, error => {
-                  console.log(error);
-                })
-              }
-            })
-//              NetworkManagerAuth.getUserInfo()
-//                .then(data => {
-//                  getApp().globalData.userInfo = data;
-//                }, err => {
-//                  console.log(err);
+//      wepy.getSystemInfo({
+//        success: function (object) {
+//          console.log(object);
+//        }
+//      })
+//      wepy.login({
+//        success: (res) => {
+//          wepy.code = res.code;
+//          console.log('login 获取到的数据: ');
+//          console.log(res);
+////              获取登录code成功
+//          if (res.code) {
+//            wepy.getSetting({
+//              success: function (option) {
+//                console.log('getSetting 获取到的数据: ');
+//                console.log(option);
+//              }
+//            });
+//            wepy.getUserInfo({
+//              withCredentials: true,
+//              success: function (options) {
+//                console.log('getUserInfo 获取到的数据: ' + options);
+//                console.log(options);
+//                NetworkManagerAuth.miniprogramCode2Session(res.code).then(data => {
+//                  console.log(data);
+//                  NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
+//                    console.log(data);
+//                  }, error => {
+//                    console.log(error);
+//                  })
+//                }, error => {
+//                  console.log(error);
 //                })
-          } else {
-            console.log('登录失败！' + res.errMsg)
-          }
-        }
-      })
+//              }
+//            })
+////              NetworkManagerAuth.getUserInfo()
+////                .then(data => {
+////                  getApp().globalData.userInfo = data;
+////                }, err => {
+////                  console.log(err);
+////                })
+//          } else {
+//            console.log('登录失败！' + res.errMsg)
+//          }
+//        }
+//      })
     }
 
     sleep (s) {
