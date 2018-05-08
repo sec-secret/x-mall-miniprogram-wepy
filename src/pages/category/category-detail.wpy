@@ -138,10 +138,10 @@
             this.goodsList = data.goods;
             this.lastKey = data.lastKey;
             this.$apply();
-        wepy.hideNavigationBarLoading();
+            wepy.hideNavigationBarLoading();
           }, err => {
-          wepy.showToast({title: err.message, icon: 'none'})
-          wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       },
       onClickGoods(goods) {
@@ -165,10 +165,10 @@
             this.goodsList = this.goodsList.concat(data.goods);
             this.lastKey = data.lastKey;
             this.$apply();
-        wepy.hideNavigationBarLoading();
+            wepy.hideNavigationBarLoading();
           }, err => {
-          wepy.showToast({title: err.message, icon: 'none'})
-          wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       }
 //      fetchGoodsList(catId, lastKey) {
@@ -187,7 +187,7 @@
     }
 
     onLoad(option) {
-        this.catId = option.catId;
+      this.catId = option.catId;
       wepy.showNavigationBarLoading();
       NetworkManagerCategory.secondCategories(this.catId).then(data => {
         this.categoryList = data;
@@ -198,10 +198,10 @@
             this.goodsList = data.goods;
             this.lastKey = data.lastKey;
             this.$apply();
-      wepy.hideNavigationBarLoading();
+            wepy.hideNavigationBarLoading();
           }, err => {
-        wepy.showToast({title: err.message, icon: 'none'})
-        wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
           })
       }, err => {
         wepy.showToast({title: err.message, icon: 'none'})

@@ -1,4 +1,4 @@
-import NetworkManager from "./NetworkManager";
+import NetworkManager from './NetworkManager';
 
 export default class NetworkManagerOther extends NetworkManager{
   static mallSearch(req) {

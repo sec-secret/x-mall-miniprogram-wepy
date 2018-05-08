@@ -150,13 +150,13 @@
     }
 
     /*.goods-description {*/
-      /*background-color: white;*/
-      /*.description{*/
-        /*background: #ff0000;*/
-        /*width: 100%;*/
-        /*margin-left: 50rpx;*/
-        /*margin-right: 50rpx;*/
-      /*}*/
+    /*background-color: white;*/
+    /*.description{*/
+    /*background: #ff0000;*/
+    /*width: 100%;*/
+    /*margin-left: 50rpx;*/
+    /*margin-right: 50rpx;*/
+    /*}*/
     /*}*/
   }
 
@@ -430,90 +430,90 @@
         <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
           <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
             <rich-text class="description" type="node" nodes="{{testRichText}}"></rich-text>
-            </view>
           </view>
         </view>
       </view>
     </view>
+  </view>
 
-    <!--<view class="goods-param">-->
-    <!--<label v-html="goodsExt.param"></label>-->
-    <!--</view>-->
+  <!--<view class="goods-param">-->
+  <!--<label v-html="goodsExt.param"></label>-->
+  <!--</view>-->
 
-    <view wx:if="{{isShowBuyPopArea}}" class="buy-pop-section">
-      <view class="pop-content">
-        <view class="image-area flex-x">
-          <image class="image" src="{{popAreaImage}}">
-          </image>
-          <view class="price-area flex-y">
-            <view style="flex: 1;"></view>
-            <label class="real-price">￥{{popAreaPrice}}</label>
-          </view>
-          <image @tap="onClickClosePopArea" class="close-icon" src="./img/close.png" mode="widthFix"></image>
+  <view wx:if="{{isShowBuyPopArea}}" class="buy-pop-section">
+    <view class="pop-content">
+      <view class="image-area flex-x">
+        <image class="image" src="{{popAreaImage}}">
+        </image>
+        <view class="price-area flex-y">
+          <view style="flex: 1;"></view>
+          <label class="real-price">￥{{popAreaPrice}}</label>
         </view>
+        <image @tap="onClickClosePopArea" class="close-icon" src="./img/close.png" mode="widthFix"></image>
+      </view>
 
-        <view class="type-area">
-          <view class="type-select flex-y">
-            <repeat for="{{goodsSimilarDisplayTypeCount}}"
-                    index="typeIndex">
-              <view class="type-group">
-                <view class="title">{{item.saleName}}</view>
-                <view class="item-group">
-                  <repeat for="{{goodsSimilarDisplayBlob[typeIndex]}}"
-                          item="typeValue"
-                          index="typeValueIndex">
-                    <view class="type-item"
-                          :class="{'active':selectedTypeList[typeIndex]===typeValue}"
-                          data-type-index="{{typeIndex}}"
-                          data-type-value-index="{{typeValueIndex}}"
-                          data-type-value="{{typeValue}}"
-                          @tap="actionClickTypeValue">
-                      {{typeValue}}
-                    </view>
-                  </repeat>
-                </view>
+      <view class="type-area">
+        <view class="type-select flex-y">
+          <repeat for="{{goodsSimilarDisplayTypeCount}}"
+                  index="typeIndex">
+            <view class="type-group">
+              <view class="title">{{item.saleName}}</view>
+              <view class="item-group">
+                <repeat for="{{goodsSimilarDisplayBlob[typeIndex]}}"
+                        item="typeValue"
+                        index="typeValueIndex">
+                  <view class="type-item"
+                        :class="{'active':selectedTypeList[typeIndex]===typeValue}"
+                        data-type-index="{{typeIndex}}"
+                        data-type-value-index="{{typeValueIndex}}"
+                        data-type-value="{{typeValue}}"
+                        @tap="actionClickTypeValue">
+                    {{typeValue}}
+                  </view>
+                </repeat>
               </view>
-            </repeat>
-          </view>
+            </view>
+          </repeat>
+        </view>
 
-          <view class="number-select">
-            <view class="title">
-              数量
-            </view>
-            <view class="control">
-              <text class="button" @tap="actionClickDown">-</text>
-              <input class="count-number" type="number" disabled="{{true}}" value="{{goodsCount}}"/>
-              <text class="button" @tap="actionClickUp">+</text>
-            </view>
+        <view class="number-select">
+          <view class="title">
+            数量
+          </view>
+          <view class="control">
+            <text class="button" @tap="actionClickDown">-</text>
+            <input class="count-number" type="number" disabled="{{true}}" value="{{goodsCount}}"/>
+            <text class="button" @tap="actionClickUp">+</text>
           </view>
         </view>
       </view>
     </view>
+  </view>
   <view wx:if="{{!isSale}}" class="disable-tips title">对不起，该商品暂时无货。</view>
-    <view class="footer-bar">
-      <view class="customer-service">
-        <image @tap="onClickHomeIcon" class="icon" src="./img/shouye.png" mode="widthFix">
-        </image>
-        <image class="icon" src="./img/kefu.png" mode="widthFix">
-        </image>
-        <image @tap="onClickCarIcon" class="icon" src="./img/gouwuche.png" mode="widthFix">
-        </image>
-      </view>
-      <button class="buy-button {{!isSale?'disable':''}}" @tap="onClickAdd">加入购物车</button>
-      <button class="add-button {{!isSale?'disable':''}}" @tap="onClickBuy">购买</button>
+  <view class="footer-bar">
+    <view class="customer-service">
+      <image @tap="onClickHomeIcon" class="icon" src="./img/shouye.png" mode="widthFix">
+      </image>
+      <image class="icon" src="./img/kefu.png" mode="widthFix">
+      </image>
+      <image @tap="onClickCarIcon" class="icon" src="./img/gouwuche.png" mode="widthFix">
+      </image>
     </view>
-    <!--<view class="tabbar flex-middle-x top-seg">-->
-    <!--<view class="customer-service flex-center-x">-->
-    <!--<image class="icon" src="./img/customer-service.png" mode="aspectFit">-->
-    <!--</image>-->
-    <!--</view>-->
-    <!--<view class="shopping-cart flex-center-x">-->
-    <!--<image class="icon" src="./img/shopping-cart.png" mode="aspectFit">-->
-    <!--</image>-->
-    <!--</view>-->
-    <!--<label class="shop-now" @click="showSelect = true;">立即购买</label>-->
-    <!--<label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>-->
-    <!--</view>-->
+    <button class="buy-button {{!isSale?'disable':''}}" @tap="onClickAdd">加入购物车</button>
+    <button class="add-button {{!isSale?'disable':''}}" @tap="onClickBuy">购买</button>
+  </view>
+  <!--<view class="tabbar flex-middle-x top-seg">-->
+  <!--<view class="customer-service flex-center-x">-->
+  <!--<image class="icon" src="./img/customer-service.png" mode="aspectFit">-->
+  <!--</image>-->
+  <!--</view>-->
+  <!--<view class="shopping-cart flex-center-x">-->
+  <!--<image class="icon" src="./img/shopping-cart.png" mode="aspectFit">-->
+  <!--</image>-->
+  <!--</view>-->
+  <!--<label class="shop-now" @click="showSelect = true;">立即购买</label>-->
+  <!--<label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>-->
+  <!--</view>-->
   </view>
 </template>
 
@@ -535,7 +535,7 @@
     }
 
     wxs = {
-        globalWxs
+      globalWxs
     }
 
     data = {
@@ -632,7 +632,7 @@
         return titleList;
       },
       goodsSimilarDisplayTypeCount(){
-       return this.goodsSimilarDisplayTypeTitle.length
+        return this.goodsSimilarDisplayTypeTitle.length
       }
     }
 
@@ -790,7 +790,7 @@
         ]
       };
       NetworkManagerGoods.goodsCheckSale(req).then((info) => {
-          console.log(info)
+        console.log(info)
       }, err => {
         wepy.showToast({title: err.message, icon: 'none'})
       })
@@ -959,9 +959,9 @@
 //      let parentWrapper = query.select('#scale-parent');
       let scaleWrapper = query.select('.scale-box');
       setTimeout(() => {
-          let _this = this;
+        let _this = this;
         scaleWrapper.boundingClientRect((res) => {
-            console.log(res);
+          console.log(res);
           _this.scaling = (wepy.getSystemInfoSync().windowWidth - 20) / res.width;
           _this.scaleH = res.height * _this.scaling;
           console.log(_this.scaling);

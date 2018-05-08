@@ -73,8 +73,8 @@
            src="./img/zhifuchenggong.png"
            mode="widthFix"/>
     <image wx:else
-         src="./img/zhifushibai.png"
-         mode="widthFix"/>
+           src="./img/zhifushibai.png"
+           mode="widthFix"/>
     <text class="title">{{payResult.title}}</text>
     <text class="text">{{payResult.text}}</text>
     <view class="btn-group">
@@ -138,28 +138,28 @@
     }
 
     methods = {
-        onClickHome() {
-          wepy.switchTab({
-            url: '../main/main'
-          })
-        },
+      onClickHome() {
+        wepy.switchTab({
+          url: '../main/main'
+        })
+      },
       onClickOrder() {
         wepy.switchTab({
           url: '../mine/mine'
         })
       },
       onClickPay() {
-            wepy.showToast({
-                title: '支付'
-            })
+        wepy.showToast({
+          title: '支付'
+        })
       }
     }
 
     onLoad(option) {
-        this.payInfo = JSON.parse('{"address":{"id":43,"city":2813,"county":51976,"isDefault":1,"priority":100000,"province":2,"town":0,"userId":4,"detailAddress":"远中产业园4期1号楼502","mobile":"15300928006","name":"张浩轩","provinceName":"上海","cityName":"徐汇区","countyName":"城区"},"payTotal":48902}');
-        this.result = 'fail';
-        this.orderId = '2018042614015395112288';
-        this.$apply();
+      this.payInfo = JSON.parse('{"address":{"id":43,"city":2813,"county":51976,"isDefault":1,"priority":100000,"province":2,"town":0,"userId":4,"detailAddress":"远中产业园4期1号楼502","mobile":"15300928006","name":"张浩轩","provinceName":"上海","cityName":"徐汇区","countyName":"城区"},"payTotal":48902}');
+      this.result = 'fail';
+      this.orderId = '2018042614015395112288';
+      this.$apply();
     }
   }
 </script>

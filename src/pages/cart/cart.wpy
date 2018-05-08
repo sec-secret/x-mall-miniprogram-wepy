@@ -203,14 +203,14 @@
     </view>
     <view class="pay-area">
       <view class="select flex-center-x"
-           @tap="onClickSelectAll">
+            @tap="onClickSelectAll">
         <image wx:if="{{isSelectedAll}}"
-             class="select-icon"
-             src="./img/gouxuan.png">
+               class="select-icon"
+               src="./img/gouxuan.png">
         </image>
         <image wx:else
-             class="select-icon"
-             src="./img/meixuan.png">
+               class="select-icon"
+               src="./img/meixuan.png">
         </image>
         <view wx:if="{{selectedCount === 0}}">全选</view>
         <view wx:else>已选({{selectedCount}})</view>
@@ -241,8 +241,8 @@
     }
 
     wxs = {
-        globalWxs,
-        cartWxs
+      globalWxs,
+      cartWxs
     }
 
     data = {
@@ -272,11 +272,11 @@
           })
           return total;
         } else {
-            return 0
+          return 0
         }
       },
       isSelectedAll() {
-          return this.selectedCount === this.goodsList.length;
+        return this.selectedCount === this.goodsList.length;
       }
     }
 
@@ -301,7 +301,7 @@
           this.selectedIds = [];
         } else {
           this.goodsList.forEach(goods => {
-              this.selectedIds.push(goods.cartId);
+            this.selectedIds.push(goods.cartId);
           })
         }
         this.$apply();
@@ -553,7 +553,7 @@
           if (this.goodsList.some(goods => {
               return goods.cartId === id
             })) {
-              newIds.push(id);
+            newIds.push(id);
           }
         })
         this.selectedIds = newIds;
@@ -566,7 +566,7 @@
     }
 
     onLoad() {
-        this.initEleWidth();
+      this.initEleWidth();
     }
 
     getEleWidth(w) {

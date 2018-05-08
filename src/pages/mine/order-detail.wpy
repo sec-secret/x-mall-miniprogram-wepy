@@ -45,135 +45,135 @@
       }
     }
   }
-    .goods-info {
-      margin-top: 20rpx;
-      padding-left: 30rpx;
-      background-color: #fff;
-      .content {
-        padding-right: 30rpx;
-        @include flex-x-middle();
-        image {
-          width: 146rpx;
-          height: 146rpx;
-          margin: 24rpx 0;
-        }
-        .goods-info {
-          margin-left: 20rpx;
-          padding-right: 20rpx;
-          height: 100%;
-          @include flex(1);
-          @include flex-y-center();
-          .name {
-            @include ellipsis();
-            margin-bottom:10rpx;
-            font-size: $xg-size-4;
-          }
-          .dim {
-            @include ellipsis();
-            font-size: $xg-size-2;
-            color: #999;
-          }
-          .price {
-            font-size: $xg-size-5;
-            margin-top: 10rpx;
-            color: $xg-c-red;
-          }
-        }
-        .count {
-          font-size: $xg-size-4;
-          color: #333;
-        }
-      }
-    }
-    .orderTrack {
-      padding: 30rpx;
-      background-color: $xg-c-white;
-      margin-top: 20rpx;
-      font-size: $xg-size-4;
-    }
-    .pay-way-area {
-      padding: 30rpx;
-      background-color: #fff;
-      font-size: $xg-size-4;
-      color: #333;
-      view {
-        @include flex-x-middle();
-        &:nth-of-type(2) {
-          margin: 10rpx 0;
-        }
-        text {
-          color: #999;
-          width: 150rpx;
-        }
-      }
-    }
-    .order-info-area {
-      padding: 30rpx;
-      background-color: #fff;
-      margin-top: 20rpx;
-      font-size: $xg-size-4;
-      color: #333;
-      border-bottom: 1px solid $xg-c-seg;
-      view {
-        @include flex-x-middle();
-        text {
-          color: #999;
-          width: 150rpx;
-        }
-      }
-      view:first-of-type {
-        margin-bottom: 10rpx;
-      }
-    }
-    .total-area {
-      padding: 30rpx;
-      background-color: #fff;
-      margin-top: 20rpx;
-      font-size: $xg-size-4;
-      color: $xg-c-red;
-      view {
-        @include flex-x-middle();
-        text {
-          color: #999;
-          width: 150rpx;
-        }
-      }
-    }
-    .pay-info {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 88rpx;
-      background-color: #fff;
+  .goods-info {
+    margin-top: 20rpx;
+    padding-left: 30rpx;
+    background-color: #fff;
+    .content {
       padding-right: 30rpx;
       @include flex-x-middle();
-      @include justify-content-end();
-      border-top: 1px solid $xg-c-seg;
-      view {
-        @include flex-x-middle();
-        button {
-          width: 192rpx;
-          height: 64rpx;
-          border-radius: 4rpx;
-          border: 1rpx solid #999;
+      image {
+        width: 146rpx;
+        height: 146rpx;
+        margin: 24rpx 0;
+      }
+      .goods-info {
+        margin-left: 20rpx;
+        padding-right: 20rpx;
+        height: 100%;
+        @include flex(1);
+        @include flex-y-center();
+        .name {
+          @include ellipsis();
+          margin-bottom:10rpx;
+          font-size: $xg-size-4;
+        }
+        .dim {
+          @include ellipsis();
+          font-size: $xg-size-2;
           color: #999;
-          background-color: transparent;
-          font-size: $xg-size-3;
-          &:last-of-type {
-            color: $xg-c-red;
-            border-color: $xg-c-red;
-            margin-left: 20rpx;
-          }
+        }
+        .price {
+          font-size: $xg-size-5;
+          margin-top: 10rpx;
+          color: $xg-c-red;
+        }
+      }
+      .count {
+        font-size: $xg-size-4;
+        color: #333;
+      }
+    }
+  }
+  .orderTrack {
+    padding: 30rpx;
+    background-color: $xg-c-white;
+    margin-top: 20rpx;
+    font-size: $xg-size-4;
+  }
+  .pay-way-area {
+    padding: 30rpx;
+    background-color: #fff;
+    font-size: $xg-size-4;
+    color: #333;
+    view {
+      @include flex-x-middle();
+      &:nth-of-type(2) {
+        margin: 10rpx 0;
+      }
+      text {
+        color: #999;
+        width: 150rpx;
+      }
+    }
+  }
+  .order-info-area {
+    padding: 30rpx;
+    background-color: #fff;
+    margin-top: 20rpx;
+    font-size: $xg-size-4;
+    color: #333;
+    border-bottom: 1px solid $xg-c-seg;
+    view {
+      @include flex-x-middle();
+      text {
+        color: #999;
+        width: 150rpx;
+      }
+    }
+    view:first-of-type {
+      margin-bottom: 10rpx;
+    }
+  }
+  .total-area {
+    padding: 30rpx;
+    background-color: #fff;
+    margin-top: 20rpx;
+    font-size: $xg-size-4;
+    color: $xg-c-red;
+    view {
+      @include flex-x-middle();
+      text {
+        color: #999;
+        width: 150rpx;
+      }
+    }
+  }
+  .pay-info {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 88rpx;
+    background-color: #fff;
+    padding-right: 30rpx;
+    @include flex-x-middle();
+    @include justify-content-end();
+    border-top: 1px solid $xg-c-seg;
+    view {
+      @include flex-x-middle();
+      button {
+        width: 192rpx;
+        height: 64rpx;
+        border-radius: 4rpx;
+        border: 1rpx solid #999;
+        color: #999;
+        background-color: transparent;
+        font-size: $xg-size-3;
+        &:last-of-type {
+          color: $xg-c-red;
+          border-color: $xg-c-red;
+          margin-left: 20rpx;
         }
       }
     }
+  }
 </style>
 <template>
   <wxs src="./wxs/mine.wxs" module="mineWxs"/>
-    <!--<address-cell :address="addressInfo"-->
-                  <!--:isFromList="false"-->
-                  <!--@clickAddress="onClickAddress"></address-cell>-->
+  <!--<address-cell :address="addressInfo"-->
+  <!--:isFromList="false"-->
+  <!--@clickAddress="onClickAddress"></address-cell>-->
   <view class="address-item">
     <view class="center-part">
       <view class="first-line">
@@ -185,44 +185,44 @@
       </view>
     </view>
   </view>
-    <view class="orderTrack" @tap="onClickTrack">
-      点击查看物流信息
-    </view>
-    <view class="goods-info">
-      <repeat for="{{orderInfo.orderExtRespList}}" item="i">
-        <view @tap="onClickGoods({{i}})" class="content">
-          <image src="{{i.goodsImg}}" alt="" mode="widthFix"/>
-          <view class="goods-info">
-            <text class="name">{{i.name}}</text>
-            <!--<view class="dim"  v-if="i.hasOwnProperty('saleValue') && JSON.parse(i.saleValue)">-->
-              <!--<text v-for="i in JSON.parse(i.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
-            <!--</view>-->
-            <text class="price">￥{{mineWxs.formatFenPrice(i.nbPrice)}}</text>
-          </view>
-          <view class="num">
-            <text>x {{i.num}}</text>
-          </view>
+  <view class="orderTrack" @tap="onClickTrack">
+    点击查看物流信息
+  </view>
+  <view class="goods-info">
+    <repeat for="{{orderInfo.orderExtRespList}}" item="i">
+      <view @tap="onClickGoods({{i}})" class="content">
+        <image src="{{i.goodsImg}}" alt="" mode="widthFix"/>
+        <view class="goods-info">
+          <text class="name">{{i.name}}</text>
+          <!--<view class="dim"  v-if="i.hasOwnProperty('saleValue') && JSON.parse(i.saleValue)">-->
+          <!--<text v-for="i in JSON.parse(i.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
+          <!--</view>-->
+          <text class="price">￥{{mineWxs.formatFenPrice(i.nbPrice)}}</text>
         </view>
-      </repeat>
-    </view>
-    <view class="order-info-area">
-      <view class="create-time"><text>下单时间：</text>{{orderInfo.order.createdTime}}</view>
-      <view><text>订单编号：</text>{{orderInfo.order.orderId}}</view>
-    </view>
-    <view class="pay-way-area">
-      <view><text>支付方式：</text>微信</view>
-      <view><text>商品合计：</text>￥{{mineWxs.formatFenPrice(orderInfo.order.nbAmount)}}</view>
-      <view><text>运费：</text>￥{{mineWxs.formatFenPrice(orderInfo.order.freightAmount)}}</view>
-    </view>
-    <view class="total-area">
-      <view><text>实付：</text>￥{{mineWxs.formatFenPrice(payTotal)}}</view>
-    </view>
-    <view class="pay-info">
-      <view wx:if="{{mineWxs.status2CN(orderInfo.order.status) === '未支付'}}">
-        <button @tap="onClickCancel">取消订单</button>
-        <button @tap="onClickPay">直接付款</button>
+        <view class="num">
+          <text>x {{i.num}}</text>
+        </view>
       </view>
+    </repeat>
+  </view>
+  <view class="order-info-area">
+    <view class="create-time"><text>下单时间：</text>{{orderInfo.order.createdTime}}</view>
+    <view><text>订单编号：</text>{{orderInfo.order.orderId}}</view>
+  </view>
+  <view class="pay-way-area">
+    <view><text>支付方式：</text>微信</view>
+    <view><text>商品合计：</text>￥{{mineWxs.formatFenPrice(orderInfo.order.nbAmount)}}</view>
+    <view><text>运费：</text>￥{{mineWxs.formatFenPrice(orderInfo.order.freightAmount)}}</view>
+  </view>
+  <view class="total-area">
+    <view><text>实付：</text>￥{{mineWxs.formatFenPrice(payTotal)}}</view>
+  </view>
+  <view class="pay-info">
+    <view wx:if="{{mineWxs.status2CN(orderInfo.order.status) === '未支付'}}">
+      <button @tap="onClickCancel">取消订单</button>
+      <button @tap="onClickPay">直接付款</button>
     </view>
+  </view>
 </template>
 
 <script>
@@ -254,7 +254,7 @@
       onClickTrack() {
 //        跳转物流页面
         wepy.navigateTo({
-            url: './order-track?orderId=' + this.orderInfo.order.orderId
+          url: './order-track?orderId=' + this.orderInfo.order.orderId
         })
       },
       onClickCancel() {
@@ -262,7 +262,7 @@
         NetworkManagerOrder.cancelOrder(this.orderInfo.order.orderId)
           .then(data => {
             wepy.hideNavigationBarLoading();
-              wepy.navigateBack()
+            wepy.navigateBack()
           }, err => {
             wepy.hideNavigationBarLoading();
             wepy.showToast({title: err.message, icon: 'none'})

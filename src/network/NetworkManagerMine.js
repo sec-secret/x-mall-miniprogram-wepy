@@ -1,4 +1,5 @@
-import NetworkManager from "./NetworkManager";
+import NetworkManager from './NetworkManager';
+import wepy from 'wepy'
 
 export default class NetworkManagerMine extends NetworkManager{
   static fetchAddressList() {

@@ -41,7 +41,7 @@
           padding: 0 10rpx;
         }
       }
-       .btn{
+      .btn{
         width: 180rpx;
         font-size: $xg-size-5;
         display: inline-block;
@@ -137,15 +137,15 @@
             wepy.$instance.globalData.authToken = 'Bearer ' + data.access_token;
             wepy.$instance.globalData.authData = data;
             NetworkManagerAuth.getUserInfo()
-                .then(data => {
-                  wepy.hideNavigationBarLoading();
-                  wepy.$instance.globalData.userInfo = data;
-                  wepy.$instance.globalData.hasLogin = data;
-                  wepy.navigateBack()
-                }, err => {
-                  wepy.showToast({title: err.message, icon: 'none'})
-                  wepy.hideNavigationBarLoading();
-                })
+              .then(data => {
+                wepy.hideNavigationBarLoading();
+                wepy.$instance.globalData.userInfo = data;
+                wepy.$instance.globalData.hasLogin = data;
+                wepy.navigateBack()
+              }, err => {
+                wepy.showToast({title: err.message, icon: 'none'})
+                wepy.hideNavigationBarLoading();
+              })
           }, err => {
             wepy.hideNavigationBarLoading();
             wepy.showToast({title: err.message, icon: 'none'})
@@ -160,20 +160,20 @@
         NetworkManagerAuth.getVerifyCode(this.mobile, this.userInfo.openId)
           .then(data => {
             wepy.hideNavigationBarLoading();
-              this.verifyKey = data.data;
-        this.showDJS = true;
-        this.$apply();
-        this.djs = setInterval(() => {
-            if (this.timeout === 1) {
-          this.showDJS = false;
-          this.timeout = 60;
-          this.$apply();
-          clearInterval(this.djs);
-          return
-        }
-        this.timeout--
-        this.$apply();
-      }, 1000)
+            this.verifyKey = data.data;
+            this.showDJS = true;
+            this.$apply();
+            this.djs = setInterval(() => {
+              if (this.timeout === 1) {
+                this.showDJS = false;
+                this.timeout = 60;
+                this.$apply();
+                clearInterval(this.djs);
+                return
+              }
+              this.timeout--
+              this.$apply();
+            }, 1000)
           }, err => {
             wepy.hideNavigationBarLoading();
             wepy.showToast({title: err.message, icon: 'none'})
@@ -182,8 +182,8 @@
     }
 
     onLoad() {
-        this.userInfo = wepy.$instance.globalData.userInfo;
-        this.$apply();
+      this.userInfo = wepy.$instance.globalData.userInfo;
+      this.$apply();
     }
 
     onUnload() {

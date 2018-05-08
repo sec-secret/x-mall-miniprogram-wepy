@@ -134,7 +134,7 @@
     }
 
     data = {
-        addressList: [],
+      addressList: [],
       delBtnWidth: 120,
       startX: 0
     }
@@ -143,22 +143,22 @@
     }
 
     methods = {
-        onClickAddress(address) {
-          if (this.from === 'order') {
-            wepy.showNavigationBarLoading();
-            NetworkManagerMine.setDefaultAddress({id: address.id}).then(data => {
-              wepy.hideNavigationBarLoading();
-              wepy.navigateBack();
-            }, err => {
-              wepy.showToast({title: err.message, icon: 'none'})
-              wepy.hideNavigationBarLoading();
-            })
-          }
-        },
+      onClickAddress(address) {
+        if (this.from === 'order') {
+          wepy.showNavigationBarLoading();
+          NetworkManagerMine.setDefaultAddress({id: address.id}).then(data => {
+            wepy.hideNavigationBarLoading();
+            wepy.navigateBack();
+          }, err => {
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
+          })
+        }
+      },
       onClickEdit(addressInfo) {
-          let query = JSON.stringify({addressInfo: addressInfo, type: 'edit'})
+        let query = JSON.stringify({addressInfo: addressInfo, type: 'edit'})
         wepy.navigateTo({
-            url: './address-detail?query=' + query
+          url: './address-detail?query=' + query
         })
       },
       onClickDel(address) {
@@ -186,8 +186,8 @@
         }
       },
       touchM:function(option){
-          let e = option.event;
-          let index = option.index;
+        let e = option.event;
+        let index = option.index;
         if (e.touches.length === 1){
           // 手指移动时水平方向位置
           let moveX = e.touches[0].clientX;
@@ -238,7 +238,7 @@
 
     onShow() {
 //        从我的页面和从订单进入地址列表两种情况的点击跳转不同
-        this.fetchAddressList();
+      this.fetchAddressList();
     }
 
     fetchAddressList() {
@@ -269,8 +269,7 @@
     }
 
     initEleWidth() {
-      let delBtnWidth = this.getEleWidth(this.data.delBtnWidth);
-      this.delBtnWidth = delBtnWidth;
+      this.delBtnWidth = this.getEleWidth(this.data.delBtnWidth);
       this.$apply();
     }
   }

@@ -186,9 +186,9 @@
 <template>
   <!--<wxs src="./wxs/cart.wxs" module="cartWxs"></wxs>-->
   <!--<address-cell v-if="hasAddress"-->
-                <!--:address="defaultAddress"-->
-                <!--:isFromList="false"-->
-                <!--@clickAddress="onClickAddress"></address-cell>-->
+  <!--:address="defaultAddress"-->
+  <!--:isFromList="false"-->
+  <!--@clickAddress="onClickAddress"></address-cell>-->
   <view wx:if="{{hasAddress}}" class="address-item" @tap="onClickAddress">
     <view class="center-part">
       <view class="first-line">
@@ -205,10 +205,10 @@
     </view>
   </view>
   <view wx:else
-       @tap="onClickAddress"
-       class="set-address-area pl2 pr2">
+        @tap="onClickAddress"
+        class="set-address-area pl2 pr2">
     <text class="setAddress">设置收货地址</text>
-      <image class="icon" src="../main/img/black-right-arrow.png" mode="widthFix"/>
+    <image class="icon" src="../main/img/black-right-arrow.png" mode="widthFix"/>
   </view>
 
   <view class="amount-area">
@@ -231,7 +231,7 @@
             {{goods.name}}
           </view>
           <!--<view class="dim" v-if="goods.hasOwnProperty('saleValue') && JSON.parse(goods.saleValue)">-->
-            <!--<text v-for="i in JSON.parse(goods.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
+          <!--<text v-for="i in JSON.parse(goods.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
           <!--</view>-->
           <text class="price">
             ￥{{globalWxs.formatFenPrice(goods.nbPrice)}}
@@ -271,7 +271,7 @@
     }
 
     wxs = {
-        globalWxs
+      globalWxs
     }
 
     data = {
@@ -285,18 +285,18 @@
     }
 
     computed = {
-        payTotal() {
-            return this.payInfo.total + this.freight;
-        }
+      payTotal() {
+        return this.payInfo.total + this.freight;
+      }
     }
 
     methods = {
-        onClickAgree() {
-            this.isAgree = !this.isAgree;
-        },
+      onClickAgree() {
+        this.isAgree = !this.isAgree;
+      },
       onClickAddress() {
         wepy.navigateTo({
-            url: '../mine/address-list?from=order'
+          url: '../mine/address-list?from=order'
         })
       },
       onClickPay() {
@@ -345,9 +345,9 @@
     }
 
     onLoad(option) {
-        this.payInfo = JSON.parse(option.payInfo);
+      this.payInfo = JSON.parse(option.payInfo);
       this.goodsList = this.payInfo.selectedList;
-        this.$apply();
+      this.$apply();
     }
 
     getDefaultAddress() {

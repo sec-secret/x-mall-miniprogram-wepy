@@ -400,7 +400,8 @@
         wepy.stopPullDownRefresh();
         this.$apply();
       }, error => {
-        wepy.showToast({title: err.message, icon: 'none'})
+        console.log(error);
+        wepy.showToast({title: error.message, icon: 'none'})
       });
     }
   }

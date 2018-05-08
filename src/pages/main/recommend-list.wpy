@@ -71,12 +71,12 @@
     }
 
     onLoad(option) {
-        this.category = JSON.parse(option.category);
-        this.catId = this.category.catId;
-        this.catName = this.category.catName;
-        wepy.setNavigationBarTitle({
-            title: this.catName + '推荐'
-        })
+      this.category = JSON.parse(option.category);
+      this.catId = this.category.catId;
+      this.catName = this.category.catName;
+      wepy.setNavigationBarTitle({
+        title: this.catName + '推荐'
+      })
       wepy.showNavigationBarLoading();
       NetworkManagerMain.mallRecommend(this.catId, this.page).then(data => {
         this.goodsList = data;

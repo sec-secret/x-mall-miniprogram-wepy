@@ -211,32 +211,32 @@
         '城市',
         '乡镇'
       ],
-    showLevel: 0,
-    provinces: [],
-    cities: [],
-    counties: [],
-    towns: [],
-    province: {
-      areaName: '',
-      areaId: 0
-    },
-    city: {
-      areaName: '',
-      areaId: 0
-    },
-    county: {
-      areaName: '',
-      areaId: 0
-    },
-    town: {
-      areaName: '',
-      areaId: 0
-    },
-    detailAddress: '',
-    name: '',
-    mobile: '',
-    showAddress: false,
-    isDefault: false
+      showLevel: 0,
+      provinces: [],
+      cities: [],
+      counties: [],
+      towns: [],
+      province: {
+        areaName: '',
+        areaId: 0
+      },
+      city: {
+        areaName: '',
+        areaId: 0
+      },
+      county: {
+        areaName: '',
+        areaId: 0
+      },
+      town: {
+        areaName: '',
+        areaId: 0
+      },
+      detailAddress: '',
+      name: '',
+      mobile: '',
+      showAddress: false,
+      isDefault: false
     }
 
     computed = {
@@ -247,8 +247,8 @@
 
     methods = {
       onClickDefault() {
-            this.isDefault = !this.isDefault;
-        },
+        this.isDefault = !this.isDefault;
+      },
       onClickAddress() {
         this.showAddress = true;
         this.$apply();
@@ -257,13 +257,13 @@
         console.log('nothing')
       },
       onCloseAddress() {
-          console.log('close')
+        console.log('close')
         this.showAddress = false;
         this.$apply();
       },
       onInputName(e) {
-           this.name =  e.detail.value;
-           this.$apply();
+        this.name =  e.detail.value;
+        this.$apply();
       },
       onInputMobile(e) {
         this.mobile =  e.detail.value;
@@ -406,11 +406,11 @@
 
     onLoad(option) {
       let query;
-        if (option.hasOwnProperty('query')) {
-          query = JSON.parse(option.query);
-          this.addressInfo = query.addressInfo;
-          this.isEdit = query.type === 'edit';
-        }
+      if (option.hasOwnProperty('query')) {
+        query = JSON.parse(option.query);
+        this.addressInfo = query.addressInfo;
+        this.isEdit = query.type === 'edit';
+      }
       NetworkManagerMine.fetchProvince()
         .then(list => {
           this.provinces = list.sort(function (a, b) {

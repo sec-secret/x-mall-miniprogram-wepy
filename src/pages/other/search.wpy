@@ -91,85 +91,85 @@
     padding-top: 88rpx;
     background-color: #fff;
     .result-item {
-        float: left;
-        width: 50%;
-        padding: 20rpx 10rpx;
-        background: #fff;
-        /*&:first-of-type {*/
-        /*width: ;*/
-        /*}*/
-        image {
-          width: 100%;
-          height: auto;
+      float: left;
+      width: 50%;
+      padding: 20rpx 10rpx;
+      background: #fff;
+      /*&:first-of-type {*/
+      /*width: ;*/
+      /*}*/
+      image {
+        width: 100%;
+        height: auto;
+      }
+      .info {
+        height: 150rpx;
+        justify-content: center;
+        color: $xg-c-black;
+        font-size: $xg-size-3;
+        .mall-product-name {
+          @include ellipsis(2);
+          margin-top: 16rpx;
+          padding: 0 10rpx;
+          font-weight: lighter;
         }
-        .info {
-          height: 150rpx;
-          justify-content: center;
-          color: $xg-c-black;
-          font-size: $xg-size-3;
-          .mall-product-name {
-            @include ellipsis(2);
-            margin-top: 16rpx;
-            padding: 0 10rpx;
-            font-weight: lighter;
-          }
-          .price {
-            display: block;
+        .price {
+          display: block;
+          font-weight: bold;
+          font-size: $xg-size-5;
+          margin-top: 10rpx;
+          padding: 0 10rpx;
+        }
+        .fenqi {
+          color: #999;
+          padding: 0 10rpx;
+          i {
             font-weight: bold;
-            font-size: $xg-size-5;
-            margin-top: 10rpx;
-            padding: 0 10rpx;
-          }
-          .fenqi {
-            color: #999;
-            padding: 0 10rpx;
-            i {
-              font-weight: bold;
-              color: $xg-c-red;
-              font-size: $xg-size-4;
-            }
+            color: $xg-c-red;
+            font-size: $xg-size-4;
           }
         }
+      }
     }
   }
 </style>
 <template>
-    <view class="form">
-      <image src="./img/search.png" mode="widthFix"/>
-      <input id="search-input"
-             type="text"
-             confirm-type="搜索"
-             placeholder="请输入关键词搜索"
-             placeholder-style="input-placeholder"
-             maxlength="25"
-             value="{{searchVal}}"
-             @confirm="onSearch"
-             @input="onChange"/>
-      <text @tap="onClickCancel">取消</text>
-      <view class="suggestions">
-        <repeat for="{{suggestions}}">
-          <view @tap="onClickSuggestion({{item}})">{{item.keywords}}</view>
-        </repeat>
-      </view>
+  <view class="form">
+    <image src="./img/search.png" mode="widthFix"/>
+    <input id="search-input"
+           type="text"
+           confirm-type="搜索"
+           placeholder="请输入关键词搜索"
+           placeholder-style="input-placeholder"
+           maxlength="25"
+           value="{{searchVal}}"
+           @confirm="onSearch"
+           @input="onChange"/>
+    <text @tap="onClickCancel">取消</text>
+    <view class="suggestions">
+      <repeat for="{{suggestions}}">
+        <view @tap="onClickSuggestion({{item}})">{{item.keywords}}</view>
+      </repeat>
     </view>
-    <view wx:if="{{historyList.length !== 0}}" class="history-list">
-      <image src="./img/deletehei.png" model="widthFix" @click="clearHistory"/>
-      <view class="title">搜索历史</view>
-      <view class="content">
-        <repeat for="{{historyList}}" item="i">
-          <view @tap="onClickHotWord(i)">{{i}}</view>
-        </repeat>
-      </view>
+  </view>
+  <view wx:if="{{historyList.length !== 0}}" class="history-list">
+    <image src="./img/deletehei.png" model="widthFix" @click="clearHistory"/>
+    <view class="title">搜索历史</view>
+    <view class="content">
+      <repeat for="{{historyList}}" item="i">
+        <view @tap="onClickHotWord(i)">{{i}}</view>
+      </repeat>
     </view>
-    <scroll-view class="result-list"
-                 scroll-y="true"
-                 bindscrolltolower="loadMore"
-                 lower-threshold="150"
-                 scroll-top="{{scrollTop}}">
-        <repeat for="{{resultList}}" item="goods">
-          <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
-        </repeat>
-      </scroll-view>
+  </view>
+  <scroll-view class="result-list"
+               scroll-y="true"
+               bindscrolltolower="loadMore"
+               lower-threshold="150"
+               scroll-top="{{scrollTop}}">
+    <repeat for="{{resultList}}" item="goods">
+      <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
+    </repeat>
+  </scroll-view>
 </template>
 
 <script>
@@ -196,7 +196,7 @@
       resultType: 'input',
       firstCatId: 0,
       secondCatId: 0,
-      thirdCatId: 0,
+      thirdCatId: 0
     }
 
     computed = {}
@@ -208,7 +208,8 @@
           .then(data => {
             this.suggestions = data.suggestions;
             this.$apply()
-          }, err => {
+          }, error => {
+            console.log(error);
             this.suggestions = [];
             this.$apply()
           })
@@ -244,20 +245,20 @@
               this.suggestions = [];
               this.resultList = list.goods;
               this.$apply();
-          wepy.hideNavigationBarLoading();
+              wepy.hideNavigationBarLoading();
             }, err => {
               this.suggestions = [];
               this.resultList = [];
               this.$apply();
-            wepy.showToast({title: err.message, icon: 'none'})
-            wepy.hideNavigationBarLoading();
+              wepy.showToast({title: err.message, icon: 'none'})
+              wepy.hideNavigationBarLoading();
             })
         }
       },
       loadMore() {
-          if (this.noMore) {
-              return
-          }
+        if (this.noMore) {
+          return
+        }
         this.loading = true;
         this.page = this.page + 1;
         let req = {
@@ -272,17 +273,17 @@
         if (this.resultType === 'input') {
           NetworkManagerOther.mallSearch(req)
             .then(data => {
-                if (data.goods.length === 0) {
-                    this.noMore = true;
-                    return
-                }
+              if (data.goods.length === 0) {
+                this.noMore = true;
+                return
+              }
               this.resultList = this.resultList.concat(data.goods);
-                this.$apply();
-          wepy.hideNavigationBarLoading();
+              this.$apply();
+              wepy.hideNavigationBarLoading();
             }, err => {
               this.loading = true;
-            wepy.showToast({title: err.message, icon: 'none'})
-            wepy.hideNavigationBarLoading();
+              wepy.showToast({title: err.message, icon: 'none'})
+              wepy.hideNavigationBarLoading();
             })
         } else {
           NetworkManagerOther.searchBySuggestions(req)
@@ -292,12 +293,12 @@
                 return
               }
               this.resultList = this.resultList.concat(data.goods);
-          wepy.hideNavigationBarLoading();
+              wepy.hideNavigationBarLoading();
               this.$apply();
             }, err => {
               this.loading = true;
-            wepy.showToast({title: err.message, icon: 'none'})
-            wepy.hideNavigationBarLoading();
+              wepy.showToast({title: err.message, icon: 'none'})
+              wepy.hideNavigationBarLoading();
             })
         }
       },
@@ -324,10 +325,10 @@
           .then(data => {
             this.resultList = data.goods;
             this.$apply();
-        wepy.hideNavigationBarLoading();
+            wepy.hideNavigationBarLoading();
           }, err => {
-          wepy.showToast({title: err.message, icon: 'none'});
-          wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'});
+            wepy.hideNavigationBarLoading();
           })
       },
       onClickCancel() {

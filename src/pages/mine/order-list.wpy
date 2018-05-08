@@ -150,7 +150,7 @@
     }
 
     components = {
-        'order-cell': OrderCell
+      'order-cell': OrderCell
     }
 
     data = {
@@ -201,7 +201,8 @@
           }, err => {
             wepy.showToast({title: err.message, icon: 'none'})
             wepy.hideNavigationBarLoading();
-          }).catch(err => {
+          }).catch(error => {
+          console.log(error);
           wepy.hideNavigationBarLoading();
         })
       },
@@ -223,14 +224,13 @@
         NetworkManagerOrder.cancelOrder(order.order.orderId)
           .then(data => {
             wepy.hideNavigationBarLoading();
-              this.fetchOrders();
+            this.fetchOrders();
           }, err => {
             wepy.showToast({title: err.message, icon: 'none'})
             wepy.hideNavigationBarLoading();
           })
       },
       onClickPay(order) {
-
       }
     }
 
@@ -248,7 +248,8 @@
         }, err => {
           wepy.showToast({title: err.message, icon: 'none'})
           wepy.hideNavigationBarLoading();
-        }).catch(err => {
+        }).catch(error => {
+        console.log(error);
         wepy.hideNavigationBarLoading();
       })
     }

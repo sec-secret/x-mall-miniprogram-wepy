@@ -44,7 +44,7 @@
           color: #333;
         }
         .active{
-         color: $xg-c-blue;
+          color: $xg-c-blue;
         }
       }
       ::-webkit-scrollbar{
@@ -113,8 +113,8 @@
       <scroll-view class="category-area flex-y"
                    scroll-y="true">
         <view class="banner-wrapper">
-        <image class="banner" src="/assets/main/temp_category_banner.png" mode="widthFix">
-        </image>
+          <image class="banner" src="/assets/main/temp_category_banner.png" mode="widthFix">
+          </image>
         </view>
         <view class="title flex-center-x">
           <label class="name">{{categoryList[selectedMenuIndex].catName}}</label>
