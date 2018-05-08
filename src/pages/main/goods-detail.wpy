@@ -955,7 +955,7 @@
     }
 
     formatDetail() {
-      let query = wx.createSelectorQuery();
+      let query = wepy.createSelectorQuery();
 //      let parentWrapper = query.select('#scale-parent');
       let scaleWrapper = query.select('.scale-box');
       setTimeout(() => {
