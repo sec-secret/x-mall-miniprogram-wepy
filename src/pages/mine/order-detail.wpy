@@ -170,7 +170,7 @@
   }
 </style>
 <template>
-  <wxs src="./wxs/mine.wxs" module="mineWxs"/>
+  <!--<wxs src="./wxs/mine.wxs" module="mineWxs"/>-->
   <!--<address-cell :address="addressInfo"-->
   <!--:isFromList="false"-->
   <!--@clickAddress="onClickAddress"></address-cell>-->

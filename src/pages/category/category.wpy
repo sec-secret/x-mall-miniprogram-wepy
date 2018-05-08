@@ -183,8 +183,8 @@
         this.secondCategoryList = data;
         this.$apply();
         wepy.hideNavigationBarLoading();
-      }, err=> {
-        wepy.showToast({title: err.message, icon: 'none'})
+      }, error => {
+        wepy.showToast({title: error.message, icon: 'none'})
         wepy.hideNavigationBarLoading();
       })
     }

@@ -96,7 +96,7 @@
 
 <script>
   import wepy from 'wepy'
-  import {connect} from 'wepy-redux'
+  // import {connect} from 'wepy-redux'
 
   export default class Mine extends wepy.page {
     config = {
@@ -138,7 +138,7 @@
             wepy.showToast({title: '敬请期待', icon: 'none'})
             return
           }
-         let pathList= ['./order-list', './address-list', ''];
+         let pathList = ['./order-list', './address-list', ''];
          wepy.navigateTo({
              url: pathList[index]
          })

@@ -1,8 +1,8 @@
-import NetworkManager from './NetworkManager'
+import NetworkManager, {BASE_URL} from './NetworkManager'
 
 export default class JNetworkMallAuth extends NetworkManager{
   static getUserInfo(){
-    return this.instance().freedomPOST('http://mall.beta.zookainet.com/gateway/auth/', 'login/getUserInfo', {});
+    return this.instance().freedomPOST(BASE_URL, 'login/getUserInfo', {});
   }
 
   // static userLogin(mobile, verifyCode, verifyKey, openId, nickName) {
@@ -10,19 +10,19 @@ export default class JNetworkMallAuth extends NetworkManager{
   // }
 
   static userLogin(authType, username, password = '', openId = '', nickName = '', mobile = '', verifyKey = '') {
-    return this.instance().freedomPOST('http://mall.beta.zookainet.com/gateway/auth/', 'oauth/token', {grant_type: 'password', authType, username, password, openId, nickName, mobile, verifyKey}, {}, {})
+    return this.instance().freedomPOST(BASE_URL, 'oauth/token', {grant_type: 'password', authType, username, password, openId, nickName, mobile, verifyKey}, {}, {})
   }
 
   static getVerifyCode(mobile, openId) {
-    return this.instance().freedomPOST('http://mall.beta.zookainet.com/gateway/auth/', 'login/getVerifyCode', {mobile, openId})
+    return this.instance().freedomPOST(BASE_URL, 'login/getVerifyCode', {mobile, openId})
   }
 
   static miniprogramCode2Session(code){
-    return this.instance().freedomPOST('http://10.1.1.63:7000', '/wxmini/miniUserInfoByCode', {code}, {}, {}, true)
+    return this.instance().freedomPOST(BASE_URL, '/wxmini/miniUserInfoByCode', {code}, {}, {}, true)
   }
 
   static miniprogramDecrypt(sessionKey, encryptedData, iv){
-    return this.instance().freedomPOST('http://10.1.1.63:7000', '/wxmini/miniDecrypt', {
+    return this.instance().freedomPOST(BASE_URL, '/wxmini/miniDecrypt', {
       session_key: sessionKey,
       encryptedData: encryptedData,
       iv: iv
