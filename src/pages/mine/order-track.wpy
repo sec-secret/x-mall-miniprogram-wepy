@@ -64,7 +64,7 @@
 
 <script>
   import wepy from 'wepy'
-  import {connect} from 'wepy-redux'
+  // import {connect} from 'wepy-redux'
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
 
   export default class OrderTrack extends wepy.page {

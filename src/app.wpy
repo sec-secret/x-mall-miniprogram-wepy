@@ -130,16 +130,16 @@
               success: function (options) {
                 console.log('getUserInfo 获取到的数据: ' + options);
                 console.log(options);
-                NetworkManagerAuth.miniprogramCode2Session(res.code).then(data => {
-                  console.log(data);
-                  NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
-                    console.log(data);
-                  }, error => {
-                    console.log(error);
-                  })
-                }, error => {
-                  console.log(error);
-                })
+                // NetworkManagerAuth.miniprogramCode2Session(res.code).then(data => {
+                //   console.log(data);
+                //   NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
+                //     console.log(data);
+                //   }, error => {
+                //     console.log(error);
+                //   })
+                // }, error => {
+                //   console.log(error);
+                // })
               }
             })
 //              NetworkManagerAuth.getUserInfo()

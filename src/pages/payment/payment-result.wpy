@@ -100,8 +100,8 @@
 
 <script>
   import wepy from 'wepy'
-  import NetworkManagerCart from '../../network/NetworkManagerCart';
-  import UnitTool from '../../tool/UnitTool';
+  // import NetworkManagerCart from '../../network/NetworkManagerCart';
+  // import UnitTool from '../../tool/UnitTool';
   export default class Payment extends wepy.page {
     config = {
       navigationBarTitleText: '支付结果'

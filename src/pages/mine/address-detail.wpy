@@ -113,39 +113,43 @@
   }
 </style>
 <template>
-  <wxs src="./wxs/mine.wxs" module="mineWxs"/>
+  <!--<wxs src="./wxs/mine.wxs" module="mineWxs">-->
+  <!--</wxs>-->
   <view class="address-area">
     <view class="name section">
       <input type="text"
              placeholder="收货人姓名"
              placeholder-class="input-placeholder"
              value="{{name}}"
-             @input="onInputName">
+             @input="onInputName"/>
     </view>
     <view class="mobile section">
       <input type="number"
              placeholder="收货人手机号"
              placeholder-class="input-placeholder"
              maxlength="11" value="{{mobile}}"
-             @input="onInputMobile">
+             @input="onInputMobile"/>
     </view>
     <view class="address-city section" @tap="onClickAddress">
       <view wx:if="{{province.areaId === 0}}" class="content placeholder">省份 城市 区县</view>
       <view wx:else class="content">{{province.areaName}} {{city.areaName}} {{county.areaName}} {{town.areaName}}</view>
     </view>
     <view class="address-street section">
-      <textarea hidden="{{showAddress}}"
-                value="{{detailAddress}}"
-                row="3"
-                cols="4"
-                placeholder="详细地址"
-                placeholder-class="input-placeholder"
-                @input="onInputDetail"></textarea>
+    <textarea hidden="{{showAddress}}"
+              value="{{detailAddress}}"
+              row="3"
+              cols="4"
+              placeholder="详细地址"
+              placeholder-class="input-placeholder"
+              @input="onInputDetail">
+    </textarea>
     </view>
     <view @tap="onClickDefault" class="set-default section">
       <view>设为默认地址</view>
-      <image wx:if="{{isDefault}}" src="./img/gouxuan.png" mode="widthFix" />
-      <image wx:else src="./img/meixuan.png" mode="widthFix" />
+      <image wx:if="{{isDefault}}" src="./img/gouxuan.png" mode="widthFix">
+      </image>
+      <image wx:else src="./img/meixuan.png" mode="widthFix">
+      </image>
     </view>
   </view>
   <view class="footer">
@@ -262,15 +266,15 @@
         this.$apply();
       },
       onInputName(e) {
-        this.name =  e.detail.value;
+        this.name = e.detail.value;
         this.$apply();
       },
       onInputMobile(e) {
-        this.mobile =  e.detail.value;
+        this.mobile = e.detail.value;
         this.$apply();
       },
       onInputDetail(e) {
-        this.detailAddress =  e.detail.value;
+        this.detailAddress = e.detail.value;
         this.$apply();
       },
       onClickTitle(index) {
@@ -319,30 +323,29 @@
         this.county = item;
         NetworkManagerMine.fetchTowns({countyId: item.areaId})
           .then(list => {
-              if (list.length !== 0) {
-                this.titleList.push('区域');
-                this.showLevel = 3;
-                this.towns = list;
-                this.town = {
-                  areaName: '',
-                  areaId: 0
-                }
-              } else {
-                this.showLevel = 2;
-                this.towns = list;
-                this.town = {
-                  areaName: '',
-                  areaId: 0
-                }
-                this.titleList = this.titleList.slice(0, 3);
-                this.showAddress = false;
+            if (list.length !== 0) {
+              this.titleList.push('区域');
+              this.showLevel = 3;
+              this.towns = list;
+              this.town = {
+                areaName: '',
+                areaId: 0
               }
-              this.$apply();
-//              document.querySelector('.address-section').scrollTop = 0;
+            } else {
+              this.showLevel = 2;
+              this.towns = list;
+              this.town = {
+                areaName: '',
+                areaId: 0
+              }
+              this.titleList = this.titleList.slice(0, 3);
+              this.showAddress = false;
             }
-            , err => {
-              console.log(err)
-            })
+            this.$apply();
+//              document.querySelector('.address-section').scrollTop = 0;
+          }, err => {
+            console.log(err)
+          })
       },
       onClickTown(item) {
 //        document.querySelector('.address-section').scrollTop = 0;
@@ -401,7 +404,7 @@
             wepy.showToast({title: err.message, icon: 'none'})
             wepy.hideNavigationBarLoading();
           })
-      },
+      }
     }
 
     onLoad(option) {

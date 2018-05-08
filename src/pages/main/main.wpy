@@ -171,17 +171,17 @@
       </repeat>
     </view>
 
-      <view class="main-section hot-section">
-        <text class="title">人气推荐</text>
-        <view class="recommend-content"
-              @touchstart="actionTouchCategoryStart"
-              @touchmove="actionTouchCategoryMove"
-              @touchend="actionTouchCategoryEnd">
-          <repeat for="{{hotGoods}}" item="goods">
-            <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
-          </repeat>
-        </view>
+    <view class="main-section hot-section">
+      <text class="title">人气推荐</text>
+      <view class="recommend-content"
+            @touchstart="actionTouchCategoryStart"
+            @touchmove="actionTouchCategoryMove"
+            @touchend="actionTouchCategoryEnd">
+        <repeat for="{{hotGoods}}" item="goods">
+          <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
+        </repeat>
       </view>
+    </view>
     <repeat for="{{categoryGroup}}"
             item="group"
             index="index">
@@ -299,9 +299,9 @@
     }
 
     methods = {
-        onClickBanner() {
+      onClickBanner() {
 
-        },
+      },
       onClickGoods(goods){
         wepy.navigateTo({
           url: 'goods-detail?skuId=' + goods.skuId
@@ -309,7 +309,7 @@
       },
       onClickCategory(cat) {
         wepy.navigateTo({
-            url: 'recommend-list?category=' + JSON.stringify(cat)
+          url: 'recommend-list?category=' + JSON.stringify(cat)
         })
       },
       actionTouchCategoryStart(e){
@@ -337,9 +337,9 @@
         this.touchMoveRecordList.push({clientX: anyTouch.clientX, clientY: anyTouch.clientY})
       },
       onClickSearch() {
-          wepy.navigateTo({
-              url: '../other/search'
-          })
+        wepy.navigateTo({
+          url: '../other/search'
+        })
       }
     }
 

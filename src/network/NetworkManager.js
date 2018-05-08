@@ -1,7 +1,8 @@
 import wepy from 'wepy'
+
+export const BASE_URL = 'https://www.xiaoguostore.com/b-nb-mall';
 export default class NetworkManager{
   static _instance = null
-  baseUrl = 'http://mall.beta.zookainet.com/b-nb-mall';
   timeout = 10 * 1000;
   delegate = null;
 
@@ -79,7 +80,7 @@ export default class NetworkManager{
   }
 
   POST(url, parameters, headers, otherObject){
-    return this.freedomPOST(this.baseUrl, url, {
+    return this.freedomPOST(BASE_URL, url, {
         ...this.getCarryData(),
         ...parameters
       },
@@ -93,7 +94,7 @@ export default class NetworkManager{
   }
 
   GET(url, parameters, headers, otherObject){
-    return this.freedomGET(this.baseUrl, url, {
+    return this.freedomGET(BASE_URL, url, {
         ...this.getCarryData(),
         ...parameters
       },
