@@ -91,8 +91,13 @@
     }
 
     globalData = {
-      userInfo: {userId: 4},
-      hasLogin: false
+//      userInfo: {userId: 4},
+      hasLogin: false,
+      authToken: 'Basic bmItc2VydmljZTpQSUFPaGFvMTkxQA==',
+      userInfo: {
+        'openId': 'oMBXg1FVVt1l1mOdeXqc-5wKjwE4',
+        'nickName': '鞋生',
+        'headImg': 'http://thirdwx.qlogo.cn/mmopen/oriamiaebV7gib8PE1nf32Wwrkbk17BfnbBADsvl8210z4ZVyQ1iaLRwdewG0mtm8sw4nX4OqgVMpNORb3aBt9libpyT3h7icsb9B6/132'}
     }
 
     constructor () {
@@ -137,7 +142,7 @@
                 })
               }
             })
-//              NetworkManagerAuth.getUserInfo(String(res.code))
+//              NetworkManagerAuth.getUserInfo()
 //                .then(data => {
 //                  getApp().globalData.userInfo = data;
 //                }, err => {

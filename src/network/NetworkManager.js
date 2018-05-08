@@ -46,7 +46,7 @@ export default class NetworkManager{
         header: {
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': wepy.authToken || '',
+          'Authorization': wepy.$instance.globalData.authToken,
           ...headers
         },
         success: function(res) {

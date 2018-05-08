@@ -107,7 +107,8 @@
       timeout: 60,
       showDJS: false,
       verifyKey: '',
-      djs: {}
+      djs: {},
+      userInfo: {}
     }
 
     computed = {}
@@ -130,12 +131,24 @@
           wepy.showToast({title: '请输入正确验证码', icon: 'none'});
           return
         }
-        let openId;
-        let password;
-        NetworkManagerAuth.userLogin(password, this.mobile, openId)
+        wepy.showNavigationBarLoading();
+        NetworkManagerAuth.userLogin('mobile', this.mobile, this.verifyCode, this.userInfo.openId, this.userInfo.nickName, this.mobile, this.verifyKey)
           .then(data => {
-              wepy.authToken = 'Bearer ' + data.access_token;
+            wepy.$instance.globalData.authToken = 'Bearer ' + data.access_token;
+            wepy.$instance.globalData.authData = data;
+            NetworkManagerAuth.getUserInfo()
+                .then(data => {
+                  wepy.hideNavigationBarLoading();
+                  wepy.$instance.globalData.userInfo = data;
+                  wepy.$instance.globalData.hasLogin = data;
+                  wepy.navigateBack()
+                }, err => {
+                  wepy.showToast({title: err.message, icon: 'none'})
+                  wepy.hideNavigationBarLoading();
+                })
           }, err => {
+            wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
           })
       },
       onClickVerify() {
@@ -143,11 +156,13 @@
           wepy.showToast({title: '请输入正确的手机号', icon: 'none'});
           return
         }
+        wepy.showNavigationBarLoading();
         NetworkManagerAuth.getVerifyCode(this.mobile, this.userInfo.openId)
           .then(data => {
-            this.closeLoading();
-            this.verifyKey = data;
+            wepy.hideNavigationBarLoading();
+              this.verifyKey = data.data;
         this.showDJS = true;
+        this.$apply();
         this.djs = setInterval(() => {
             if (this.timeout === 1) {
           this.showDJS = false;
@@ -160,12 +175,15 @@
         this.$apply();
       }, 1000)
           }, err => {
-            this.closeLoading();
+            wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
           })
       }
     }
 
     onLoad() {
+        this.userInfo = wepy.$instance.globalData.userInfo;
+        this.$apply();
     }
 
     onUnload() {

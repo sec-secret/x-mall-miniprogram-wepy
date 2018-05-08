@@ -69,7 +69,7 @@
     <view class="mine-area">
       <image class="mine-back" src="./img/temp_mine-back.png" mode="widthFix">
       </image>
-      <view wx:if="{{hasUserId}}" class="mine-info">
+      <view wx:if="{{hasLogin}}" class="mine-info">
         <image class="icon" src="{{headImg}}" mode="widthFix">
         </image>
         <view class="name">{{nickName}}</view>
@@ -99,11 +99,6 @@
   import wepy from 'wepy'
   import {connect} from 'wepy-redux'
 
-  @connect({
-    userInfo (state) {
-      return state.user.userInfo
-    }
-  })
   export default class Mine extends wepy.page {
     config = {
       navigationBarTitleText: '我的'
@@ -126,7 +121,17 @@
         }]
     }
 
-    computed = {}
+    computed = {
+        hasLogin() {
+            return wepy.$instance.globalData.hasLogin;
+        },
+      nickName() {
+        return wepy.$instance.globalData.userInfo.nickName;
+      },
+      headImg() {
+        return wepy.$instance.globalData.userInfo.headImg;
+      }
+    }
 
     methods = {
       onClickItem(index) {
@@ -140,8 +145,10 @@
          })
       },
       onClickLogin() {
-          console.log(wepy.$instance.globalData.hasLogin);
         wepy.showToast({title: '敬请期待', icon: 'none'})
+        wepy.navigateTo({
+          url: './login'
+        })
       }
     }
 
