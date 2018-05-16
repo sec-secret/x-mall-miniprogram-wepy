@@ -45,7 +45,7 @@ export default class NetworkManager{
         method,
         url: baseUrl + url,
         data: {
-          userId: store.getState().user.userId,
+          userId: store.getState().user.userInfo.userId,
           ...parameters
         },
         header: {

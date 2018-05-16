@@ -5,8 +5,7 @@ export default handleActions({
   [UPDATE_USER_INFO] (state, action) {
     return {
       ...state,
-      userInfo: {...state.userInfo, ...action.userInfo},
-      userId: action.userInfo.userId || ''
+      userInfo: {...state.userInfo, ...action.userInfo}
     }
   },
   [UPDATE_AUTHOR_INFO] (state, action) {
@@ -18,7 +17,13 @@ export default handleActions({
     }
   }
 }, {
-  userInfo: {},
+  userInfo: {
+    userId: '',
+    openId: '',
+    nickName: '',
+    headImg: '',
+    mobile: ''
+  },
   hasUserId: false,
   authorData: {},
   hasAuthor: false,

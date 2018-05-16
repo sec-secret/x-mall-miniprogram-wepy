@@ -262,6 +262,12 @@
   import CartCell from '@/components/widget/cart-cell';
   import globalWxs from '../../wxs/global.wxs'
   import cartWxs from '../../wxs/cart.wxs'
+  import { connect } from 'wepy-redux'
+  @connect({
+    isLogin(state) {
+      return state.user.hasAuthor;
+    }
+  })
   export default class Cart extends wepy.page {
     config = {
       navigationBarTitleText: '购物车'
@@ -290,9 +296,6 @@
     }
 
     computed = {
-      isLogin() {
-        return wepy.$instance.globalData.hasLogin;
-      },
       selectedCount(){
         return this.selectedIds.length;
       },
@@ -585,24 +588,26 @@
 
     onShow() {
       wepy.showNavigationBarLoading();
-      NetworkManagerCart.fetchCartGoods().then(data => {
-        this.goodsList = data.skus;
-        let newIds = [];
+      if (this.isLogin) {
+        NetworkManagerCart.fetchCartGoods().then(data => {
+          this.goodsList = data.skus;
+          let newIds = [];
 //        找到刚刚删除的商品，更新已选列表
-        this.selectedIds.forEach((id, index) => {
-          if (this.goodsList.some(goods => {
-              return goods.cartId === id
-            })) {
-            newIds.push(id);
-          }
+          this.selectedIds.forEach((id, index) => {
+            if (this.goodsList.some(goods => {
+                return goods.cartId === id
+              })) {
+              newIds.push(id);
+            }
+          })
+          this.selectedIds = newIds;
+          this.$apply();
+          wepy.hideNavigationBarLoading();
+        }, err => {
+          wepy.showToast({title: err.message, icon: 'none'})
+          wepy.hideNavigationBarLoading();
         })
-        this.selectedIds = newIds;
-        this.$apply();
-        wepy.hideNavigationBarLoading();
-      }, err => {
-        wepy.showToast({title: err.message, icon: 'none'})
-        wepy.hideNavigationBarLoading();
-      })
+      }
     }
 
     onLoad() {

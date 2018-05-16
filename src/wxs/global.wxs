@@ -21,6 +21,9 @@ var globalWxs = {
     }
     price = globalWxs.formatFenPrice(totalPrice / num);
     return {price: price, num: num}
+  },
+  haveSaleValue: function (val) {
+    return val.indexOf('saleName') < 0;
   }
 }
 

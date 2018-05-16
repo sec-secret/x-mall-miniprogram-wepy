@@ -1,0 +1,973 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import '../../assets/scss/index.scss';
+  .mall-goods-detail {
+    padding-bottom: $tab-bar-height + 50rpx;
+    .tabbar {
+      background: $color-white;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: $tab-bar-height;
+      text-align: center;
+      z-index: 3;
+      .icon {
+        width: 50rpx;
+        height: 50rpx;
+      }
+      .customer-service {
+        flex: 1.3;
+        height: 100%;
+        background: #fafafa;
+        border-right: 1px solid $color-seg;
+      }
+      .shopping-cart {
+        flex: 1.3;
+        height: 100%;
+        background: #fafafa;
+        border-right: 1px solid $color-seg;
+      }
+      .shop-now {
+        flex: 2;
+        font-size: $size-6;
+        line-height: $tab-bar-height;
+      }
+      .add-cart {
+        flex: 2;
+        font-size: $size-6;
+        line-height: $tab-bar-height;
+        background: $color-yellow;
+      }
+    }
+
+    .goods-image-area {
+      position: relative;
+      background: $color-white;
+      .swiper {
+        .image {
+          display: block;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .page-number {
+        background: rgba(0, 0, 0, 0.4);
+        position: absolute;
+        text-align: center;
+        z-index: 2;
+        height: 32rpx;
+        line-height: 32rpx;
+        border-radius: 40rpx;
+        right: 30rpx;
+        bottom: 30rpx;
+        color: #ffffff;
+        font-size: $xg-size-1;
+        padding-left: 15rpx;
+        padding-right: 15rpx
+      }
+    }
+
+    .goods-info {
+      background: $color-white;
+      padding: 50rpx 30rpx;
+      .name {
+        font-size:  $xg-size-8;
+      }
+      .description {
+        max-width: 100%;
+        font-size: $xg-size-4;
+        color: #999;
+        margin-top: 20rpx;
+      }
+      .price {
+        font-size: 24px;
+        margin-top: 30rpx;
+        @include flex-x-middle();
+        .new {
+          color: $xg-c-red;
+          font-weight: bold;
+        }
+        .fenqi {
+          color: #999;
+          padding: 0 0.1rem;
+          font-size: $xg-size-4;
+          text {
+            font-weight: bold;
+            color: $xg-c-red;
+            font-size: $xg-size-7;
+          }
+        }
+      }
+    }
+    .service-info {
+      margin-top: 20rpx;
+      background: #fff;
+      .title-item {
+        height: 100rpx;
+        @include flex-x-middle();
+        @include flex-justify-content_space-between();
+        padding: 0 30rpx;
+        border-bottom: 1px solid #eeeded;
+        .icon {
+          width: 6rpx;
+        }
+      }
+      .service-section {
+        padding: 20rpx 30rpx 40rpx 30rpx;
+        position: relative;
+        @include flex-x();
+        flex-wrap: wrap;
+        view {
+          @include flex-x-middle();
+          font-size: $xg-size-3;
+          color: #666;
+          margin-top: 20rpx;
+          margin-right: 40rpx;
+          image {
+            width: 22rpx;
+            margin-right: 10rpx;
+          }
+        }
+        .right-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-6rpx);
+          right: 30rpx;
+          width: 6rpx;
+        }
+      }
+    }
+    .detailimg-area {
+      display: block;
+      width: 100%;
+      margin-top: 20rpx;
+      margin-bottom: $tab-bar-height+20rpx;
+    }
+    .goods-param {
+      padding: 10px;
+      background-color: white;
+    }
+
+    /*.goods-description {*/
+    /*background-color: white;*/
+    /*.description{*/
+    /*background: #ff0000;*/
+    /*width: 100%;*/
+    /*margin-left: 50rpx;*/
+    /*margin-right: 50rpx;*/
+    /*}*/
+    /*}*/
+  }
+
+  .buy-pop-section {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(66, 66, 66, .6);
+    z-index: 999;
+    .pop-content {
+      position: absolute;
+      background: white;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      overflow: auto;
+      padding-bottom: 88rpx;
+      .image-area {
+        height: 246rpx;
+        .image {
+          height: 166rpx;
+          width: 166rpx;
+          margin: 40rpx 30rpx;
+        }
+        .price-area {
+          padding-bottom: 30rpx;
+          font-size: $xg-size-5;
+          .real-price {
+            height: 50rpx;
+            line-height: 50rpx;
+            font-weight: bold;
+            color: $color-red;
+            font-size: 40rpx;
+          }
+        }
+        .close-icon {
+          position: absolute;
+          right: 30rpx;
+          top: 30rpx;
+          width: 24rpx;
+          height: 24rpx;
+          margin: 0;
+        }
+      }
+      .type-area {
+        padding: 30rpx;
+        .type-title {
+          font-size: $size-4;
+          color: $color-2;
+          height: 60rpx;
+        }
+        .type-group{
+          margin-top: 25rpx;
+          .title {
+
+          }
+          .item-group {
+            .type-item {
+              &.active{
+                color: #ffffff !important;
+                background-color: #a63533 !important;
+              }
+              display: inline-block;
+              height: 70rpx;
+              line-height: 70rpx;
+              padding: 0 20rpx;
+              font-size: $xg-size-4;
+              color: #333;
+              background-color: #f5f5f5;
+              border-radius: 4px;
+              margin-right: 30rpx;
+              margin-bottom: 20rpx;
+              word-break: keep-all;
+              /*&.selected {
+                color: $color-yellow !important;
+                border-color: $color-yellow !important;
+                border-style: solid !important;
+              }
+              &.haveNot {
+                border-style: dashed;
+                border-color: $color-3;
+                color: $color-3;
+              }*/
+            }
+          }
+        }
+        .number-select{
+          @include flex-x-middle();
+          @include flex-justify-content_space-between();
+          height: 90rpx;
+          .control {
+            @include flex-x-middle();
+            .button {
+              @include flex(none);
+              @include flex-center();
+              height: 48rpx;
+              line-height: 48rpx;
+              width: 52rpx;
+              border-radius: 0 4px 4px 0;
+              border: 1px solid #999999;
+              font-size: $xg-size-4;
+              font-weight: bold;
+              color: #999999;
+              border-left-width: 0;
+            }
+            .button:first-of-type {
+              border-radius: 4px 0 0 4px;
+              border-right: 0;
+              border-left-width: 1px;
+            }
+            input {
+              @include flex(none);
+              @include flex-center();
+              min-height: 0;
+              text-align: center;
+              border: 1px solid #999;
+              height: 48rpx;
+              line-height: 48rpx;
+              width: 70rpx;
+              font-weight: bold;
+              outline: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  .disable-tips {
+    position: fixed;
+    bottom: 88rpx;
+    left: 0;
+    width: 100%;
+    height: 70rpx;
+    line-height: 70rpx;
+    text-align: center;
+    background-color: rgba(220, 220, 220, .6);
+    font-size: $xg-size-3;
+  }
+  .footer-bar {
+    position: fixed;
+    background: $color-white;
+    bottom: 0;
+    left: 0;
+    height: 88rpx;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+    @include flex-x();
+    .customer-service {
+      @include flex(auto);
+      @include flex-x-middle();
+      @include flex-justify-content_space-around();
+      height: 100%;
+      background: #fcfcfc;
+      image {
+        width: 36rpx;
+      }
+    }
+    button {
+      border-radius: 0;
+      outline: 0;
+    }
+    .buy-button {
+      @include flex-center();
+      width: 212rpx;
+      font-size: $xg-size-5;
+      color: #fff;
+      background-color: #d7807e;
+      &.disable {
+        background-color: #ccc;
+      }
+    }
+    .add-button {
+      @include flex-center();
+      width: 212rpx;
+      font-size: $xg-size-5;
+      color: #fff;
+      background-color: $xg-c-red;
+      &.disable {
+        background-color: #ccc;
+      }
+    }
+  }
+  .scale-box {
+    transform-origin: 0px 0px 0px;
+    font-size: 29px;
+  }
+
+  #wareInfo {
+    margin: 0;
+    padding: 5px 0 0;
+  }
+
+  .btm-detail {
+    background-color: #fff;
+    margin-top: 20rpx;
+  }
+
+  .detail {
+    overflow: hidden;
+    position: relative;
+    margin: 0 10px 12px;
+    height: 100%;
+    font-size: 12px;
+    color: #5a5a5a;
+  }
+  .scale-box {
+    display: table;
+    word-wrap: break-word;
+    word-break: break-all
+  }
+
+  .scale-box image {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none
+  }
+</style>
+<template>
+  <view class="mall-goods-detail page">
+    <view class="goods-image-area">
+      <swiper class="swiper"
+              bindchange="actionChangeGoodsImage">
+        <repeat for="{{goodsImageList}}"
+                item="imageUrl"
+                key="index">
+          <swiper-item class="swiper-item">
+            <image class="image"
+                   src="{{imageUrl}}"
+                   mode="aspectFit">
+            </image>
+          </swiper-item>
+        </repeat>
+      </swiper>
+      <label class="page-number">{{goodsImageIndex + 1}}/{{goodsImageList.length}}</label>
+    </view>
+
+    <view class="goods-info pl2 pr2">
+      <label class="name mall-product-name">{{goods.name}}</label>
+      <!--<label class="description" v-html="goods.goodsDetailDesc"></label>-->
+      <view class="price flex-middle-x">
+        <label class="new">￥{{goods.smartPrice}}</label>
+        <!--<view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>-->
+      </view>
+    </view>
+
+    <view class="service-info">
+      <view wx:if="isSale" class="title-item" @tap="actionClickShowPopArea">
+        <view class="title">规格数量选择</view>
+        <image class="icon" src="./img/jiantou3.png" mode="widthFix">
+        </image>
+      </view>
+      <view class="service-section">
+        <repeat for="{{serviceItems}}">
+          <view>
+            <image src="./img/fuwugouxuan.png" mode="widthFix">
+            </image>
+            <span class="name">{{item}}</span>
+          </view>
+        </repeat>
+        <image class="right-arrow" src="./img/jiantou3.png" mode="widthFix">
+        </image>
+      </view>
+    </view>
+
+    <view id="btmDetail" class="btm-detail">
+      <view class="detail" id="wareInfo" style="display:block;">
+        <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
+          <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
+            <rich-text class="description" type="node" nodes="{{testRichText}}"></rich-text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!--<view class="goods-param">-->
+  <!--<label v-html="goodsExt.param"></label>-->
+  <!--</view>-->
+
+  <view wx:if="{{isShowBuyPopArea}}" class="buy-pop-section">
+    <view class="pop-content">
+      <view class="image-area flex-x">
+        <image class="image" src="{{popAreaImage}}">
+        </image>
+        <view class="price-area flex-y">
+          <view style="flex: 1;"></view>
+          <label class="real-price">￥{{popAreaPrice}}</label>
+        </view>
+        <image @tap="onClickClosePopArea" class="close-icon" src="./img/close.png" mode="widthFix"></image>
+      </view>
+
+      <view class="type-area">
+        <view class="type-select flex-y">
+          <repeat for="{{goodsSimilarDisplayTypeCount}}"
+                  index="typeIndex">
+            <view class="type-group">
+              <view class="title">{{item.saleName}}</view>
+              <view class="item-group">
+                <repeat for="{{goodsSimilarDisplayBlob[typeIndex]}}"
+                        item="typeValue"
+                        index="typeValueIndex">
+                  <view class="type-item"
+                        :class="{'active':selectedTypeList[typeIndex]===typeValue}"
+                        data-type-index="{{typeIndex}}"
+                        data-type-value-index="{{typeValueIndex}}"
+                        data-type-value="{{typeValue}}"
+                        @tap="actionClickTypeValue">
+                    {{typeValue}}
+                  </view>
+                </repeat>
+              </view>
+            </view>
+          </repeat>
+        </view>
+
+        <view class="number-select">
+          <view class="title">
+            数量
+          </view>
+          <view class="control">
+            <text class="button" @tap="actionClickDown">-</text>
+            <input class="count-number" type="number" disabled="{{true}}" value="{{goodsCount}}"/>
+            <text class="button" @tap="actionClickUp">+</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{!isSale}}" class="disable-tips title">对不起，该商品暂时无货。</view>
+  <view class="footer-bar">
+    <view class="customer-service">
+      <image @tap="onClickHomeIcon" class="icon" src="./img/shouye.png" mode="widthFix">
+      </image>
+      <image class="icon" src="./img/kefu.png" mode="widthFix">
+      </image>
+      <image @tap="onClickCarIcon" class="icon" src="./img/gouwuche.png" mode="widthFix">
+      </image>
+    </view>
+    <button class="buy-button {{!isSale?'disable':''}}" @tap="onClickAdd">加入购物车</button>
+    <button class="add-button {{!isSale?'disable':''}}" @tap="onClickBuy">购买</button>
+  </view>
+  <!--<view class="tabbar flex-middle-x top-seg">-->
+  <!--<view class="customer-service flex-center-x">-->
+  <!--<image class="icon" src="./img/customer-service.png" mode="aspectFit">-->
+  <!--</image>-->
+  <!--</view>-->
+  <!--<view class="shopping-cart flex-center-x">-->
+  <!--<image class="icon" src="./img/shopping-cart.png" mode="aspectFit">-->
+  <!--</image>-->
+  <!--</view>-->
+  <!--<label class="shop-now" @click="showSelect = true;">立即购买</label>-->
+  <!--<label @tap="actionClickShowPopArea" class="add-cart">加入购物车</label>-->
+  <!--</view>-->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerGoods from '../../network/NetworkManagerGoods'
+  import UnitTool from '@tool/UnitTool';
+  import SetTool from '@tool/SetTool';
+  import EncodeTool from '../../tool/EncodeTool';
+  import CPParse from '../../parse/CPParse'
+  import NetworkManager from '../../network/NetworkManager';
+  import globalWxs from '../../wxs/global.wxs'
+  export default class GoodsDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '商品详情'
+    }
+
+    components = {
+    }
+
+    wxs = {
+      globalWxs
+    }
+
+    data = {
+      testRichText: '',
+      tableRichText: '',
+      isShowBuyPopArea: false,
+      skuId: 0,
+      goods: null,
+      goodsExt: null,
+      goodsImageList: [],
+      goodsImageIndex: 0,
+      serviceItems: [
+        '小呱自营假1赔3',
+        '7天无忧退货',
+        '次日快速送达',
+        '满88元免邮费',
+        '国内部分地区不配送'
+      ],
+      imageHeader: {},
+      goodsSimilarTree: {},
+      popAreaPrice: 0, // ???
+      originGoodsPrice: 0,
+      selectedTypeList: [],
+      goodsCount: 1,
+      goodsInventory: 9999,
+      isSale: true,
+      scaling: 1,
+      scaleH: 'auto'
+    }
+
+    computed = {
+      popAreaImage() {
+        if (!this.goodsSimilarTree.children){
+          if (this.goods){
+            return this.goods.goodsImg
+          }
+        }
+        let treeReader = (node, selectedTypeList, index) => {
+          if (index >= selectedTypeList.length){
+            return '';
+          }
+          if (node.children && node.children.hasOwnProperty(selectedTypeList[index])){
+            if (node.children[selectedTypeList[index]].hasOwnProperty('imagePath')){
+              return node.children[selectedTypeList[index]]['imagePath'];
+            } else {
+              return treeReader(node.children[selectedTypeList[index]], selectedTypeList, index + 1);
+            }
+          } else {
+            return '';
+          }
+        };
+        let imagePath = treeReader(this.goodsSimilarTree, this.selectedTypeList, 0);
+        if (imagePath !== ''){
+          let imageHeader = this.imageHeader.smallUrl;
+          return imageHeader + imagePath;
+        }
+        return '';
+      },
+      goodsSimilarDisplayBlob(){
+        let goodsSimilarDisplayBlob = [];
+        let goodsSimilarTree = this.goodsSimilarTree;
+        if (!this.goodsSimilarTree.children){
+          return [];
+        }
+        for (let i = 0; i < this.goodsSimilarDisplayTypeCount; i++){
+          if (i === 0){
+            goodsSimilarDisplayBlob.push(goodsSimilarTree.children);
+          } else {
+            let rootNode = goodsSimilarTree;
+            for (let j = 0; j < i; j++){
+              rootNode = rootNode.children[this.selectedTypeList[j]];
+            }
+            goodsSimilarDisplayBlob.push(rootNode.children);
+          }
+        }
+        goodsSimilarDisplayBlob = goodsSimilarDisplayBlob.map(typeMap => {
+          let typeList = [];
+          for (let type in typeMap){
+            if (typeMap.hasOwnProperty(type)){
+              typeList.push(type);
+            }
+          }
+          return typeList;
+        })
+        return goodsSimilarDisplayBlob;
+      },
+      goodsSimilarDisplayTypeTitle(){
+        let titleList = [];
+        if (this.goodsSimilarTree.levelCursor){
+          for (let levelCursor = this.goodsSimilarTree.levelCursor; levelCursor; levelCursor = levelCursor.next){
+            titleList.push(levelCursor.name)
+          }
+        }
+        return titleList;
+      },
+      goodsSimilarDisplayTypeCount(){
+        return this.goodsSimilarDisplayTypeTitle.length
+      }
+    }
+
+    methods = {
+      onClickClosePopArea() {
+        this.isShowBuyPopArea = false
+      },
+      actionClickShowPopArea(){
+        this.isShowBuyPopArea = true;
+      },
+      actionChangeGoodsImage(data){
+        this.goodsImageIndex = data.detail.current;
+      },
+      actionClickTypeValue(e){
+        wepy.showNavigationBarLoading();
+        let typeIndex = e.currentTarget.dataset.typeIndex;
+        this.selectedTypeList[typeIndex] = e.currentTarget.dataset.typeValue;
+        let skuId = this.currentSelectedGoodsSkuId();
+        if (skuId !== this.skuId){
+          NetworkManagerGoods.goodsPrice(skuId).then(data => {
+            this.popAreaPrice = UnitTool.formatFenPrice(data);
+            this.$apply();
+            wepy.hideNavigationBarLoading();
+          }, err => {
+            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.hideNavigationBarLoading();
+          })
+        } else {
+          this.popAreaPrice = UnitTool.formatFenPrice(this.originGoodsPrice);
+          wepy.hideNavigationBarLoading();
+        }
+      },
+      actionClickDown() {
+        if (this.goodsCount > 1) {
+          this.goodsCount--
+        }
+      },
+      actionClickUp() {
+        if (this.goodsCount <= this.goodsInventory) {
+          this.goodsCount++
+        }
+      },
+      onClickAdd() {
+        if (this.isShowBuyPopArea) {
+          if (!wepy.$instance.globalData.hasLogin) {
+            wepy.showToast({title: '敬请期待', icon: 'none'})
+            return
+          }
+          this.addToCar();
+        } else {
+          this.isShowBuyPopArea = true;
+        }
+      },
+      onClickBuy() {
+        if (this.isShowBuyPopArea) {
+          if (!wepy.$instance.globalData.hasLogin) {
+            wepy.showToast({title: '敬请期待', icon: 'none'})
+            return
+          }
+          this.goToBuy();
+        } else {
+          this.isShowBuyPopArea = true;
+        }
+      },
+      onClickCarIcon() {
+        wepy.switchTab({
+          url: '../cart/cart'
+        })
+      },
+      onClickHomeIcon() {
+        wepy.switchTab({
+          url: '../main/main'
+        })
+      }
+    }
+    currentSelectedGoodsSkuId(){
+      let treeReader = (node, selectedTypeList, index) => {
+        if (node.children && node.children.hasOwnProperty(selectedTypeList[index])){
+          if (index < selectedTypeList.length){
+            return treeReader(node.children[selectedTypeList[index]], selectedTypeList, index + 1);
+          } else {
+            return [];
+          }
+        } else {
+          return node.skuIds;
+        }
+      };
+      let skuIds = treeReader(this.goodsSimilarTree, this.selectedTypeList, 0);
+      if (skuIds && skuIds.length > 0){
+        return skuIds[0];
+      }
+      return this.skuId;
+    }
+
+    getSelectedNodeList(skuId){
+      let selectedNodeList = [];
+      let treeSearcher = (node, skuId) => {
+        if (node.children){
+          for (let childName in node.children){
+            if (node.children.hasOwnProperty(childName)){
+              let curSkuIds = node.children[childName].skuIds;
+              if (curSkuIds.contains(skuId)){
+                selectedNodeList.push(node.children[childName]);
+                treeSearcher(node.children[childName], skuId)
+              }
+            }
+          }
+        }
+      };
+      treeSearcher(this.goodsSimilarTree, skuId);
+      return selectedNodeList;
+    }
+
+    onLoad(options) {
+      this.skuId = parseInt(options.skuId);
+      this.fetchCheckIsSale();
+      this.fetchGoodsState();
+      this.fetchGoodsDetail();
+      this.fetchSimilarGoods();
+      // let stationName = TestRichText.BODY.replace(/[\r\n]/g, '').substring(9);
+      // stationName = JSON.parse(stationName.substring(0, stationName.length - 1));
+      // let aimTree = CPParse.parse(stationName.content);
+    }
+
+    addToCar() {
+      let buyParams = {
+        'skuReqs': [
+          {
+            'num': this.goodsCount,
+            'skuId': this.currentSelectedGoodsSkuId()
+          }
+        ]
+      };
+      wepy.showNavigationBarLoading();
+      NetworkManagerGoods.goodsAddToCart(buyParams).then(data => {
+        this.isShowBuyPopArea = false;
+        wepy.showToast({
+          title: '成功加入购物车',
+          icon: 'success'
+        })
+        this.$apply();
+        wepy.hideNavigationBarLoading();
+      }, err => {
+        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.hideNavigationBarLoading();
+      })
+    }
+
+    goToBuy() {}
+
+    fetchCheckIsSale() {
+      let req = {
+        skuIds: [
+          this.skuId
+        ]
+      };
+      NetworkManagerGoods.goodsCheckSale(req).then((info) => {
+        console.log(info)
+      }, err => {
+        wepy.showToast({title: err.message, icon: 'none'})
+      })
+    }
+
+    fetchGoodsState() {
+      let req = {
+        skuIds: [
+          this.skuId
+        ]
+      }
+      NetworkManagerGoods.goodsState(req).then((info) => {
+        this.isSale = info[0].state === 1;
+        this.$apply();
+      }).catch(err => {
+        console.log(err)
+        wepy.showToast({title: err.message, icon: 'none'})
+      })
+    }
+
+    fetchGoodsDetail() {
+      wepy.showNavigationBarLoading();
+      NetworkManagerGoods.goodsDetail(this.skuId).then((data) => {
+        this.goods = {...data.goods, smartPrice: UnitTool.formatFenPrice(data.goods.nbPrice)};
+        this.goodsExt = data.goodsExt;
+        this.originGoodsPrice = data.goods.nbPrice;
+        this.popAreaPrice = UnitTool.formatFenPrice(this.originGoodsPrice);
+        this.fetchGoodsImages();
+        this.$apply();
+        wepy.hideNavigationBarLoading();
+        // TODO: 描述富文本的格式化
+        let stationName
+        if (data.goodsExt.mobileDesc) {
+          stationName = data.goodsExt.mobileDesc;
+        } else {
+          stationName = data.goodsExt.introduction;
+        }
+        stationName = EncodeTool.reconvert(stationName);
+        let aimTree = CPParse.parseString(stationName);
+        let linkStyleList = [];
+        let traverse = (aimTree) => {
+          if (aimTree.name === 'link'){
+            // console.log(aimTree.href);
+            linkStyleList.push('http:' + aimTree.href);
+          }
+          if (aimTree.hasOwnProperty('children')){
+            for (let i = 0; i < aimTree.children.length; i++){
+              traverse(aimTree.children[i]);
+            }
+          }
+        };
+        traverse(aimTree);
+        Promise.all(linkStyleList.map((link) => {
+          return NetworkManager.instance().freedomGET(link)
+        })).then(cssStringList => {
+          let cssString = '';
+          cssStringList.forEach(cs => {
+            cssString += cs;
+          })
+          CPParse.applyCss2Node(aimTree, cssString);
+          this.testRichText = aimTree.children;
+          console.log('detail');
+          this.formatDetail();
+          this.$apply();
+        }, error => {
+          console.log(error);
+        })
+      }, error => {
+        console.log(error);
+        wepy.hideNavigationBarLoading();
+      })
+    }
+
+    fetchSimilarGoods() {
+      NetworkManagerGoods.goodsSimilar(this.skuId).then((data) => {
+        let similarGoodsTypeList = data.similarProducts;
+//        similarGoodsTypeList = [];
+        // if (similarGoodsTypeList.length === 0){
+        //   similarGoodsTypeList.push({
+        //     dim: 1,
+        //     saleAttrList: [{
+        //       imagePath: '',
+        //       saleValue: ''
+        //     }],
+        //     saleName: ''
+        //   })
+        // }
+        this.imageHeader = data.imageHeader;
+        // this.similarGoods = data.similarProducts;
+        let goodsSimilarTree = {
+        };
+        let levelCursor = goodsSimilarTree.levelCursor;
+        similarGoodsTypeList.forEach((goodsType, index) => {
+          let childValueList = goodsType.saleAttrList;
+          let childLevelList = [];
+          childValueList.forEach(childValue => {
+            if (levelCursor){
+              levelCursor.forEach(parentValue => {
+                let resultSkuIds = SetTool.intersectionSet(childValue.skuIds, parentValue.skuIds);
+                if (resultSkuIds.length > 0){
+                  let childTypeNode = {
+                    ...childValue,
+                    skuIds: resultSkuIds
+                  };
+                  parentValue.children = {
+                    ...(parentValue.children || {}),
+                    [childValue.saleValue]: childTypeNode
+                  };
+                  childLevelList.push(childTypeNode)
+                }
+              })
+            } else {
+              goodsSimilarTree.children = {
+                ...(goodsSimilarTree.children || {}),
+                [childValue.saleValue]: childValue
+              };
+              childLevelList.push(childValue)
+            }
+          })
+          if (levelCursor){
+            levelCursor.next = childLevelList;
+            levelCursor.next.name = goodsType.saleName;
+            levelCursor = levelCursor.next;
+          } else {
+            levelCursor = childLevelList;
+            goodsSimilarTree.levelCursor = levelCursor;
+            levelCursor.name = goodsType.saleName;
+          }
+        })
+        this.goodsSimilarTree = goodsSimilarTree;
+        this.selectedTypeList = this.getSelectedNodeList(this.skuId).map(_ => _.saleValue);
+        this.$apply();
+      }).catch((err) => {
+        wepy.showToast({title: err.message, icon: 'none'})
+      })
+    }
+
+    fetchGoodsImages() {
+      NetworkManagerGoods.goodsImages(this.skuId).then((goodsImageList) => {
+        if (goodsImageList && goodsImageList.length > 0) {
+          goodsImageList.sort((a, b) => {
+            if (a.orderSort > b.orderSort) {
+              return 1;
+            } else if (a.orderSort < b.orderSort) {
+              return -1;
+            } else {
+              if (a.isPrimary > b.isPrimary) {
+                return 1;
+              } else {
+                return -1;
+              }
+            }
+          })
+          this.goodsImageList = goodsImageList.map(_ => _.path) || [];
+        } else {
+          this.goodsImageList = [this.goods.goodsImg];
+        }
+        this.$apply();
+      }, error => {
+        console.log(error);
+      })
+    }
+
+    formatDetail() {
+      let query = wepy.createSelectorQuery();
+//      let parentWrapper = query.select('#scale-parent');
+      let scaleWrapper = query.select('.scale-box');
+      setTimeout(() => {
+        let _this = this;
+        scaleWrapper.boundingClientRect((res) => {
+          console.log(res);
+          _this.scaling = (wepy.getSystemInfoSync().windowWidth - 20) / res.width;
+          _this.scaleH = res.height * _this.scaling;
+          console.log(_this.scaling);
+          _this.$apply();
+        }).exec();
+      }, 500)
+    }
+  }
+</script>

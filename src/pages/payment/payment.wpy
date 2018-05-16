@@ -132,7 +132,7 @@
             font-size: $xg-size-4;
           }
           .dim {
-            @include ellipsis();
+            @include ellipsis(2);
             font-size: $xg-size-2;
             color: #999;
           }
@@ -232,12 +232,12 @@
           <view class="name">
             {{goods.name}}
           </view>
-          <!--<view class="dim" v-if="goods.hasOwnProperty('saleValue') && JSON.parse(goods.saleValue)">-->
-          <!--<text v-for="i in JSON.parse(goods.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
-          <!--</view>-->
-          <text class="price">
+          <view class="dim" wx:if="{{globalWxs.haveSaleValue(i.saleValue)}}">
+            {{goods.saleValue}}
+          </view>
+          <view class="price">
             ￥{{globalWxs.formatFenPrice(goods.nbPrice)}}
-          </text>
+          </view>
         </view>
         <view class="count">x {{goods.num}}</view>
       </view>
@@ -464,6 +464,11 @@
 
     onLoad(option) {
       this.payInfo = JSON.parse(option.payInfo);
+//      if (this.payInfo.saleValue) {
+//        this.payInfo.saleValue = JSON.parse(this.payInfo.saleValue);
+//      } else {
+//        this.payInfo.saleValue = [];
+//      }
       this.goodsList = this.payInfo.selectedList;
       this.$apply();
     }

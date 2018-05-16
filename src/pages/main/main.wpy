@@ -271,13 +271,13 @@
           catId: 6144
         }
       ],
-      categoryGroup: []
+      categoryGroup: [],
+      touchMoveRecordList: [],
+      isTouching: false,
+      isTriggerInTouching: false,
+      leftAnimation: null,
+      rightAnimation: null
     }
-    touchMoveRecordList = [];
-    isTouching = false;
-    isTriggerInTouching = false;
-    leftAnimation = null;
-    rightAnimation = null;
 
     components = {
       'goods-cell': GoodsCell

@@ -72,7 +72,7 @@
   <view class="mobile-section">
     <text>手机号</text>
     <view class="input-wrapper">
-      <input type="number" value="{{mobile}}" @blur="inputMobile" maxlength="11"/>
+      <input type="number" @blur="inputMobile" maxlength="11"/>
     </view>
   </view>
   <view class="verify-section">

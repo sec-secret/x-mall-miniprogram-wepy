@@ -70,7 +70,7 @@
           font-size: $xg-size-4;
         }
         .dim {
-          @include ellipsis();
+          @include ellipsis(2);
           font-size: $xg-size-2;
           color: #999;
         }
@@ -200,10 +200,10 @@
         <image src="{{i.goodsImg}}" alt="" mode="widthFix"/>
         <view class="goods-info">
           <text class="name">{{i.name}}</text>
-          <!--<view class="dim"  v-if="i.hasOwnProperty('saleValue') && JSON.parse(i.saleValue)">-->
-          <!--<text v-for="i in JSON.parse(i.saleValue)">{{i.saleName + ': ' + i.value}}</text>-->
-          <!--</view>-->
-          <text class="price">￥{{mineWxs.formatFenPrice(i.nbPrice)}}</text>
+          <view class="dim" wx:if="{{globalWxs.haveSaleValue(i.saleValue)}}">
+            {{i.saleValue}}
+          </view>
+          <text class="price">￥{{globalWxs.formatFenPrice(i.nbPrice)}}</text>
         </view>
         <view class="num">
           <text>x {{i.num}}</text>
@@ -228,21 +228,21 @@
     </view>
     <view>
       <text>商品合计：</text>
-      ￥{{mineWxs.formatFenPrice(orderInfo.order.nbAmount)}}
+      ￥{{globalWxs.formatFenPrice(orderInfo.order.nbAmount)}}
     </view>
     <view>
       <text>运费：</text>
-      ￥{{mineWxs.formatFenPrice(orderInfo.order.freightAmount)}}
+      ￥{{globalWxs.formatFenPrice(orderInfo.order.freightAmount)}}
     </view>
   </view>
   <view class="total-area">
     <view>
       <text>实付：</text>
-      ￥{{mineWxs.formatFenPrice(payTotal)}}
+      ￥{{globalWxs.formatFenPrice(payTotal)}}
     </view>
   </view>
-  <view class="pay-info">
-    <view wx:if="{{mineWxs.status2CN(orderInfo.order.status) === '未支付'}}">
+  <view class="pay-info" wx:if="{{mineWxs.status2CN(orderInfo.order.status) === '未支付'}}">
+    <view>
       <button @tap="onClickCancel">取消订单</button>
       <button @tap="onClickPay">直接付款</button>
     </view>
@@ -252,6 +252,8 @@
 <script>
   import wepy from 'wepy'
   import { connect } from 'wepy-redux'
+  import globalWxs from '../../wxs/global.wxs'
+  import mineWxs from '../../wxs/mine.wxs'
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
   import NetworkManagerPayment from '../../network/NetworkManagerPayment';
 
@@ -266,6 +268,11 @@
     }
 
     components = {}
+
+    wxs = {
+        globalWxs,
+        mineWxs
+    }
 
     data = {
       orderInfo: {},
