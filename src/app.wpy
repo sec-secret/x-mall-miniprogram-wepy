@@ -117,7 +117,7 @@
 //          wepy.code = res.code;
 //          console.log('login 获取到的数据: ');
 //          console.log(res);
-////              获取登录code成功
+// //              获取登录code成功
 //          if (res.code) {
 //            wepy.getSetting({
 //              success: function (option) {
@@ -142,12 +142,12 @@
 //                })
 //              }
 //            })
-////              NetworkManagerAuth.getUserInfo()
-////                .then(data => {
-////                  getApp().globalData.userInfo = data;
-////                }, err => {
-////                  console.log(err);
-////                })
+// //              NetworkManagerAuth.getUserInfo()
+// //                .then(data => {
+// //                  getApp().globalData.userInfo = data;
+// //                }, err => {
+// //                  console.log(err);
+// //                })
 //          } else {
 //            console.log('登录失败！' + res.errMsg)
 //          }
