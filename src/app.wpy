@@ -90,70 +90,47 @@
       }
     }
 
-    globalData = {
-//      userInfo: {userId: 4},
-      hasLogin: false,
-      authToken: 'Basic bmItc2VydmljZTpQSUFPaGFvMTkxQA=='
-//      userInfo: {
-//        'openId': 'oMBXg1FVVt1l1mOdeXqc-5wKjwE4',
-//        'nickName': '鞋生',
-//        'headImg': 'http://thirdwx.qlogo.cn/mmopen/oriamiaebV7gib8PE1nf32Wwrkbk17BfnbBADsvl8210z4ZVyQ1iaLRwdewG0mtm8sw4nX4OqgVMpNORb3aBt9libpyT3h7icsb9B6/132'}
-    }
-
     constructor () {
       super()
       this.use('requestfix')
     }
 
     onLaunch(options) {
+        const that = this;
       this.testAsync()
-//      wepy.getSystemInfo({
-//        success: function (object) {
-//          console.log(object);
+//      if (1) {
+//       let userInfo = {
+//          'openId': 'oMBXg1KfQX3OSxnHrIlTMlHTWjA4',
+//          'nickName': 'ZHXXHZ',
+//          'headImg': 'http://thirdwx.qlogo.cn/mmopen/ajNVdqHZLLDCHLQcYMYHyIEJzrp1FRiaq54gzdyoAsbc2vk5gprMvMzm4B2icJBs1tFpk5qsF89eBicS59Z2SQbSw/132',
+//          'mobile': '15300928006'
 //        }
-//      })
-//      wepy.login({
-//        success: (res) => {
-//          wepy.code = res.code;
-//          console.log('login 获取到的数据: ');
-//          console.log(res);
-////              获取登录code成功
-//          if (res.code) {
-//            wepy.getSetting({
-//              success: function (option) {
-//                console.log('getSetting 获取到的数据: ');
-//                console.log(option);
-//              }
-//            });
-//            wepy.getUserInfo({
-//              withCredentials: true,
-//              success: function (options) {
-//                console.log('getUserInfo 获取到的数据: ' + options);
-//                console.log(options);
-//                NetworkManagerAuth.miniprogramCode2Session(res.code).then(data => {
-//                  console.log(data);
-//                  NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
-//                    console.log(data);
-//                  }, error => {
-//                    console.log(error);
-//                  })
-//                }, error => {
-//                  console.log(error);
+//        store.dispatch({
+//          type: UPDATE_USER_INFO,
+//          userInfo: userInfo
+//        })
+//          return
+//      }
+      wepy.login({
+        success: (res) => {
+//              获取登录code成功
+            if (res.code) {
+                that.getUserInfo()
+//              NetworkManagerAuth.getUserInfo()
+//                .then(data => {
+//                  getApp().globalData.userInfo = data;
+//                }, err => {
+//                  console.log(err);
 //                })
-//              }
-//            })
-////              NetworkManagerAuth.getUserInfo()
-////                .then(data => {
-////                  getApp().globalData.userInfo = data;
-////                }, err => {
-////                  console.log(err);
-////                })
 //          } else {
 //            console.log('登录失败！' + res.errMsg)
 //          }
-//        }
-//      })
+            }
+        }
+      })
     }
+
+
 
     sleep (s) {
       return new Promise((resolve, reject) => {
@@ -164,25 +141,35 @@
     }
 
     async testAsync () {
-      const data = await this.sleep(3);
-      console.log(data)
+//      const data = await this.sleep(3);
     }
 
-    getUserInfo(cb) {
-      const that = this
-      if (this.globalData.userInfo) {
-        return this.globalData.userInfo
-      }
-
+    getUserInfo() {
+//      const that = this;
       wepy.getUserInfo({
+        withCredentials: true,
         success (res) {
-          that.globalData.userInfo = res.userInfo
-          cb && cb(res.userInfo)
+//          that.testUnionId(code, res);
+          console.log('getUserInfo 获取到的数据: ' + res);
+          console.log(res);
           store.dispatch({
             type: UPDATE_USER_INFO,
             userInfo: res.userInfo
           });
         }
+      })
+    }
+
+    testUnionId(code, options) {
+      NetworkManagerAuth.miniprogramCode2Session(code).then(data => {
+        console.log(data);
+        NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
+          console.log(data);
+        }, error => {
+          console.log(error);
+        })
+      }, error => {
+        console.log(error);
       })
     }
   }

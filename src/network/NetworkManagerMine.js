@@ -1,25 +1,24 @@
 import NetworkManager from './NetworkManager';
-import wepy from 'wepy'
 
 export default class NetworkManagerMine extends NetworkManager{
   static fetchAddressList() {
-    return this.instance().POST('/account/addresses', {userId: wepy.userInfo.userId});
+    return this.instance().POST('/account/addresses');
   }
 
   static setDefaultAddress(id) {
-    return this.instance().POST('/account/setDefaultAddress', {'userId': wepy.userInfo.userId, ...id});
+    return this.instance().POST('/account/setDefaultAddress', {id});
   }
 
   static getDefaultAddress() {
-    return this.instance().POST('/account/getDefaultAddress', {'userId': wepy.userInfo.userId});
+    return this.instance().POST('/account/getDefaultAddress');
   }
 
   static saveAddress(params) {
-    return this.instance().POST('/account/saveAddress', {'userId': wepy.userInfo.userId, ...params}, {'Content-Type': 'application/json'})
+    return this.instance().POST('/account/saveAddress', params, {'Content-Type': 'application/json'})
   }
 
   static deleteAddress(id) {
-    return this.instance().POST('/account/deleteAddress', {'userId': wepy.userInfo.userId, ...id})
+    return this.instance().POST('/account/deleteAddress', {id})
   }
   static fetchProvince() {
     return this.instance().POST('/area/provinces');

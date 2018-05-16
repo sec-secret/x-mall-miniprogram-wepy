@@ -1,5 +1,6 @@
 <style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
+
   .orders-titles {
     position: fixed;
     left: 0;
@@ -25,6 +26,7 @@
       }
     }
   }
+
   .orders-area {
     padding-top: 80rpx;
     height: 100vh;
@@ -116,7 +118,8 @@
   <view class="orders-titles">
     <repeat for="{{typeList}}" item="i">
       <view :class="{selected: type === i.type}"
-            @tap="onClickType({{i.type}})">{{i.name}}</view>
+            @tap="onClickType({{i.type}})">{{i.name}}
+      </view>
     </repeat>
   </view>
   <scroll-view class="orders-area"
@@ -137,6 +140,7 @@
   import wepy from 'wepy'
   import {connect} from 'wepy-redux'
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
+  import NetworkManagerPayment from '../../network/NetworkManagerPayment'
   import OrderCell from '@/components/widget/order-cell';
 
   @connect({
@@ -231,10 +235,36 @@
           })
       },
       onClickPay(order) {
+        wepy.showNavigationBarLoading();
+        NetworkManagerPayment.applyPay(order.orderId, 'wxmini')
+          .then(data => {
+            wepy.hideNavigationBarLoading();
+            wepy.requestPayment({
+              'timeStamp': data.timeStamp,
+              'nonceStr': data.nonceStr,
+              'package': data.packages,
+              'paySign': data.paySign,
+              'signType': 'MD5',
+//            'signType': data.signType,
+              'success': (res) => {
+                console.log(res);
+                this.fetchOrders();
+              },
+              'fail': (res) => {
+                console.log(res);
+                this.fetchOrders();
+              }
+            })
+          }, err => {
+            wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+          })
       }
     }
 
     onShow() {
+      this.page = 1;
+      this.$apply();
       this.fetchOrders();
     }
 

@@ -1,7 +1,30 @@
 <style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
-  .cart{
+
+  .cart {
     background-color: $xg-c-bg;
+    .empty-area {
+      margin-top: 300rpx;
+      @include flex-y-middle();
+      .icon {
+        width: 200rpx;
+      }
+      view {
+        width: 400rpx;
+        height: 70rpx;
+        line-height: 70rpx;
+        text-align: center;
+        margin-top: 30rpx;
+        color: #fff;
+        font-size: $xg-size-5;
+        background-color: $xg-c-red;
+      }
+      text {
+        margin-top: 30rpx;
+        color: #999;
+        font-size: $xg-size-6;
+      }
+    }
     .cart-area {
       .tips {
         @include flex-x-middle();
@@ -64,9 +87,9 @@
                 @include ellipsis(2);
                 font-size: $xg-size-2;
                 color: #999;
-                margin-top: .1rem;
+                margin-top: 10rpx;
                 label {
-                  margin-right: .1rem;
+                  margin-right: 10rpx;
                 }
               }
               .info {
@@ -101,7 +124,7 @@
                   .count-button:first-of-type {
                     border-radius: 4rpx 0 0 4rpx;
                     border-right: 0;
-                    border-left-width: 1rpx;
+                    border-left-width: 1 rpx;
                   }
                   .count-number {
                     @include flex(none);
@@ -121,7 +144,6 @@
         }
       }
     }
-
     .pay-area {
       @include flex-x-middle();
       background: #fff;
@@ -133,8 +155,9 @@
       text-align: center;
       font-size: $xg-size-4;
       color: #999;
+      z-index: 10;
       .select {
-        padding-left: 30rpx;
+        padding-left: 30 rpx;
         .select-icon {
           width: 34rpx;
           height: 34rpx;
@@ -171,11 +194,17 @@
 </style>
 <template>
   <view class="cart">
-    <view class="cart-area top-seg">
+    <view wx:if="{{goodsList.length === 0}}" class="empty-area">
+      <image class="icon" src="./img/dagouwuche.png" mode="widthFix">
+      </image>
+      <view wx:if="{{!isLogin}}" @tap="onClickLogin">登录</view>
+      <text wx:else>去添加点什么吧</text>
+    </view>
+    <view wx:else class="cart-area top-seg">
       <view class="tips">
         <repeat for="{{tips}}">
           <view>
-            <image src="./img/yuan.png" alt="">
+            <image src="./img/yuan.png">
             </image>
             <text>{{item}}</text>
           </view>
@@ -216,10 +245,12 @@
         <view wx:else>已选({{selectedCount}})</view>
       </view>
       <view class="amount">
-        合计:<text class="price">￥{{globalWxs.formatFenPrice(totalPrice)}}</text>
+        合计:
+        <text class="price">￥{{globalWxs.formatFenPrice(totalPrice)}}</text>
       </view>
       <button class="pay {{selectedCount===0?'disabled':''}}"
-              @tap="onClickPay">下单</button>
+              @tap="onClickPay">下单
+      </button>
     </view>
   </view>
 </template>
@@ -259,6 +290,9 @@
     }
 
     computed = {
+      isLogin() {
+        return wepy.$instance.globalData.hasLogin;
+      },
       selectedCount(){
         return this.selectedIds.length;
       },
@@ -281,6 +315,11 @@
     }
 
     methods = {
+      onClickLogin() {
+        wepy.navigateTo({
+          url: '../mine/login'
+        })
+      },
       onClickGoodsSelected(goods){
         if (this.selectedIds.findIndex(id => {
             return id === goods.cartId;
@@ -471,32 +510,32 @@
           url: '../payment/payment?payInfo=' + payInfo
         })
       },
-      touchS:function(option){
+      touchS: function (option) {
         let e = option.event;
         // let index = option.index;
-        if (e.touches.length === 1){
+        if (e.touches.length === 1) {
           // 设置触摸起始点水平方向位置
           this.startX = e.touches[0].clientX;
           this.$apply();
         }
       },
-      touchM:function(option){
+      touchM: function (option) {
         let e = option.event;
         let index = option.index;
-        if (e.touches.length === 1){
+        if (e.touches.length === 1) {
           // 手指移动时水平方向位置
           let moveX = e.touches[0].clientX;
           // 手指起始点位置与移动期间的差值
           let disX = this.startX - moveX;
           let delBtnWidth = this.data.delBtnWidth;
           let txtStyle = '';
-          if (disX === 0 || disX < 0){
+          if (disX === 0 || disX < 0) {
             // 如果移动距离小于等于0，文本层位置不变
             txtStyle = 'left:0px';
-          } else if (disX > 0){
+          } else if (disX > 0) {
             // 移动距离大于0，文本层left值等于手指移动距离
             txtStyle = 'left:-' + disX + 'px';
-            if (disX >= delBtnWidth){
+            if (disX >= delBtnWidth) {
               // 控制手指移动距离最大值为删除按钮的宽度
               txtStyle = 'left:-' + delBtnWidth + 'px';
             }
@@ -506,10 +545,10 @@
           this.$apply();
         }
       },
-      touchE:function(option){
+      touchE: function (option) {
         let e = option.event;
         let index = option.index;
-        if (e.changedTouches.length === 1){
+        if (e.changedTouches.length === 1) {
           // 手指移动结束后水平位置
           let endX = e.changedTouches[0].clientX;
           // 触摸开始与结束，手指移动的距离
@@ -522,6 +561,7 @@
         }
       }
     }
+
     fetchGoodsList() {
       wepy.showNavigationBarLoading();
       NetworkManagerCart.fetchCartGoods().then(data => {

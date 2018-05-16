@@ -11,7 +11,7 @@
         width: 100%;
         height: 100%;
         position: relative;
-        z-index:  -1;
+        z-index: -1;
       }
       .mine-info {
         position: absolute;
@@ -38,7 +38,7 @@
           color: $c-white;
           width: 200rpx;
           height: 60rpx;
-          line-height: 60rpx;
+          line-height: 60 rpx;
           text-align: center;
         }
       }
@@ -69,10 +69,10 @@
     <view class="mine-area">
       <image class="mine-back" src="./img/temp_mine-back.png" mode="widthFix">
       </image>
-      <view wx:if="{{hasLogin}}" class="mine-info">
-        <image class="icon" src="{{headImg}}" mode="widthFix">
+      <view wx:if="{{isLogin}}" class="mine-info">
+        <image class="icon" src="{{userInfo.headImg}}" mode="widthFix">
         </image>
-        <view class="name">{{nickName}}</view>
+        <view class="name">{{userInfo.nickName}}</view>
       </view>
       <view wx:else class="mine-info">
         <image class="icon" src="./img/touxiang.png" mode="widthFix">
@@ -96,12 +96,22 @@
 
 <script>
   import wepy from 'wepy'
-  // import {connect} from 'wepy-redux'
+  import { getStore, connect } from 'wepy-redux'
+
+  @connect({
+    isLogin(state) {
+      return state.user.hasAuthor;
+    },
+    userInfo(state) {
+      return state.user.userInfo;
+    }
+  })
 
   export default class Mine extends wepy.page {
     config = {
       navigationBarTitleText: '我的'
     }
+
     components = {}
 
     data = {
@@ -120,38 +130,32 @@
         }]
     }
 
-    computed = {
-        hasLogin() {
-            return wepy.$instance.globalData.hasLogin;
-        },
-      nickName() {
-        return wepy.$instance.globalData.userInfo.nickName;
-      },
-      headImg() {
-        return wepy.$instance.globalData.userInfo.headImg;
-      }
-    }
+    computed = {}
 
     methods = {
       onClickItem(index) {
-          if (!wepy.$instance.globalData.hasLogin) {
-            wepy.showToast({title: '敬请期待', icon: 'none'})
-            return
-          }
-         let pathList = ['./order-list', './address-list', ''];
-         wepy.navigateTo({
-             url: pathList[index]
-         })
+        if (!this.isLogin) {
+          wepy.showToast({title: '敬请期待', icon: 'none'})
+          return
+        }
+        let pathList = ['./order-list', './address-list', ''];
+        wepy.navigateTo({
+          url: pathList[index]
+        })
       },
       onClickLogin() {
-        wepy.showToast({title: '敬请期待', icon: 'none'})
-//        wepy.navigateTo({
-//          url: './login'
-//        })
+        wepy.navigateTo({
+          url: './login'
+        })
       }
     }
 
     onLoad() {
+    }
+
+    onShow() {
+      console.log(getStore().getState());
+      console.log(this.userInfo);
     }
   }
 </script>

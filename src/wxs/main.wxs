@@ -1,2 +1,19 @@
+var _ = {
+  isEmpty: function (obj) {
+    return JSON.stringify(obj) === '{}';
+  }
+}
 module.exports = {
+  //    判断已选择其中几项时，其余规格是否可选
+  checkIsNot: function (targetGoodsList, selectedList, item, dim, isFirst, nowDim) {
+    return item.skuIds.every(function (x) {
+        return !targetGoodsList.indexOf(x) >= 0;
+      }) && _.isEmpty(selectedList[dim]) && !isFirst && nowDim !== dim && !selectedList.every(function (item) {
+        return _.isEmpty(item)
+      });
+    return false
+  },
+  isSelected: function (selectedList, item, index, skuId, isFirst) {
+    return item.skuIds === selectedList[index].skuIds || (item.skuIds.indexOf(skuId) >= 0 && isFirst);
+  }
 }

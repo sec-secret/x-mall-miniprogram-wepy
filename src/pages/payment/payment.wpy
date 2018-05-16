@@ -1,5 +1,6 @@
 <style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index';
+
   page {
     padding-bottom: 108rpx;
     .pay-area {
@@ -196,7 +197,8 @@
         <view wx:if="{{defaultAddress.mobile}}" class="mobile">{{globalWxs.formatMobile(defaultAddress.mobile)}}</view>
         <view wx:if="{{address.isDefault === 1}}" class="default">默认</view>
       </view>
-      <view class="second-line address">{{defaultAddress.provinceName + defaultAddress.cityName + defaultAddress.countyName +
+      <view class="second-line address">{{defaultAddress.provinceName + defaultAddress.cityName +
+        defaultAddress.countyName +
         defaultAddress.detailAddress}}
       </view>
     </view>
@@ -224,7 +226,7 @@
 
   <view class="goods-area">
     <repeat for="{{goodsList}}" item="goods">
-      <view class="goods-item" @click="onClickGoods(goods)" >
+      <view class="goods-item" @click="onClickGoods(goods)">
         <image class="icon" src="{{goods.goodsImg}}"/>
         <view class="info">
           <view class="name">
@@ -243,13 +245,16 @@
   </view>
   <view class="rule-area"
         @tap="onClickAgree">
-    <image wx:if="{{isAgree}}" src="./img/gouxuan.png" />
-    <image wx:else src="./img/meixuan.png" />
-    <view>我已同意 <text class="rule">《小呱GO物服务协议》</text></view>
+    <image wx:if="{{isAgree}}" src="./img/gouxuan.png"/>
+    <image wx:else src="./img/meixuan.png"/>
+    <view>我已同意
+      <text class="rule">《小呱GO物服务协议》</text>
+    </view>
   </view>
   <view class="pay-area">
     <view class="amount">
-      实付：<text class="price">￥{{globalWxs.formatFenPrice(payTotal)}}</text>
+      实付：
+      <text class="price">￥{{globalWxs.formatFenPrice(payTotal)}}</text>
     </view>
     <view class="pay" @tap="onClickPay">去付款</view>
   </view>
@@ -260,6 +265,7 @@
   import NetworkManagerCart from '../../network/NetworkManagerCart';
   import NetworkManagerMine from '../../network/NetworkManagerMine';
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
+  import NetworkManagerPayment from '../../network/NetworkManagerPayment'
   // import UnitTool from '../../tool/UnitTool';
   import globalWxs from '../../wxs/global.wxs'
   export default class Cart extends wepy.page {
@@ -267,8 +273,7 @@
       navigationBarTitleText: '确认订单'
     }
 
-    components = {
-    }
+    components = {}
 
     wxs = {
       globalWxs
@@ -281,7 +286,9 @@
       isAgree: true,
       defaultAddress: {},
       hasAddress: false,
-      noLimit: true
+      noLimit: true,
+      payWay: 'mini',
+      orderId: ''
     }
 
     computed = {
@@ -330,9 +337,9 @@
             wepy.hideNavigationBarLoading();
 //          删除对应购物车
             this.deleteCat(catData);
+            this.orderId = data;
 //          调支付
-            this.goPay();
-//            this.goPay(this.userId, String(data), this.openId, this.defaultWay.id);
+            this.goPay(this.orderId, 'wxmini');
           }, err => {
             wepy.hideNavigationBarLoading();
             wepy.showToast({title: err.message, icon: 'none'})
@@ -340,14 +347,37 @@
       }
     }
 
-    onShow() {
-      this.getDefaultAddress();
-    }
-
-    onLoad(option) {
-      this.payInfo = JSON.parse(option.payInfo);
-      this.goodsList = this.payInfo.selectedList;
-      this.$apply();
+    goPay(orderId, payWay) {
+      wepy.showNavigationBarLoading();
+      NetworkManagerPayment.applyPay(orderId, payWay)
+        .then(data => {
+          wepy.hideNavigationBarLoading();
+          wepy.requestPayment({
+            'timeStamp': data.timeStamp,
+            'nonceStr': data.nonceStr,
+            'package': data.packages,
+            'paySign': data.paySign,
+            'signType': 'MD5',
+//          'signType': data.signType,
+            'success': (res) => {
+              console.log(res);
+              let payInfo = JSON.stringify({address: this.defaultAddress, payTotal: this.payTotal})
+              wepy.navigateTo({
+                url: `./payment-result?orderId=${orderId}&payInfo=${payInfo}&payResult=success`
+              })
+            },
+            'fail': (res) => {
+              console.log(res);
+              let payInfo = JSON.stringify({address: this.defaultAddress, payTotal: this.payTotal})
+              wepy.navigateTo({
+                url: `./payment-result?orderId=${orderId}&payInfo=${payInfo}&payResult=fail`
+              })
+            }
+          })
+        }, err => {
+          wepy.hideNavigationBarLoading();
+          wepy.showToast({title: err.message, icon: 'none'})
+        })
     }
 
     getDefaultAddress() {
@@ -428,8 +458,14 @@
         })
     }
 
-    goPay() {
-      wepy.showToast({title: '下单成功去支付', icon: 'success'})
+    onShow() {
+      this.getDefaultAddress();
+    }
+
+    onLoad(option) {
+      this.payInfo = JSON.parse(option.payInfo);
+      this.goodsList = this.payInfo.selectedList;
+      this.$apply();
     }
   }
 </script>

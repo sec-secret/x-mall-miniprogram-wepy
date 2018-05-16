@@ -1,8 +1,8 @@
-import NetworkManager, {BASE_URL} from './NetworkManager'
+import NetworkManager, {AUTH_BASE_URL} from './NetworkManager'
 
-export default class JNetworkMallAuth extends NetworkManager{
-  static getUserInfo(){
-    return this.instance().freedomPOST(BASE_URL, 'login/getUserInfo', {});
+export default class JNetworkMallAuth extends NetworkManager {
+  static getUserInfo(token) {
+    return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getUserInfo', {}, {'Authorization': token}, {}, true);
   }
 
   // static userLogin(mobile, verifyCode, verifyKey, openId, nickName) {
@@ -10,19 +10,28 @@ export default class JNetworkMallAuth extends NetworkManager{
   // }
 
   static userLogin(authType, username, password = '', openId = '', nickName = '', mobile = '', verifyKey = '') {
-    return this.instance().freedomPOST(BASE_URL, 'oauth/token', {grant_type: 'password', authType, username, password, openId, nickName, mobile, verifyKey}, {}, {})
+    return this.instance().freedomPOST(AUTH_BASE_URL, '/oauth/token', {
+      grant_type: 'password',
+      authType,
+      username,
+      password,
+      openId,
+      nickName,
+      mobile,
+      verifyKey
+    }, {'Authorization': 'Basic bmItc2VydmljZTpQSUFPaGFvMTkxQA=='}, {})
   }
 
-  static getVerifyCode(mobile, openId) {
-    return this.instance().freedomPOST(BASE_URL, 'login/getVerifyCode', {mobile, openId})
+  static getVerifyCode(mobile) {
+    return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getVerifyCode', {mobile}, {}, {}, true)
   }
 
-  static miniprogramCode2Session(code){
-    return this.instance().freedomPOST(BASE_URL, '/wxmini/miniUserInfoByCode', {code}, {}, {}, true)
+  static miniprogramCode2Session(code) {
+    return this.instance().freedomPOST(AUTH_BASE_URL, '/wxmini/miniUserInfoByCode', {code}, {}, {}, true)
   }
 
-  static miniprogramDecrypt(sessionKey, encryptedData, iv){
-    return this.instance().freedomPOST(BASE_URL, '/wxmini/miniDecrypt', {
+  static miniprogramDecrypt(sessionKey, encryptedData, iv) {
+    return this.instance().freedomPOST(AUTH_BASE_URL, '/wxmini/miniDecrypt', {
       session_key: sessionKey,
       encryptedData: encryptedData,
       iv: iv

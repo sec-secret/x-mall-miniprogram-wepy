@@ -45,6 +45,7 @@
       }
     }
   }
+
   .goods-info {
     margin-top: 20rpx;
     padding-left: 30rpx;
@@ -65,7 +66,7 @@
         @include flex-y-center();
         .name {
           @include ellipsis();
-          margin-bottom:10rpx;
+          margin-bottom: 10rpx;
           font-size: $xg-size-4;
         }
         .dim {
@@ -85,12 +86,14 @@
       }
     }
   }
+
   .orderTrack {
     padding: 30rpx;
     background-color: $xg-c-white;
     margin-top: 20rpx;
     font-size: $xg-size-4;
   }
+
   .pay-way-area {
     padding: 30rpx;
     background-color: #fff;
@@ -107,6 +110,7 @@
       }
     }
   }
+
   .order-info-area {
     padding: 30rpx;
     background-color: #fff;
@@ -125,6 +129,7 @@
       margin-bottom: 10rpx;
     }
   }
+
   .total-area {
     padding: 30rpx;
     background-color: #fff;
@@ -139,6 +144,7 @@
       }
     }
   }
+
   .pay-info {
     position: fixed;
     left: 0;
@@ -206,16 +212,34 @@
     </repeat>
   </view>
   <view class="order-info-area">
-    <view class="create-time"><text>下单时间：</text>{{orderInfo.order.createdTime}}</view>
-    <view><text>订单编号：</text>{{orderInfo.order.orderId}}</view>
+    <view class="create-time">
+      <text>下单时间：</text>
+      {{orderInfo.order.createdTime}}
+    </view>
+    <view>
+      <text>订单编号：</text>
+      {{orderInfo.order.orderId}}
+    </view>
   </view>
   <view class="pay-way-area">
-    <view><text>支付方式：</text>微信</view>
-    <view><text>商品合计：</text>￥{{mineWxs.formatFenPrice(orderInfo.order.nbAmount)}}</view>
-    <view><text>运费：</text>￥{{mineWxs.formatFenPrice(orderInfo.order.freightAmount)}}</view>
+    <view>
+      <text>支付方式：</text>
+      微信
+    </view>
+    <view>
+      <text>商品合计：</text>
+      ￥{{mineWxs.formatFenPrice(orderInfo.order.nbAmount)}}
+    </view>
+    <view>
+      <text>运费：</text>
+      ￥{{mineWxs.formatFenPrice(orderInfo.order.freightAmount)}}
+    </view>
   </view>
   <view class="total-area">
-    <view><text>实付：</text>￥{{mineWxs.formatFenPrice(payTotal)}}</view>
+    <view>
+      <text>实付：</text>
+      ￥{{mineWxs.formatFenPrice(payTotal)}}
+    </view>
   </view>
   <view class="pay-info">
     <view wx:if="{{mineWxs.status2CN(orderInfo.order.status) === '未支付'}}">
@@ -227,8 +251,9 @@
 
 <script>
   import wepy from 'wepy'
-  import {connect} from 'wepy-redux'
+  import { connect } from 'wepy-redux'
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
+  import NetworkManagerPayment from '../../network/NetworkManagerPayment';
 
   @connect({
     userInfo (state) {
@@ -269,7 +294,31 @@
           })
       },
       onClickPay() {
-        wepy.showToast({title: 'TODO', icon: 'none'})
+        wepy.showNavigationBarLoading();
+        NetworkManagerPayment.applyPay(this.orderInfo.orderId, 'wxmini')
+          .then(data => {
+            wepy.hideNavigationBarLoading();
+            wepy.requestPayment({
+              'timeStamp': data.timeStamp,
+              'nonceStr': data.nonceStr,
+              'package': data.packages,
+              'paySign': data.paySign,
+              'signType': 'MD5',
+//            'signType': data.signType,
+              'success': (res) => {
+                console.log(res);
+                wepy.switchTab({
+                  url: '../mine/mine'
+                })
+              },
+              'fail': (res) => {
+                console.log(res);
+              }
+            })
+          }, err => {
+            wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+          })
       }
     }
 

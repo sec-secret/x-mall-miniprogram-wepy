@@ -1,6 +1,8 @@
 import wepy from 'wepy'
+import { getStore } from 'wepy-redux'
 
-export const BASE_URL = 'https://www.xiaoguostore.com/b-nb-mall';
+export const MALL_BASE_URL = 'http://mall.beta.zookainet.com/gateway/mall';
+export const AUTH_BASE_URL = 'http://mall.beta.zookainet.com/gateway/auth'
 export default class NetworkManager{
   static _instance = null
   timeout = 10 * 1000;
@@ -37,17 +39,19 @@ export default class NetworkManager{
   }
 
   fetchRequest(method, baseUrl, url, parameters, headers, otherObject, isStandard){
+    let store = getStore();
     return new Promise((resolve, reject) => {
       wepy.request({
         method,
         url: baseUrl + url,
         data: {
+          userId: store.getState().user.userId,
           ...parameters
         },
         header: {
           'Accept': 'application/json',
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': wepy.$instance.globalData.authToken,
+          'content-type': 'application/x-www-form-urlencoded',
+          'Authorization': store.getState().user.token,
           ...headers
         },
         success: function(res) {
@@ -80,7 +84,7 @@ export default class NetworkManager{
   }
 
   POST(url, parameters, headers, otherObject){
-    return this.freedomPOST(BASE_URL, url, {
+    return this.freedomPOST(MALL_BASE_URL, url, {
         ...this.getCarryData(),
         ...parameters
       },
@@ -94,7 +98,7 @@ export default class NetworkManager{
   }
 
   GET(url, parameters, headers, otherObject){
-    return this.freedomGET(BASE_URL, url, {
+    return this.freedomGET(MALL_BASE_URL, url, {
         ...this.getCarryData(),
         ...parameters
       },

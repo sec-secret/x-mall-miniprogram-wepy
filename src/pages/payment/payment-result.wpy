@@ -1,5 +1,6 @@
 <style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
+
   .result {
     @include flex-y-middle();
     background-color: #fff;
@@ -45,6 +46,7 @@
       }
     }
   }
+
   .pay-info {
     margin-top: 20rpx;
     padding: 30rpx;
@@ -71,10 +73,12 @@
   <view class="result">
     <image wx:if="{{payResult.title === '支付成功'}}"
            src="./img/zhifuchenggong.png"
-           mode="widthFix"/>
+           mode="widthFix">
+    </image>
     <image wx:else
            src="./img/zhifushibai.png"
-           mode="widthFix"/>
+           mode="widthFix">
+    </image>
     <text class="title">{{payResult.title}}</text>
     <text class="text">{{payResult.text}}</text>
     <view class="btn-group">
@@ -89,29 +93,31 @@
   </view>
   <view class="pay-info">
     <view>
-      <text class="name">{{payInfo.address.name}}</text><text class="mobile" wx:if="{{payInfo.address}}">{{paymentWxs.formatMobile(payInfo.address.mobile)}}</text>
+      <text class="name">{{payInfo.address.name}}</text>
+      <text class="mobile" wx:if="{{payInfo.address}}">{{paymentWxs.formatMobile(payInfo.address.mobile)}}</text>
     </view>
     <view class="address">{{payInfo.address.provinceName + payInfo.address.cityName + payInfo.address.countyName +
       payInfo.address.detailAddress}}
     </view>
-    <view class="total">实付：<text>￥{{paymentWxs.formatFenPrice(payInfo.payTotal)}}</text></view>
+    <view class="total">实付：
+      <text>￥{{paymentWxs.formatFenPrice(payInfo.payTotal)}}</text>
+    </view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  // import NetworkManagerCart from '../../network/NetworkManagerCart';
+  import NetworkManagerPayment from '../../network/NetworkManagerPayment';
   // import UnitTool from '../../tool/UnitTool';
-  export default class Payment extends wepy.page {
+  export default class PaymentResult extends wepy.page {
     config = {
       navigationBarTitleText: '支付结果'
     }
 
-    components = {
-    }
+    components = {}
 
     data = {
-      payInfo:{},
+      payInfo: {},
       orderId: '',
       result: ''
     }
@@ -149,16 +155,39 @@
         })
       },
       onClickPay() {
-        wepy.showToast({
-          title: '支付'
-        })
+        wepy.showNavigationBarLoading();
+        NetworkManagerPayment.applyPay(this.orderId, 'wxmini')
+          .then(data => {
+            wepy.hideNavigationBarLoading();
+            wepy.requestPayment({
+              'timeStamp': data.timeStamp,
+              'nonceStr': data.nonceStr,
+              'package': data.packages,
+              'paySign': data.paySign,
+              'signType': 'MD5',
+//      'signType': data.signType,
+              'success': (res) => {
+                console.log(res);
+                wepy.switchTab({
+                  url: '../mine/mine'
+                })
+              },
+              'fail': (res) => {
+                console.log(res);
+              }
+            })
+          }, err => {
+            wepy.hideNavigationBarLoading();
+            wepy.showToast({title: err.message, icon: 'none'})
+          })
       }
     }
 
     onLoad(option) {
       this.payInfo = JSON.parse('{"address":{"id":43,"city":2813,"county":51976,"isDefault":1,"priority":100000,"province":2,"town":0,"userId":4,"detailAddress":"远中产业园4期1号楼502","mobile":"15300928006","name":"张浩轩","provinceName":"上海","cityName":"徐汇区","countyName":"城区"},"payTotal":48902}');
-      this.result = 'fail';
-      this.orderId = '2018042614015395112288';
+      this.payInfo = JSON.parse(option.orderInfo)
+      this.result = option.payResult;
+      this.orderId = option.orderId;
       this.$apply();
     }
   }

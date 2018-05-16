@@ -1,5 +1,6 @@
 <style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
+
   page {
     @include flex-y-middle();
     input {
@@ -41,7 +42,7 @@
           padding: 0 10rpx;
         }
       }
-      .btn{
+      .btn {
         width: 180rpx;
         font-size: $xg-size-5;
         display: inline-block;
@@ -86,15 +87,20 @@
 
 <script>
   import wepy from 'wepy'
-  import {connect} from 'wepy-redux'
+  import {getStore, connect} from 'wepy-redux'
+  import {UPDATE_USER_INFO, UPDATE_AUTHOR_INFO} from '../../store/types/user'
   import StringTool from '../../tool/StringTool'
   import NetworkManagerAuth from '../../network/NetworkManagerAuth'
 
   @connect({
-    userInfo (state) {
+    authorData(state) {
+      return state.user.authorData
+    },
+    userInfo(state) {
       return state.user.userInfo
     }
   })
+
   export default class Login extends wepy.page {
     config = {
       navigationBarTitleText: '登录'
@@ -133,17 +139,20 @@
         }
         wepy.showNavigationBarLoading();
         NetworkManagerAuth.userLogin('mobile', this.mobile, this.verifyCode, this.userInfo.openId, this.userInfo.nickName, this.mobile, this.verifyKey)
-          .then(data => {
-            wepy.$instance.globalData.authToken = 'Bearer ' + data.access_token;
-            wepy.$instance.globalData.authData = data;
-            NetworkManagerAuth.getUserInfo()
+          .then(authData => {
+            const store = getStore();
+            const authorData = {
+              author: authData,
+              hasAuthor: true,
+              token: 'Bearer ' + authData.access_token
+            }
+            store.dispatch({type: UPDATE_AUTHOR_INFO, ...authorData});
+            NetworkManagerAuth.getUserInfo(authorData.token)
               .then(data => {
-                wepy.hideNavigationBarLoading();
-                wepy.$instance.globalData.userInfo = data;
-                wepy.$instance.globalData.hasLogin = data;
-                wepy.navigateBack()
+                store.dispatch({type: UPDATE_USER_INFO, userInfo: data});
+                wepy.navigateBack();
               }, err => {
-                wepy.showToast({title: err.message, icon: 'none'})
+                wepy.showToast({title: err.message, icon: 'none'});
                 wepy.hideNavigationBarLoading();
               })
           }, err => {
@@ -157,10 +166,10 @@
           return
         }
         wepy.showNavigationBarLoading();
-        NetworkManagerAuth.getVerifyCode(this.mobile, this.userInfo.openId)
+        NetworkManagerAuth.getVerifyCode(this.mobile)
           .then(data => {
             wepy.hideNavigationBarLoading();
-            this.verifyKey = data.data;
+            this.verifyKey = data;
             this.showDJS = true;
             this.$apply();
             this.djs = setInterval(() => {
@@ -182,7 +191,6 @@
     }
 
     onLoad() {
-      this.userInfo = wepy.$instance.globalData.userInfo;
       this.$apply();
     }
 
