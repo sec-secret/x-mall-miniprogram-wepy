@@ -135,7 +135,9 @@
     methods = {
       onClickItem(index) {
         if (!this.isLogin) {
-          wepy.showToast({title: '敬请期待', icon: 'none'})
+          wepy.navigateTo({
+            url: './login'
+          })
           return
         }
         let pathList = ['./order-list', './address-list', ''];
