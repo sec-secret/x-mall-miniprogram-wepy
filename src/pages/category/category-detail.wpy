@@ -127,6 +127,7 @@
 
     methods = {
       actionClickCategory(cate, index) {
+        this.getBottom = false;
         this.catId = cate.catId;
         this.selectedIndex = index;
         this.lastKey = '';

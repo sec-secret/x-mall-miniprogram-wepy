@@ -30,8 +30,8 @@ export default class NetworkManagerGoods extends NetworkManager{
     return this.instance().POST('/goods/skuImage', {skuId});
   }
 
-  static goodsAddToCart() {
-    return this.instance().POST('/order/addToShoppingCart', {'Content-Type': 'application/json'})
+  static goodsAddToCart(req) {
+    return this.instance().POST('/order/addToShoppingCart', req, {'Content-Type': 'application/json'})
     // return this.instance().POST('/order/addToShoppingCart', {'userId': GlobalConstant.store.state.userModule.user.userId, ...params})
   }
 }

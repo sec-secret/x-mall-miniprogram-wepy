@@ -124,7 +124,7 @@
                   .count-button:first-of-type {
                     border-radius: 4rpx 0 0 4rpx;
                     border-right: 0;
-                    border-left-width: 1 rpx;
+                    border-left-width: 1rpx;
                   }
                   .count-number {
                     @include flex(none);
@@ -157,7 +157,7 @@
       color: #999;
       z-index: 10;
       .select {
-        padding-left: 30 rpx;
+        padding-left: 30rpx;
         .select-icon {
           width: 34rpx;
           height: 34rpx;

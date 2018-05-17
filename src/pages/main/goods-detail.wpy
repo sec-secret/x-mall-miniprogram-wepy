@@ -50,6 +50,12 @@
           color: $xg-c-red;
           font-weight: bold;
         }
+        .leader-price {
+          font-size: $xg-size-5;
+          text-decoration: line-through;
+          color: #999;
+          margin-left: 20rpx;
+        }
         .fenqi {
           color: #999;
           padding: 0 10rpx;
@@ -358,6 +364,8 @@
       <label class="name mall-product-name">{{goods.name}}</label>
       <view class="price flex-middle-x">
         <label class="new">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</label>
+        <label wx:if="{{goods.wzPrice}}" class="leader-price">￥{{globalWxs.formatFenPrice(goods.wzPrice)}}</label>
+        <label wx:if="{{goods.jdPrice}}" class="leader-price">￥{{globalWxs.formatFenPrice(goods.jdPrice)}}</label>
         <!--<view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>-->
       </view>
     </view>

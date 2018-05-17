@@ -61,8 +61,14 @@ export default class NetworkManager{
               resolve(responseJson.data);
             } else {
               let errorCode = responseJson.errorCode;
-              if (errorCode === 10022) {
-                reject(NetworkManager.notLoginError(10022));
+              if (errorCode === 10002) {
+                let authorData = {
+                  author: {},
+                  hasAuthor: false,
+                  token: ''
+                };
+                store.dispatch({type: 'UPDATE_AUTHOR_INFO', ...authorData});
+                reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
               } else {
                 reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
               }

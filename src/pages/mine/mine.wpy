@@ -155,7 +155,6 @@
 
     onShow() {
       console.log(getStore().getState());
-      console.log(this.userInfo);
     }
   }
 </script>
