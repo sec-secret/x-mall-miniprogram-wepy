@@ -100,7 +100,7 @@
       payInfo.address.detailAddress}}
     </view>
     <view class="total">实付：
-      <text>￥{{paymentWxs.formatFenPrice(payInfo.payTotal)}}</text>
+      <text>￥{{globalWxs.formatFenPrice(payInfo.payTotal)}}</text>
     </view>
   </view>
 </template>
@@ -108,10 +108,15 @@
 <script>
   import wepy from 'wepy'
   import NetworkManagerPayment from '../../network/NetworkManagerPayment';
+  import globalWxs from '../../wxs/global.wxs'
   // import UnitTool from '../../tool/UnitTool';
   export default class PaymentResult extends wepy.page {
     config = {
       navigationBarTitleText: '支付结果'
+    }
+
+    wxs = {
+        globalWxs
     }
 
     components = {}
@@ -184,8 +189,7 @@
     }
 
     onLoad(option) {
-      this.payInfo = JSON.parse('{"address":{"id":43,"city":2813,"county":51976,"isDefault":1,"priority":100000,"province":2,"town":0,"userId":4,"detailAddress":"远中产业园4期1号楼502","mobile":"15300928006","name":"张浩轩","provinceName":"上海","cityName":"徐汇区","countyName":"城区"},"payTotal":48902}');
-      this.payInfo = JSON.parse(option.orderInfo)
+      this.payInfo = JSON.parse(option.payInfo);
       this.result = option.payResult;
       this.orderId = option.orderId;
       this.$apply();

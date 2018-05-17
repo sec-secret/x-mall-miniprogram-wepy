@@ -232,7 +232,7 @@
           <view class="name">
             {{goods.name}}
           </view>
-          <view class="dim" wx:if="{{globalWxs.haveSaleValue(i.saleValue)}}">
+          <view class="dim" wx:if="{{globalWxs.haveSaleValue(goods.saleValue)}}">
             {{goods.saleValue}}
           </view>
           <view class="price">
@@ -362,6 +362,7 @@
             'success': (res) => {
               console.log(res);
               let payInfo = JSON.stringify({address: this.defaultAddress, payTotal: this.payTotal})
+              console.log(payInfo);
               wepy.navigateTo({
                 url: `./payment-result?orderId=${orderId}&payInfo=${payInfo}&payResult=success`
               })
@@ -389,7 +390,7 @@
             this.defaultAddress = data;
             this.$apply();
             let skuReqs = [];
-            let skuIds = []
+            let skuIds = [];
             this.goodsList.forEach((item) => {
               skuReqs.push({
                 num: item.num,
@@ -419,7 +420,6 @@
                 });
                 if (this.noLimit) {
                   this.getFreight(freightReq)
-                  wepy.showToast({title: '很抱歉,当前区域无法配送', icon: 'none'})
                 } else {
                   wepy.showToast({title: '很抱歉,当前区域无法配送', icon: 'none'})
                 }
