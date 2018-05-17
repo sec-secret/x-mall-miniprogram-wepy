@@ -587,8 +587,8 @@
     }
 
     onShow() {
-      wepy.showNavigationBarLoading();
       if (this.isLogin) {
+        wepy.showNavigationBarLoading();
         NetworkManagerCart.fetchCartGoods().then(data => {
           this.goodsList = data.skus;
           let newIds = [];
