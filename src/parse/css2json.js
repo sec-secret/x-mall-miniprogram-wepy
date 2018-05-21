@@ -6,6 +6,8 @@
 // and written by <a href="http://davidbjorklund.se">David Björklund</a>.
 
 // Parse a string with css to a json-object.
+var open;
+var close;
 export default function(css) {
 
   // Remove all comments from the css-file

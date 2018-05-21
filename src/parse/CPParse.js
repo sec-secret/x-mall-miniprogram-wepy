@@ -80,7 +80,7 @@ export default class CPParse {
           if (styleObject.hasOwnProperty(key)){
             if (/.*px$/g.test(styleObject[key])){
               let number = parseInt(styleObject[key].replace(/px/g, ''));
-              styleObject[key] = number * (320 / 640) + 'px';
+              styleObject[key] = number + 'px';
             }
           }
         }

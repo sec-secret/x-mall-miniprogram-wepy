@@ -36,12 +36,6 @@
       .name {
         font-size: $xg-size-8;
       }
-      .description {
-        max-width: 100%;
-        font-size: $xg-size-4;
-        color: #999;
-        margin-top: 20rpx;
-      }
       .price {
         font-size: 24px;
         margin-top: 30rpx;
@@ -394,7 +388,7 @@
         <view class="detail" id="wareInfo" style="display:block;">
           <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
             <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
-              <rich-text class="description" type="node" nodes="{{testRichText}}"></rich-text>
+              <rich-text type="node" nodes="{{testRichText}}"></rich-text>
             </view>
           </view>
         </view>
@@ -464,7 +458,7 @@
       </view>
     </view>
   </view>
-  <view wx:if="{{!isSale}}" class="disable-tips title">对不起，该商品暂时无货。</view>
+  <view wx:if="{{!isSale}}" class="disable-tips title">{{noSaleTips}}</view>
   <view class="footer-bar">
     <view class="customer-service">
       <image @tap="onClickHomeIcon" class="icon" src="./img/shouye.png" mode="widthFix">
@@ -538,7 +532,8 @@
       goodsInventory: 9999,
       isSale: true,
       scaling: 1,
-      scaleH: 'auto'
+      scaleH: 'auto',
+      noSaleTips: ''
     }
 
     computed = {
@@ -699,6 +694,8 @@
 
     onLoad(options) {
       this.skuId = parseInt(options.skuId);
+//      this.skuId = 4890944;
+//      this.skuId = 6280032;
       this.fetchCheckIsSale();
       this.fetchGoodsState();
       this.fetchGoodsDetail();
@@ -770,7 +767,11 @@
         ]
       };
       NetworkManagerGoods.goodsCheckSale(req).then((info) => {
-        console.log(info)
+        if (info[0].saleState !== 1) {
+          this.isSale = false;
+          this.noSaleTips = '对不起，该商品已下架。'
+        }
+        this.$apply();
       }, err => {
         wepy.showToast({title: err.message, icon: 'none'})
       })
@@ -783,7 +784,11 @@
         ]
       }
       NetworkManagerGoods.goodsState(req).then((info) => {
-        this.isSale = info[0].state === 1;
+//        this.isSale = info[0].state === 1;
+        if (info[0].state !== 1) {
+          this.isSale = false;
+          this.noSaleTips = '对不起，该商品暂时无货。'
+        }
         this.$apply();
       }).catch(err => {
         console.log(err)
@@ -812,10 +817,10 @@
         let linkStyleList = [];
         let traverse = (aimTree) => {
           if (aimTree.name === 'link') {
-            // console.log(aimTree.href);
             linkStyleList.push('http:' + aimTree.href);
           }
           if (aimTree.hasOwnProperty('children')) {
+//              TODO ???
             for (let i = 0; i < aimTree.children.length; i++) {
               traverse(aimTree.children[i]);
             }
@@ -831,7 +836,6 @@
           })
           CPParse.applyCss2Node(aimTree, cssString);
           this.testRichText = aimTree.children;
-          console.log('detail');
           this.formatDetail();
           this.$apply();
         }, error => {
@@ -895,7 +899,6 @@
       setTimeout(() => {
         let _this = this;
         scaleWrapper.boundingClientRect((res) => {
-          console.log(res);
           _this.scaling = (wepy.getSystemInfoSync().windowWidth - 20) / res.width;
           _this.scaleH = res.height * _this.scaling;
           console.log(_this.scaling);

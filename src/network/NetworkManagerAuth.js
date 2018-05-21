@@ -1,13 +1,9 @@
 import NetworkManager, {AUTH_BASE_URL} from './NetworkManager'
 
 export default class JNetworkMallAuth extends NetworkManager {
-  static getUserInfo(token) {
-    return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getUserInfo', {}, {'Authorization': token}, {}, true);
+  static getVerifyCode(mobile) {
+    return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getVerifyCode', {mobile}, {}, {}, true)
   }
-
-  // static userLogin(mobile, verifyCode, verifyKey, openId, nickName) {
-  //   return this.instance().POST('/oauth/token', {mobile, verifyCode, verifyKey, openId, nickName}, {}, {urlType: 'auth'});
-  // }
 
   static userLogin(authType, username, password = '', openId = '', nickName = '', mobile = '', verifyKey = '') {
     return this.instance().freedomPOST(AUTH_BASE_URL, '/oauth/token', {
@@ -22,8 +18,8 @@ export default class JNetworkMallAuth extends NetworkManager {
     }, {'Authorization': 'Basic bmItc2VydmljZTpQSUFPaGFvMTkxQA=='}, {})
   }
 
-  static getVerifyCode(mobile) {
-    return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getVerifyCode', {mobile}, {}, {}, true)
+  static getUserInfo(token) {
+    return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getUserInfo', {}, {'Authorization': token}, {}, true);
   }
 
   static miniprogramCode2Session(code) {

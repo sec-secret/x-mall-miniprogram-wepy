@@ -112,6 +112,7 @@
         success: (res) => {
 //              获取登录code成功
             if (res.code) {
+                console.log(res)
                 that.getUserInfo()
 //              NetworkManagerAuth.getUserInfo()
 //                .then(data => {
@@ -144,8 +145,6 @@
       wepy.getUserInfo({
         withCredentials: true,
         success (res) {
-//          that.testUnionId(code, res);
-          console.log('getUserInfo 获取到的数据: ' + res);
           console.log(res);
           store.dispatch({
             type: UPDATE_USER_INFO,

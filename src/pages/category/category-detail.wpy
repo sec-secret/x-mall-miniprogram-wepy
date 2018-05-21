@@ -172,19 +172,6 @@
             wepy.hideNavigationBarLoading();
           })
       }
-//      fetchGoodsList(catId, lastKey) {
-//        NetworkMallHome.mallGoodsList(catId, lastKey).then(data => {
-//          this.goodsList = data.goods;
-//          this.lastKey = data.lastKey;
-//          this.$nextTick(() => {
-//            this.loading = data.goods.length === 0;
-//            this.closeLoading();
-//          })
-//        }, error => {
-//          this.closeLoading();
-//          console.log(error);
-//        });
-//      }
     }
 
     onLoad(option) {
@@ -201,14 +188,13 @@
             this.$apply();
             wepy.hideNavigationBarLoading();
           }, err => {
-            wepy.showToast({title: err.message, icon: 'none'})
+            wepy.showToast({title: err.message, icon: 'none'});
             wepy.hideNavigationBarLoading();
           })
       }, err => {
-        wepy.showToast({title: err.message, icon: 'none'})
+        wepy.showToast({title: err.message, icon: 'none'});
         wepy.hideNavigationBarLoading();
       })
-      console.log(option);
     }
   }
 </script>
