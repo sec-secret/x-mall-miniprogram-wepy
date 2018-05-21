@@ -2,7 +2,7 @@ import wepy from 'wepy'
 import { getStore } from 'wepy-redux'
 
 export const MALL_BASE_URL = 'https://www.xiaoguostore.com/gateway/mall';
-export const AUTH_BASE_URL = 'https://www.xiaoguostore.com/gateway/auth'
+export const AUTH_BASE_URL = 'https://www.xiaoguostore.com/gateway/auth';
 export default class NetworkManager{
   static _instance = null
   timeout = 10 * 1000;
