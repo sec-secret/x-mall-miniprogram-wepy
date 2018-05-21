@@ -1,7 +1,7 @@
 {
 	"description": "xiaogua mall for miniprogram",
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": false,
 		"postcss": false,
 		"minified": true,
