@@ -23,7 +23,11 @@ var globalWxs = {
     return {price: price, num: num}
   },
   haveSaleValue: function (val) {
-    return val.indexOf('saleName') < 0;
+    if (val) {
+      return val.indexOf('saleName') < 0;
+    } else {
+      return false
+    }
   }
 }
 

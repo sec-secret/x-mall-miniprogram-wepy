@@ -37,14 +37,10 @@
             font-size: $xg-size-4;
             color: #333;
           }
-          .cart-dim {
+          .dim {
             @include ellipsis(2);
             font-size: $xg-size-2;
             color: #999;
-            margin-top: .1rem;
-            label {
-              margin-right: .1rem;
-            }
           }
           .info {
             margin-top: 10rpx;
@@ -138,6 +134,9 @@
           <label class="name ellipsis-2">
             {{goods.name}}
           </label>
+          <view class="dim" wx:if="{{globalWxs.haveSaleValue(goods.saleValue)}}">
+            {{goods.saleValue}}
+          </view>
           <view class="info flex-middle-x">
             <div class="price">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</div>
             <view class="input flex-middle-x">

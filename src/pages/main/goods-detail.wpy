@@ -711,11 +711,20 @@
     }
 
     addToCar() {
+      let saleValue = '';
+      this.selectedList.forEach((item, index) => {
+        if (index === 0) {
+          saleValue = saleValue + this.similarGoods[index].saleName + ':' + item.saleValue;
+        } else {
+          saleValue = saleValue + '/' + this.similarGoods[index].saleName + ':' + item.saleValue;
+        }
+      })
       let buyParams = {
         'skuReqs': [
           {
             'num': this.goodsCount,
-            'skuId': this.selectedGoodsId
+            'skuId': this.selectedGoodsId,
+            'saleValue': saleValue
           }
         ]
       };
@@ -817,7 +826,7 @@
         let linkStyleList = [];
         let traverse = (aimTree) => {
           if (aimTree.name === 'link') {
-            linkStyleList.push('http:' + aimTree.href);
+            linkStyleList.push('https:' + aimTree.href);
           }
           if (aimTree.hasOwnProperty('children')) {
 //              TODO ???

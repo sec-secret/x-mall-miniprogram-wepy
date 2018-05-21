@@ -503,7 +503,7 @@
         this.selectedIds.forEach(id => {
           let index = this.goodsList.findIndex(item => item.cartId === id);
           let goods = this.goodsList[index];
-          selectedList.push({saleValue: '', ...goods});
+          selectedList.push(goods);
         })
         let payInfo = JSON.stringify({
           total: this.totalPrice,
