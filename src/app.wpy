@@ -23,6 +23,7 @@
   import configStore from './store'
   import {UPDATE_USER_INFO} from './store/types/user'
   import NetworkManagerAuth from './network/NetworkManagerAuth'
+  import test from "./test";
 
   const store = configStore()
   setStore(store)
@@ -93,6 +94,7 @@
     constructor () {
       super()
       this.use('requestfix')
+      // this.use('promisify')
     }
 
     onLaunch(options) {
@@ -111,9 +113,9 @@
       wepy.login({
         success: (res) => {
 //              获取登录code成功
-            if (res.code) {
-                console.log(res)
-                that.getUserInfo()
+          if (res.code) {
+            console.log(res)
+            that.getUserInfo()
 //              NetworkManagerAuth.getUserInfo()
 //                .then(data => {
 //                  getApp().globalData.userInfo = data;
@@ -123,7 +125,7 @@
 //          } else {
 //            console.log('登录失败！' + res.errMsg)
 //          }
-            }
+          }
         }
       })
     }
