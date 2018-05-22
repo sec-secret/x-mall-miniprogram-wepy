@@ -22,7 +22,7 @@
     "redux-promise": "^0.5.3",
     "underscore": "^1.9.0",
     "wepy": "^1.7.1",
-    "wepy-async-function": "^1.4.4",
+    "wepy-async-function": "^1.4.6",
     "wepy-com-toast": "^1.0.2",
     "wepy-redux": "^1.5.3"
   },
