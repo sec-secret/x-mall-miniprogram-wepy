@@ -74,7 +74,11 @@ export default class NetworkManager{
               }
             }
           } else {
-            resolve(responseJson);
+            if (!responseJson.errorCode) {
+              resolve(responseJson);
+            } else {
+              reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+            }
           }
         },
         fail: function (error) {
