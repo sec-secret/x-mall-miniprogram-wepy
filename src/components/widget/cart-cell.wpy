@@ -96,7 +96,7 @@
       position: absolute;
       right: 0;
       width: 120rpx;
-      height: 180rpx;
+      height: 190rpx;
       background-color: $xg-c-red;
       z-index: 0;
       @include flex-center();
