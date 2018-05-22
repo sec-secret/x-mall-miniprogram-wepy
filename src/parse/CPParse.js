@@ -165,11 +165,11 @@ export default class CPParse {
         }
       }
       if (tree.tag === 'th'){
-        aimTree['attrs'] = {
-          rowspan: '2'
-        }
         console.log('************************');
         console.log(tree);
+        aimTree['attrs'] = {
+          colspan: tree.attr.colspan
+        }
       }
       aimTree['name'] = tree.tag;
     }

@@ -16,11 +16,12 @@ const cssString = `
     padding: 8px;
     border: 1px solid #dadada;
     text-align: left;
+    vertical-align: baseline;
 }
 
 .Ptable th, .param_table th{
     width: 100%;
-    rowspan: 2;
+    colspan: 2;
 }
 
 `;
