@@ -388,7 +388,8 @@
         <view class="detail" id="wareInfo" style="display:block;">
           <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
             <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
-              <rich-text type="node" nodes="{{testRichText}}"></rich-text>
+              <rich-text type="node" nodes="{{goodsInfoRichNodes}}"></rich-text>
+              <rich-text type="node" nodes="{{goodsTableRichNodes}}"></rich-text>
             </view>
           </view>
         </view>
@@ -471,7 +472,6 @@
     <button class="buy-button {{!canClickBuy ?'disable':''}}" @tap="onClickAdd">加入购物车</button>
     <button class="add-button {{!canClickBuy ?'disable':''}}" @tap="onClickBuy">购买</button>
   </view>
-  </view>
 </template>
 
 <script>
@@ -484,6 +484,7 @@
   import globalWxs from '../../wxs/global.wxs'
   import mainWxs from '../../wxs/main.wxs'
   import {connect} from 'wepy-redux'
+  import TABLE_CSS_STRING from './table-css';
 
   @connect({
     isLogin(state) {
@@ -507,8 +508,8 @@
     }
 
     data = {
-      testRichText: '',
-      tableRichText: '',
+      goodsInfoRichNodes: [],
+      goodsTableRichNodes: [],
       isShowBuyPopArea: false,
       skuId: 0,
       goods: null,
@@ -704,10 +705,10 @@
 
     checkIsNot(item, dim) {
       return item.skuIds.every(x => {
-          return !this.targetGoodsList.includes(x)
-        }) && _.isEmpty(this.selectedList[dim]) && !this.isFirst && this.nowDim !== dim && !this.selectedList.every(item => {
-          return _.isEmpty(item)
-        });
+        return !this.targetGoodsList.includes(x)
+      }) && _.isEmpty(this.selectedList[dim]) && !this.isFirst && this.nowDim !== dim && !this.selectedList.every(item => {
+        return _.isEmpty(item)
+      });
     }
 
     addToCar() {
@@ -746,11 +747,11 @@
     goToBuy() {
       let saleValue = '';
       this.selectedList.forEach((item, index) => {
-          if (index === 0) {
-            saleValue = saleValue + this.similarGoods[index].saleName + ':' + item.saleValue;
-          } else {
-            saleValue = saleValue + '/' + this.similarGoods[index].saleName + ':' + item.saleValue;
-          }
+        if (index === 0) {
+          saleValue = saleValue + this.similarGoods[index].saleName + ':' + item.saleValue;
+        } else {
+          saleValue = saleValue + '/' + this.similarGoods[index].saleName + ':' + item.saleValue;
+        }
       })
       let payInfo = JSON.stringify({
         total: this.totalPrice,
@@ -765,7 +766,7 @@
           }]
       })
       wepy.navigateTo({
-          url: '../payment/payment?payInfo=' + payInfo
+        url: '../payment/payment?payInfo=' + payInfo
       })
     }
 
@@ -815,13 +816,34 @@
         this.$apply();
         wepy.hideNavigationBarLoading();
         // TODO: 描述富文本的格式化
-        let stationName
-        if (data.goodsExt.mobileDesc) {
-          stationName = data.goodsExt.mobileDesc;
+        let introduction = '';
+        let goodsTableRichText = '';
+        if (data.goodsExt && data.goodsExt.mobileDesc) {
+          introduction = data.goodsExt.mobileDesc;
+          goodsTableRichText = data.goodsExt.param;
         } else {
-          stationName = data.goodsExt.introduction;
+          introduction = data.goodsExt.introduction;
         }
-        stationName = EncodeTool.reconvert(stationName);
+        this.renderRichTextNodes(EncodeTool.reconvert(introduction)).then(data => {
+          this.goodsInfoRichNodes = data;
+        }, error => {
+          console.log(error);
+        })
+        let otherCssString = TABLE_CSS_STRING;
+        this.renderRichTextNodes(EncodeTool.reconvert(goodsTableRichText), otherCssString).then(data => {
+          console.log('************************');
+          console.log(data);
+          this.goodsTableRichNodes = data;
+        }, error => {
+          console.log(error);
+        })
+      }, error => {
+        console.log(error)
+      })
+    }
+
+    renderRichTextNodes(stationName, otherCssString = ''){
+      return new Promise((resolve, reject) => {
         let aimTree = CPParse.parseString(stationName);
         let linkStyleList = [];
         let traverse = (aimTree) => {
@@ -829,7 +851,6 @@
             linkStyleList.push('https:' + aimTree.href);
           }
           if (aimTree.hasOwnProperty('children')) {
-//              TODO ???
             for (let i = 0; i < aimTree.children.length; i++) {
               traverse(aimTree.children[i]);
             }
@@ -839,20 +860,15 @@
         Promise.all(linkStyleList.map((link) => {
           return NetworkManager.instance().freedomGET(link)
         })).then(cssStringList => {
-          let cssString = '';
+          let cssString = otherCssString;
           cssStringList.forEach(cs => {
             cssString += cs;
           })
           CPParse.applyCss2Node(aimTree, cssString);
-          this.testRichText = aimTree.children;
-          this.formatDetail();
-          this.$apply();
+          resolve(aimTree.children);
         }, error => {
-          console.log(error);
+          reject(error);
         })
-      }, error => {
-        console.log(error);
-        wepy.hideNavigationBarLoading();
       })
     }
 

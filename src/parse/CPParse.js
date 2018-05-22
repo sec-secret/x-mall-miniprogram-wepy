@@ -1,10 +1,13 @@
 import HtmlToJson from '../wxParse/html2json.js';
 import css2json from './css2json';
+
+const NOT_INHERIT_PROPERTY_LIST = ['width']
+
 export default class CPParse {
   /**
    * 使用特定方式解析css
    * @param cssString css字符串
-   * @param keyNomenclature 解析命名法 0: 基本命名法 1: 驼峰命名法 2: 下划线命名法
+   * @param keyNomenclature 解析命名法 0: 基本命名法 1: 驼峰命名法 2: 下划线命名法 3: 竖线命名法
    * @returns {{}}
    * @private
    */
@@ -21,6 +24,11 @@ export default class CPParse {
         if (keyNomenclature === 2){
           resultKey = key.replace(/\./g, '').split(' ').join('_');
         }
+
+        if (keyNomenclature === 3){
+          resultKey = key.replace(/\./g, '').split(' ').join('|');
+        }
+
         _cssMapObject[resultKey] = simpleCssMapObject[key];
       }
     }
@@ -30,7 +38,7 @@ export default class CPParse {
   static applyCss2Node(tree, cssMapObjectOrString){
     let cssMapObject = cssMapObjectOrString;
     if (typeof cssMapObjectOrString === 'string'){
-      cssMapObject = CPParse.parseCss(cssMapObjectOrString, 2);
+      cssMapObject = CPParse.parseCss(cssMapObjectOrString, 3);
     }
     /**
      * 样式匹配处理者
@@ -40,23 +48,31 @@ export default class CPParse {
      */
     let matchSmartStyle = (classesList, cssMapObject) => {
       let style = {};
-      let traverse = (coveredClesses, list, index) => {
+      let traverse = (coveredClasses, list, index) => {
         if (index === list.length){
-          traverse.callback(coveredClesses);
+          let isInherit = list[list.length - 1].indexOf(coveredClasses[coveredClasses.length - 1]) === -1;
+          traverse.callback(coveredClasses, isInherit);
           return;
         }
-        traverse([...coveredClesses, ''], list, index + 1);
+        traverse([...coveredClasses, ''], list, index + 1);
         let classes = list[index];
         for (let i = 0; i < classes.length; i++){
-          let newCoveredList = [...coveredClesses, classes[i]]
+          let newCoveredList = [...coveredClasses, classes[i]]
           traverse(newCoveredList, list, index + 1);
         }
       }
-      traverse.callback = (list) => {
-        let currentTestClassesString = list.filter(_ => _ !== '').join('_');
+      traverse.callback = (coveredClasses, isInherit = true) => {
+        let currentTestClassesString = coveredClasses.filter(_ => _ && _ !== '').join('|');
         if (currentTestClassesString !== ''){
           if (cssMapObject.hasOwnProperty(currentTestClassesString)){
             style = {...style, ...cssMapObject[currentTestClassesString]}
+            if (isInherit){
+              NOT_INHERIT_PROPERTY_LIST.forEach(property => {
+                if (style.hasOwnProperty(property)){
+                  delete style[property]
+                }
+              })
+            }
           }
         }
       }
@@ -69,32 +85,31 @@ export default class CPParse {
      * @param parentClasses 所有父节点样式列表（某节点的样式为应用的class组成的列表）
      */
     let applyClass2Style = (tree, ...parentClasses) => {
-      let classList = [];
+      let classList = [tree.name];
       if (tree.hasOwnProperty('classList')){
-        // console.log(parentClasses);
-        classList = tree.classList;
-        tree['parentClassList'] = [...parentClasses]
-        let styleObject = matchSmartStyle([...parentClasses, classList], cssMapObject);
+        classList = [...classList, ...tree.classList];
+      }
+      tree['parentClassList'] = [...parentClasses]
+      let styleObject = matchSmartStyle([...parentClasses, classList], cssMapObject);
 
-        for (let key in styleObject){
-          if (styleObject.hasOwnProperty(key)){
-            if (/.*px$/g.test(styleObject[key])){
-              let number = parseInt(styleObject[key].replace(/px/g, ''));
-              styleObject[key] = number + 'px';
-            }
+      for (let key in styleObject){
+        if (styleObject.hasOwnProperty(key)){
+          if (/.*px$/g.test(styleObject[key])){
+            let number = parseInt(styleObject[key].replace(/px/g, ''));
+            styleObject[key] = number + 'px';
           }
         }
-        tree['smartStyle'] = styleObject;
-        let styleString = '';
-        for (let key in styleObject){
-          if (styleObject.hasOwnProperty(key)){
-            styleString += `${key}: ${styleObject[key]};`;
-          }
+      }
+      tree['smartStyle'] = styleObject;
+      let styleString = '';
+      for (let key in styleObject){
+        if (styleObject.hasOwnProperty(key)){
+          styleString += `${key}: ${styleObject[key]};`;
         }
-        tree['attrs'] = {
-          ...(tree['attrs'] || {}),
-          style: styleString
-        }
+      }
+      tree['attrs'] = {
+        ...(tree['attrs'] || {}),
+        style: styleString
       }
 
       if (tree.hasOwnProperty('children')){
@@ -112,11 +127,11 @@ export default class CPParse {
     // console.log('*****************************************************');
     let cssMapObject = {};
     if (cssStyleString && cssStyleString !== ''){
-      cssMapObject = {...cssMapObject, ...CPParse.parseCss(cssStyleString, 2)};
+      cssMapObject = {...cssMapObject, ...CPParse.parseCss(cssStyleString, 3)};
     }
     let aimTree = {};
     CPParse._simplifyNodeTree(htmlTree, aimTree, styleString => {
-      cssMapObject = {...cssMapObject, ...CPParse.parseCss(styleString, 2)};
+      cssMapObject = {...cssMapObject, ...CPParse.parseCss(styleString, 3)};
     })
     CPParse.applyCss2Node(aimTree, cssMapObject);
     return aimTree;
@@ -148,6 +163,13 @@ export default class CPParse {
         aimTree['attrs'] = {
           src: tree.attr.src
         }
+      }
+      if (tree.tag === 'th'){
+        aimTree['attrs'] = {
+          rowspan: '2'
+        }
+        console.log('************************');
+        console.log(tree);
       }
       aimTree['name'] = tree.tag;
     }
