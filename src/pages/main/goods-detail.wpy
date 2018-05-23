@@ -825,25 +825,21 @@
         }
 
         let otherCssString = TABLE_CSS_STRING;
-        Promise.all([
-          this.renderRichTextNodes(EncodeTool.reconvert(introduction)).then(data => {
-            this.goodsInfoRichNodes = data;
-          }, error => {
-            console.log(error);
-          }),
-          this.renderRichTextNodes(EncodeTool.reconvert(goodsTableRichText), otherCssString).then(data => {
-            // console.log('************************');
-            // console.log(data);
-            this.goodsTableRichNodes = data;
-          }, error => {
-            console.log(error);
-          })]).then(() => {
+        this.renderRichTextNodes(EncodeTool.reconvert(introduction)).then(data => {
+          this.goodsInfoRichNodes = data;
           this.formatDetail();
           this.$apply();
         }, error => {
           console.log(error);
           this.formatDetail();
           this.$apply();
+        });
+        this.renderRichTextNodes(EncodeTool.reconvert(goodsTableRichText), otherCssString).then(data => {
+          console.log('************************');
+          console.log(data);
+          this.goodsTableRichNodes = data;
+        }, error => {
+          console.log(error);
         })
       }, error => {
         console.log(error)

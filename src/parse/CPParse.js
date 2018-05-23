@@ -36,6 +36,7 @@ export default class CPParse {
   }
 
   static applyCss2Node(tree, cssMapObjectOrString){
+    console.log(cssMapObjectOrString)
     let cssMapObject = cssMapObjectOrString;
     if (typeof cssMapObjectOrString === 'string'){
       cssMapObject = CPParse.parseCss(cssMapObjectOrString, 3);
@@ -165,8 +166,6 @@ export default class CPParse {
         }
       }
       if (tree.tag === 'th'){
-        console.log('************************');
-        console.log(tree);
         aimTree['attrs'] = {
           colspan: tree.attr.colspan
         }
