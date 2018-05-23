@@ -23,7 +23,6 @@
   import configStore from './store'
   import {UPDATE_USER_INFO} from './store/types/user'
   import NetworkManagerAuth from './network/NetworkManagerAuth'
-  import test from "./test";
 
   const store = configStore()
   setStore(store)
