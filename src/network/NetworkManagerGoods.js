@@ -12,6 +12,10 @@ export default class NetworkManagerGoods extends NetworkManager{
     return this.instance().POST('/goods/similarSku', {skuId});
   }
 
+  static goodsComments(skuId) {
+    return this.instance().POST('/goods/skuComments', {skuId});
+  }
+
   static goodsCheckSale(req) {
     // 可售信息
     return this.instance().POST('/goods/checkSale', req, {'Content-Type': 'application/json'});

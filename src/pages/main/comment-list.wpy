@@ -1,0 +1,74 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .comment-list {
+    background-color: #fff;
+  }
+</style>
+<template>
+  <scroll-view class="comment-list"
+               scroll-y="true">
+    <repeat for="{{comments}}" item="comment">
+      <comment-cell :comment="comment"></comment-cell>
+    </repeat>
+  </scroll-view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import NetworkManagerGoods from '../../network/NetworkManagerGoods'
+  import CommentCell from '@/components/widget/comment-cell';
+  export default class CommentList extends wepy.page {
+    config = {
+      navigationBarTitleText: '评论详情'
+    }
+
+    components = {
+      'comment-cell': CommentCell
+    }
+
+    data = {
+      comments: [],
+      commentsCount: 0,
+      showComments: false
+    }
+
+    computed = {}
+
+    methods = {}
+
+    //    获取评论
+    fetchComments() {
+      wepy.showNavigationBarLoading();
+      NetworkManagerGoods.goodsComments(this.skuId)
+        .then(list => {
+          this.commentsCount = list.length;
+          this.comments = list.map(item => {
+            let picArray = item.pictureInfoList.split(',').map(url => {
+              return 'http:' + url;
+            })
+            let havePic = picArray.length !== 0;
+            let userImg;
+            if (item.userImgURL.indexOf('http://') < 0) {
+              userImg = 'http://' + item.userImgURL;
+            } else {
+              userImg = item.userImgURL;
+            }
+            return {picArray, havePic, userImg, ...item}
+          })
+          if (this.comments.length > 0) {
+            this.showComments = true;
+          }
+          wepy.hideNavigationBarLoading();
+          this.$apply();
+        }, err => {
+          console.log(err)
+          wepy.hideNavigationBarLoading();
+        })
+    }
+
+    onLoad(option) {
+        this.skuId = option.skuId;
+        this.fetchComments();
+    }
+  }
+</script>

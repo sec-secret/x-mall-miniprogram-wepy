@@ -100,6 +100,30 @@
         }
       }
     }
+    .comment-section {
+      background-color: #fff;
+      margin-top: 20rpx;
+      .comment-title {
+        height: 86rpx;
+        padding-left: 30rpx;
+        @include flex-x-middle();
+        border-bottom: 1px solid $xg-c-seg;
+      }
+      .read-more {
+        @include flex-center();
+        height: 108rpx;
+        label {
+          display: block;
+          width: 150rpx;
+          height: 48rpx;
+          line-height: 48rpx;
+          color: #333;
+          border: 1px solid #a1a1a1;
+          border-radius: 48rpx;
+          text-align: center;
+        }
+      }
+    }
     .goods-des {
       padding: 20rpx 0;
       background-color: white;
@@ -336,68 +360,79 @@
   }
 </style>
 <template>
-  <view class="mall-goods-detail page">
-    <view class="goods-image-area">
-      <swiper class="swiper"
-              bindchange="actionChangeGoodsImage">
-        <repeat for="{{goodsImageList}}"
-                item="imageUrl"
-                key="index">
-          <swiper-item class="swiper-item">
-            <image class="image"
-                   src="{{imageUrl}}"
-                   mode="aspectFit">
-            </image>
-          </swiper-item>
-        </repeat>
-      </swiper>
-      <label class="page-number">{{goodsImageIndex + 1}}/{{goodsImageList.length}}</label>
-    </view>
-
-    <view class="goods-info">
-      <label class="name mall-product-name">{{goods.name}}</label>
-      <view class="price flex-middle-x">
-        <label class="new">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</label>
-        <label wx:if="{{goods.wzPrice}}" class="leader-price">￥{{globalWxs.formatFenPrice(goods.wzPrice)}}</label>
-        <label wx:if="{{goods.jdPrice}}" class="leader-price">￥{{globalWxs.formatFenPrice(goods.jdPrice)}}</label>
-        <!--<view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>-->
+    <scroll-view class="mall-goods-detail" scroll-y style="height: 100vh" bindscroll="scroll">
+      <view class="goods-image-area">
+        <swiper class="swiper"
+                bindchange="actionChangeGoodsImage">
+          <repeat for="{{goodsImageList}}"
+                  item="imageUrl"
+                  key="index">
+            <swiper-item class="swiper-item">
+              <image class="image"
+                     src="{{imageUrl}}"
+                     mode="aspectFit">
+              </image>
+            </swiper-item>
+          </repeat>
+        </swiper>
+        <label class="page-number">{{goodsImageIndex + 1}}/{{goodsImageList.length}}</label>
       </view>
-    </view>
-
-    <view class="service-info">
-      <view wx:if="isSale" class="title-item" @tap="actionClickShowPopArea">
-        <view class="title">规格数量选择</view>
-        <image class="icon" src="./img/jiantou3.png" mode="widthFix">
-        </image>
+      <view class="goods-info">
+        <label class="name mall-product-name">{{goods.name}}</label>
+        <view class="price flex-middle-x">
+          <label class="new">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</label>
+          <label wx:if="{{goods.wzPrice}}" class="leader-price">￥{{globalWxs.formatFenPrice(goods.wzPrice)}}</label>
+          <label wx:if="{{goods.jdPrice}}" class="leader-price">￥{{globalWxs.formatFenPrice(goods.jdPrice)}}</label>
+          <!--<view class="fenqi" wx:if="{{globalWxs.formatFenqi(goods).num !== 1}}"><text>￥{{globalWxs.formatFenqi(goods).price}}</text> x {{globalWxs.formatFenqi(goods).num}}期</view>-->
+        </view>
       </view>
-      <view class="service-section">
-        <repeat for="{{serviceItems}}">
-          <view>
-            <image src="./img/fuwugouxuan.png" mode="widthFix">
-            </image>
-            <span class="name">{{item}}</span>
-          </view>
-        </repeat>
-        <image class="right-arrow" src="./img/jiantou3.png" mode="widthFix">
-        </image>
+      <view class="service-info">
+        <view wx:if="isSale" class="title-item" @tap="actionClickShowPopArea">
+          <view class="title">规格数量选择</view>
+          <image class="icon" src="./img/jiantou3.png" mode="widthFix">
+          </image>
+        </view>
+        <view class="service-section">
+          <repeat for="{{serviceItems}}">
+            <view>
+              <image src="./img/fuwugouxuan.png" mode="widthFix">
+              </image>
+              <span class="name">{{item}}</span>
+            </view>
+          </repeat>
+          <image class="right-arrow" src="./img/jiantou3.png" mode="widthFix">
+          </image>
+        </view>
       </view>
-    </view>
-    <view class="goods-des">
-      <view class="des-title">商品介绍</view>
-      <view id="btmDetail" class="btm-detail">
-        <view class="detail" id="wareInfo" style="display:block;">
-          <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
-            <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
-              <rich-text type="node" nodes="{{goodsInfoRichNodes}}"></rich-text>
-              <rich-text type="node" nodes="{{goodsTableRichNodes}}"></rich-text>
+      <view class="comment-section">
+        <view class="comment-title">
+          商品评价（{{commentsCount}}）
+        </view>
+        <view class="comment-list" wx:if="{{showComments}}">
+          <repeat for="{{comments}}" item="comment">
+            <comment-cell :comment="comment"></comment-cell>
+          </repeat>
+        </view>
+        <view class="read-more" wx:if="{{commentsCount !== 0}}">
+          <label @tap="onClickMoreComment">查看更多</label>
+        </view>
+      </view>
+      <view class="goods-des">
+        <view class="des-title">商品介绍</view>
+        <view id="btmDetail" class="btm-detail">
+          <view class="detail" id="wareInfo" style="display:block;">
+            <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
+              <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
+                <rich-text type="node" nodes="{{goodsInfoRichNodes}}"></rich-text>
+                <rich-text type="node" nodes="{{goodsTableRichNodes}}"></rich-text>
+              </view>
             </view>
           </view>
         </view>
+        <view class="des-title qingdan-title">物品清单</view>
+        <view class="wearQD">{{goodsExt.wearQD}}</view>
       </view>
-      <view class="des-title">物品清单</view>
-      <view class="wearQD">{{goodsExt.wearQD}}</view>
-    </view>
-  </view>
+    </scroll-view>
 
   <view wx:if="{{isShowBuyPopArea}}"
         class="buy-pop-section"
@@ -485,6 +520,7 @@
   import mainWxs from '../../wxs/main.wxs'
   import {connect} from 'wepy-redux'
   import TABLE_CSS_STRING from './table-css';
+  import CommentCell from '@/components/widget/comment-cell';
 
   @connect({
     isLogin(state) {
@@ -500,7 +536,9 @@
       navigationBarTitleText: '商品详情'
     }
 
-    components = {}
+    components = {
+        'comment-cell': CommentCell
+    }
 
     wxs = {
       globalWxs,
@@ -534,7 +572,11 @@
       isSale: true,
       scaling: 1,
       scaleH: 'auto',
-      noSaleTips: ''
+      noSaleTips: '',
+      comments: [],
+      commentsCount: 0,
+      showComments: false,
+      showTopIndex: 0
     }
 
     computed = {
@@ -589,6 +631,32 @@
     }
 
     methods = {
+      scroll(e) {
+//        let commentT;
+//        let detailT;
+//        let listT;
+//        let query = wepy.createSelectorQuery();
+//        query.select('.comment-section').boundingClientRect((res) => {
+//          commentT = res.top;
+//          if (commentT <= 0) {
+//          }
+//        }).exec();
+//        query.select('.goods-des').boundingClientRect((res) => {
+//          detailT = res.top;
+//        }).exec();
+//        query.select('.qingdan-title').boundingClientRect((res) => {
+//          listT = res.top;
+//        }).exec();
+//        console.log(commentT);
+//        if (listT <= 0) {
+//            this.showTopIndex = 2;
+//        } else if (detailT <= 0) {
+//          this.showTopIndex = 1;
+//        } else {
+//          this.showTopIndex = 0;
+//        }
+//        this.$apply();
+      },
       doNothing() {
         console.log('nothing');
       },
@@ -690,6 +758,11 @@
         wepy.switchTab({
           url: '../main/main'
         })
+      },
+      onClickMoreComment() {
+        wepy.navigateTo({
+          url: './comment-list?skuId=' + this.skuId
+        })
       }
     }
 
@@ -701,6 +774,7 @@
       this.fetchGoodsState();
       this.fetchGoodsDetail();
       this.fetchSimilarGoods();
+      this.fetchComments();
     }
 
     checkIsNot(item, dim) {
@@ -893,6 +967,34 @@
       }).catch((err) => {
         wepy.showToast({title: err.message, icon: 'none'})
       })
+    }
+
+    //    获取评论
+    fetchComments() {
+      NetworkManagerGoods.goodsComments(this.skuId)
+        .then(list => {
+          this.commentsCount = list.length;
+          this.comments = list.map(item => {
+            let picArray = item.pictureInfoList.split(',').map(url => {
+              return 'http:' + url;
+            })
+            let havePic = picArray.length !== 0;
+            let userImg;
+            if (item.userImgURL.indexOf('http://') < 0) {
+              userImg = 'http://' + item.userImgURL;
+            } else {
+              userImg = item.userImgURL;
+            }
+            return {picArray, havePic, userImg, ...item}
+          })
+          this.comments = this.comments.slice(0, 3);
+          if (this.comments.length > 0) {
+            this.showComments = true;
+          }
+          this.$apply();
+        }, err => {
+          console.log(err)
+        })
     }
 
     fetchGoodsImages() {

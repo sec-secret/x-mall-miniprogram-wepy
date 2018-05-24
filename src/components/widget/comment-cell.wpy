@@ -1,0 +1,164 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .comment-item {
+    background-color: #fff;
+    margin-left: 30rpx;
+    padding-bottom: 30rpx;
+    border-bottom: 1px solid #f1f1f1;
+    .first-line {
+      @include flex-x();
+      .user-head {
+        width: 52rpx;
+        height: 52rpx;
+        border-radius: 52rpx;
+        margin-top: 20rpx;
+      }
+      .user-info {
+        margin-left: 20rpx;
+        margin-top: 26rpx;
+        .name-line {
+          @include flex-x-middle();
+          .name {
+            font-size: $xg-size-4;
+            color: #333;
+          }
+          view {
+            margin-left: 20rpx;
+            image {
+              width: 26rpx;
+              height: 26rpx;
+            }
+          }
+        }
+        .dim {
+          margin-top: 20rpx;
+          font-size: $xg-size-2;
+          color: #999;
+        }
+      }
+    }
+    .content {
+      padding: 30rpx 30rpx 30rpx 0;
+      .text {
+        padding-bottom: 30rpx;
+      }
+    }
+    .last-line {
+      padding-right: 30rpx;
+      @include flex-x-middle();
+      @include flex-justify-content_space-between();
+      .date {
+        color: #999;
+        font-size: $xg-size-2;
+      }
+      .btn-group {
+        @include flex-x-middle();
+        .like {
+          @include flex-center();
+          border: 1px solid #a1a1a1;
+          width: 110rpx;
+          height: 38rpx;
+          border-radius: 1rem;
+          margin-left: 26rpx;
+          image {
+            width: 26rpx;
+            height: 26rpx;
+          }
+          text {
+            margin-left: 10rpx;
+            font-size: $xg-size-0;
+          }
+        }
+      }
+    }
+  }
+  swiper {
+    height: 160rpx;
+    .swiper-item {
+      .slide-image {
+        width: 160rpx;
+        height: 160rpx;
+      }
+    }
+  }
+
+</style>
+<template>
+  <view class="comment-item">
+    <view class="first-line">
+      <image class="user-head" src="{{comment.userImg}}">
+      </image>
+      <view class="user-info">
+        <view class="name-line">
+          <text class="name">{{comment.userNickName}}</text>
+          <view>
+            <repeat for="{{comment.commentScore}}">
+              <image src="./img/star.png" alt="" mode="widthFix">
+              </image>
+            </repeat>
+            </image>
+          </view>
+        </view>
+        <text class="dim">{{comment.wareAttributes}}</text>
+      </view>
+    </view>
+    <view class="content">
+      <view class="text">{{comment.commentData}}</view>
+      <view  wx:if="{{comment.havePic}}">
+        <swiper display-multiple-items="4">
+          <repeat for="{{comment.picArray}}">
+            <swiper-item class="swiper-item">
+              <image src="{{item}}" class="slide-image" mode="aspectFit"/>
+            </swiper-item>
+          </repeat>
+        </swiper>
+      </view>
+    </view>
+    <view class="last-line">
+      <view class="date">{{comment.commentDate}}</view>
+      <view class="btn-group">
+        <view class="like" @tap="onClickLike">
+          <image wx:if="{{like}}" src="./img/like.png" mode="widthFix">
+          </image>
+          <image wx:else src="./img/no-like.png" mode="widthFix">
+          </image>
+          <text>{{like ? comment.praiseCnt + 1 : comment.praiseCnt}}</text>
+        </view>
+        <!--<div class="like">-->
+        <!--<img src="./img/comment.png" alt="">-->
+        <!--<span>{{comment.replyCnt}}</span>-->
+        <!--</div>-->
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import globalWxs from '../../wxs/global.wxs';
+  export default class CommentCell extends wepy.component {
+    props = {
+      comment: Object
+    }
+
+    data = {
+        like: false
+    }
+
+    wxs = {
+        globalWxs
+    }
+
+    computed = {}
+
+    watch = {}
+
+    methods = {
+      onClickLike() {
+        this.like = !this.like;
+        this.$apply();
+      }
+    }
+
+    onLoad() {}
+  }
+</script>

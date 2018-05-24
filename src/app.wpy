@@ -36,6 +36,7 @@
         // 'pages/other/other',
         'pages/main/main',
         'pages/main/goods-detail',
+        'pages/main/comment-list',
         'pages/main/recommend-list',
         'pages/category/category',
         'pages/category/category-detail',
