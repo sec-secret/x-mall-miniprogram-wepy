@@ -169,6 +169,9 @@
           <text>{{cat.catName}}</text>
         </view>
       </repeat>
+      <view @tap="onClickAllCategory">
+        <text>查看更多</text>
+      </view>
     </view>
 
     <view class="main-section hot-section">
@@ -185,7 +188,7 @@
     <repeat for="{{categoryGroup}}"
             item="group"
             index="index">
-      <view class="main-section">
+      <view class="main-section" wx:if="{{group.category.catId !== 1320}}">
         <text class="title">{{group.category.catName}}</text>
         <view class="recommend-content"
               @touchstart="actionTouchCategoryStart"
@@ -260,11 +263,11 @@
           icon: './img/icon-jiadian.png',
           catId: 737
         },
-        {
-          catName: '食品',
-          icon: './img/icon-shipin.png',
-          catId: 1320
-        },
+//        {
+//          catName: '食品',
+//          icon: './img/icon-shipin.png',
+//          catId: 1320
+//        },
         {
           catName: '珠宝',
           icon: './img/icon-zhubao.png',
@@ -310,6 +313,12 @@
       onClickCategory(cat) {
         wepy.navigateTo({
           url: 'recommend-list?category=' + JSON.stringify(cat)
+        })
+      },
+//      隐藏食品类目
+      onClickAllCategory() {
+        wepy.switchTab({
+          url: '../category/category'
         })
       },
       actionTouchCategoryStart(e){

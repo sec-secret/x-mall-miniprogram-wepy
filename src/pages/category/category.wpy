@@ -104,6 +104,7 @@
         <repeat for="{{categoryList}}"
                 item="category">
           <view data-index="{{index}}"
+                wx:if="{{category.catId !== 1320}}"
                 class="menu-item ellipsis-1 {{index===selectedMenuIndex?'active':''}}"
                 @tap="actionClickCategory">
             {{category.catName}}
