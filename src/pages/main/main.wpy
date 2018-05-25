@@ -174,17 +174,17 @@
       </view>
     </view>
 
-    <view class="main-section hot-section">
-      <text class="title">人气推荐</text>
-      <view class="recommend-content"
-            @touchstart="actionTouchCategoryStart"
-            @touchmove="actionTouchCategoryMove"
-            @touchend="actionTouchCategoryEnd">
-        <repeat for="{{hotGoods}}" item="goods">
-          <goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>
-        </repeat>
-      </view>
-    </view>
+    <!--<view class="main-section hot-section">-->
+      <!--<text class="title">人气推荐</text>-->
+      <!--<view class="recommend-content"-->
+            <!--@touchstart="actionTouchCategoryStart"-->
+            <!--@touchmove="actionTouchCategoryMove"-->
+            <!--@touchend="actionTouchCategoryEnd">-->
+        <!--<repeat for="{{hotGoods}}" item="goods">-->
+          <!--<goods-cell :goods="goods" @clickGoods.user="onClickGoods"></goods-cell>-->
+        <!--</repeat>-->
+      <!--</view>-->
+    <!--</view>-->
     <repeat for="{{categoryGroup}}"
             item="group"
             index="index">
@@ -385,6 +385,7 @@
         this.hotGoods = data.hotGoods;
         this.recommendGoods = data.hotGoods;
         this.categoryGroup = data.hotCategoryAndGoodsResp.items;
+        this.categoryGroup = this.categoryGroup.reverse();
         this.$apply();
         wepy.hideNavigationBarLoading();
       }, err => {
