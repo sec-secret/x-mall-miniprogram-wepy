@@ -188,7 +188,7 @@
     <repeat for="{{categoryGroup}}"
             item="group"
             index="index">
-      <view class="main-section" wx:if="{{group.category.catId !== 1320}}">
+      <view class="main-section" wx:if="{{group.category.catId !== 1320 && group.category.catId !== 1319}}">
         <text class="title">{{group.category.catName}}</text>
         <view class="recommend-content"
               @touchstart="actionTouchCategoryStart"
@@ -228,11 +228,11 @@
           icon: './img/icon-fuzhuang.png',
           catId: 1315
         },
-        {
-          catName: '母婴',
-          icon: './img/icon-muying.png',
-          catId: 1319
-        },
+//        {
+//          catName: '母婴',
+//          icon: './img/icon-muying.png',
+//          catId: 1319
+//        },
         {
           catName: '数码',
           icon: './img/icon-shuma.png',
