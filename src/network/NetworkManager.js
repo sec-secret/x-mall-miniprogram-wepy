@@ -69,6 +69,8 @@ export default class NetworkManager{
                 };
                 store.dispatch({type: 'UPDATE_AUTHOR_INFO', ...authorData});
                 reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+              } else if (errorCode === 10005) {
+                resolve(responseJson.data);
               } else {
                 reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
               }
@@ -77,7 +79,11 @@ export default class NetworkManager{
             if (!responseJson.errorCode) {
               resolve(responseJson);
             } else {
-              reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+              if (responseJson.errorCode === 10005) {
+                resolve(responseJson.data)
+              } else {
+                reject(NetworkManager.generalError(responseJson.message, responseJson.errorCode));
+              }
             }
           }
         },

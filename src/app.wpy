@@ -21,7 +21,7 @@
   import 'wepy-async-function'
   import { setStore } from 'wepy-redux'
   import configStore from './store'
-  import {UPDATE_USER_INFO} from './store/types/user'
+  import {UPDATE_USER_INFO, UPDATE_AUTHOR_INFO} from './store/types/user'
   import NetworkManagerAuth from './network/NetworkManagerAuth'
 
   const store = configStore()
@@ -100,31 +100,12 @@
     onLaunch(options) {
       let that = this;
       this.testAsync()
-//       let userInfo = {
-//          'openId': 'oMBXg1KfQX3OSxnHrIlTMlHTWjA4',
-//          'nickName': 'ZHXXHZ',
-//          'headImg': 'http://thirdwx.qlogo.cn/mmopen/ajNVdqHZLLDCHLQcYMYHyIEJzrp1FRiaq54gzdyoAsbc2vk5gprMvMzm4B2icJBs1tFpk5qsF89eBicS59Z2SQbSw/132',
-//          'mobile': '15300928006'
-//        }
-//        store.dispatch({
-//          type: UPDATE_USER_INFO,
-//          userInfo: userInfo
-//        })
       wepy.login({
         success: (res) => {
+          console.log(res);
 //              获取登录code成功
           if (res.code) {
-            console.log(res)
-            that.getUserInfo()
-//              NetworkManagerAuth.getUserInfo()
-//                .then(data => {
-//                  getApp().globalData.userInfo = data;
-//                }, err => {
-//                  console.log(err);
-//                })
-//          } else {
-//            console.log('登录失败！' + res.errMsg)
-//          }
+            that.getUserInfo(res.code);
           }
         }
       })
@@ -142,30 +123,48 @@
 //      const data = await this.sleep(3);
     }
 
-    getUserInfo() {
-//      const that = this;
+    getUserInfo(code) {
       wepy.getUserInfo({
         withCredentials: true,
         success (res) {
-          console.log(res);
-          store.dispatch({
-            type: UPDATE_USER_INFO,
-            userInfo: res.userInfo
-          });
+          wepy.showNavigationBarLoading();
+          NetworkManagerAuth.userLogin('wxmini_code', 'wxmini', code, code, res.encryptedData, res.iv).then(loginData => {
+            if (loginData.hasOwnProperty('openId')) {
+//                未注册，需要绑定手机号
+              store.dispatch({
+                type: UPDATE_USER_INFO,
+                userInfo: loginData
+              });
+            } else {
+//          更新Token信息
+              let authorData = {
+                author: loginData,
+                hasAuthor: true,
+                hasUserId: true,
+                token: 'Bearer ' + loginData.access_token,
+                timestamp: new Date().getTime()
+              }
+              store.dispatch({
+                type: UPDATE_AUTHOR_INFO,
+                ...authorData
+              });
+              NetworkManagerAuth.getUserInfo(authorData.token)
+                .then(userInfo => {
+//              全局全局用户信息
+                  store.dispatch({
+                    type: UPDATE_USER_INFO,
+                    userInfo: userInfo
+                  });
+                }, err => {
+                  wepy.showToast({title: err.message, icon: 'none'});
+                  wepy.hideNavigationBarLoading();
+                })
+            }
+          }, err => {
+            wepy.showToast({title: err.message, icon: 'none'});
+            wepy.hideNavigationBarLoading();
+          })
         }
-      })
-    }
-
-    testUnionId(code, options) {
-      NetworkManagerAuth.miniprogramCode2Session(code).then(data => {
-        console.log(data);
-        NetworkManagerAuth.miniprogramDecrypt(data.session_key, options.encryptedData, options.iv).then(data => {
-          console.log(data);
-        }, error => {
-          console.log(error);
-        })
-      }, error => {
-        console.log(error);
       })
     }
   }

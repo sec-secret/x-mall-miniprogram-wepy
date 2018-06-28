@@ -5,7 +5,7 @@ export default class JNetworkMallAuth extends NetworkManager {
     return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getVerifyCode', {mobile}, {}, {}, true)
   }
 
-  static userLogin(authType, username, password = '', openId = '', nickName = '', mobile = '', verifyKey = '') {
+  static userLogin(authType, source, username, password = '', encryptedData, iv, openId = '', unionId = '', nickName = '', mobile = '', verifyKey = '') {
     return this.instance().freedomPOST(AUTH_BASE_URL, '/oauth/token', {
       grant_type: 'password',
       authType,
@@ -14,23 +14,15 @@ export default class JNetworkMallAuth extends NetworkManager {
       openId,
       nickName,
       mobile,
-      verifyKey
+      verifyKey,
+      unionId,
+      source,
+      encryptedData,
+      iv
     }, {'Authorization': 'Basic bmItc2VydmljZTpQSUFPaGFvMTkxQA=='}, {})
   }
 
   static getUserInfo(token) {
     return this.instance().freedomPOST(AUTH_BASE_URL, '/login/getUserInfo', {}, {'Authorization': token}, {}, true);
-  }
-
-  static miniprogramCode2Session(code) {
-    return this.instance().freedomPOST(AUTH_BASE_URL, '/wxmini/miniUserInfoByCode', {code}, {}, {}, true)
-  }
-
-  static miniprogramDecrypt(sessionKey, encryptedData, iv) {
-    return this.instance().freedomPOST(AUTH_BASE_URL, '/wxmini/miniDecrypt', {
-      session_key: sessionKey,
-      encryptedData: encryptedData,
-      iv: iv
-    }, {}, {}, true)
   }
 }

@@ -357,10 +357,8 @@
             'nonceStr': data.nonceStr,
             'package': data.packages,
             'paySign': data.paySign,
-            'signType': 'MD5',
-//          'signType': data.signType,
+            'signType': data.signType,
             'success': (res) => {
-              console.log(res);
               let payInfo = JSON.stringify({address: this.defaultAddress, payTotal: this.payTotal})
               console.log(payInfo);
               wepy.navigateTo({

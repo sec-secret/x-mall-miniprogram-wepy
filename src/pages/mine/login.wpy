@@ -138,12 +138,13 @@
           return
         }
         wepy.showNavigationBarLoading();
-        NetworkManagerAuth.userLogin('mobile', this.mobile, this.verifyCode, this.userInfo.openId, this.userInfo.nickName, this.mobile, this.verifyKey)
+        NetworkManagerAuth.userLogin('mobile', 'wxmini', this.mobile, this.verifyCode, '', '', this.userInfo.openId, this.userInfo.unionId, this.userInfo.nickName, this.mobile, this.verifyKey)
           .then(authData => {
             const store = getStore();
             const authorData = {
               author: authData,
               hasAuthor: true,
+              hasUserId: true,
               token: 'Bearer ' + authData.access_token
             }
             store.dispatch({type: UPDATE_AUTHOR_INFO, ...authorData});

@@ -134,6 +134,12 @@
 
     methods = {
       onClickItem(index) {
+          if (index === 2) {
+            wepy.makePhoneCall({
+              phoneNumber: '2161253866'
+            })
+            return
+          }
         if (!this.isLogin) {
           wepy.navigateTo({
             url: './login'

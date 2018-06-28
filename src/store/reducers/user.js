@@ -13,6 +13,7 @@ export default handleActions({
       ...state,
       authorData: action.author,
       hasAuthor: action.hasAuthor,
+      hasUserId: action.hasUserId,
       token: action.token
     }
   }
@@ -22,10 +23,11 @@ export default handleActions({
     openId: '',
     nickName: '',
     headImg: '',
-    mobile: ''
+    mobile: '',
+    unionId: ''
   },
-  hasUserId: false,
   authorData: {},
   hasAuthor: false,
+  hasUserId: false,
   token: ''
 })
