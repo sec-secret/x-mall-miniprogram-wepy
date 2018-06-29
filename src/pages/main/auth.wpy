@@ -1,0 +1,98 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import "../../assets/scss/index.scss";
+  .auth-page {
+    padding: 0 15rpx;
+    background-color: #fff;
+    height: 100vh;
+    @include flex-center();
+    button {
+      width: 350rpx;
+      background-color: $xg-c-red;
+      color: #fff;
+    }
+  }
+</style>
+<template>
+  <view class="auth-page">
+    <button open-type="getUserInfo" @tap="getAuth">授权</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import { getStore } from 'wepy-redux'
+  export default class AuthList extends wepy.page {
+    config = {
+      navigationBarTitleText: '申请授权'
+    }
+
+    components = {}
+
+    data = {
+    }
+
+    computed = {}
+
+    methods = {
+      getAuth() {
+        let store = getStore();
+        let code = store.getState().user.code;
+        wepy.getUserInfo({
+          withCredentials: true,
+          success(res) {
+            wepy.showNavigationBarLoading();
+            NetworkManagerAuth.userLogin('wxmini_code', 'wxmini', code, code, res.encryptedData, res.iv).then(loginData => {
+              console.log(loginData);
+              wepy.hideNavigationBarLoading();
+              if (loginData.hasOwnProperty('openId')) {
+//                未注册，需要绑定手机号
+                store.dispatch({
+                  type: UPDATE_USER_INFO,
+                  userInfo: loginData
+                });
+              } else {
+//          更新Token信息
+                let authorData = {
+                  author: loginData,
+                  hasAuthor: true,
+                  hasUserId: true,
+                  token: 'Bearer ' + loginData.access_token,
+                  timestamp: new Date().getTime()
+                }
+                store.dispatch({
+                  type: UPDATE_AUTHOR_INFO,
+                  ...authorData
+                });
+                NetworkManagerAuth.getUserInfo(authorData.token)
+                  .then(userInfo => {
+                    console.log(userInfo);
+                    wepy.hideNavigationBarLoading();
+//              全局全局用户信息
+                    store.dispatch({
+                      type: UPDATE_USER_INFO,
+                      userInfo: userInfo
+                    });
+                    wx.navigateBack({
+                      delta: 1
+                    })
+                  }, err => {
+                    wepy.showToast({title: err.message, icon: 'none'});
+                    wepy.hideNavigationBarLoading();
+                  })
+              }
+            }, err => {
+              wepy.showToast({title: err.message, icon: 'none'});
+              wepy.hideNavigationBarLoading();
+            })
+          },
+          fail(err) {
+            console.log('失败');
+          }
+        })
+      }
+    }
+
+    onLoad(option) {
+    }
+  }
+</script>

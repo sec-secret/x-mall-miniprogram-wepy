@@ -1,5 +1,6 @@
 <style lang="scss" rel="stylesheet/scss">
   @import './assets/scss/index.scss';
+
   .container {
     height: 100%;
     display: flex;
@@ -10,6 +11,7 @@
     font-size: $xg-size-4;
     color: #333;
   }
+
   page {
     font-size: 30rpx;
     background-color: $xg-c-bg;
@@ -19,9 +21,9 @@
 <script>
   import wepy from 'wepy'
   import 'wepy-async-function'
-  import { setStore } from 'wepy-redux'
+  import {setStore} from 'wepy-redux'
   import configStore from './store'
-  import {UPDATE_USER_INFO, UPDATE_AUTHOR_INFO} from './store/types/user'
+  import {UPDATE_USER_INFO, UPDATE_AUTHOR_INFO, UPDATE_CODE} from './store/types/user'
   import NetworkManagerAuth from './network/NetworkManagerAuth'
 
   const store = configStore()
@@ -51,7 +53,8 @@
         'pages/mine/address-detail',
         'pages/payment/payment',
         'pages/payment/payment-result',
-        'pages/other/search'
+        'pages/other/search',
+        'pages/main/auth'
       ],
       window: {
         backgroundTextStyle: 'light',
@@ -92,7 +95,7 @@
       }
     }
 
-    constructor () {
+    constructor() {
       super()
       this.use('requestfix')
       // this.use('promisify')
@@ -103,16 +106,19 @@
       this.testAsync()
       wepy.login({
         success: (res) => {
-          console.log(res);
 //              获取登录code成功
           if (res.code) {
+            store.dispatch({
+              type: UPDATE_CODE,
+              code: res.code
+            });
             that.getUserInfo(res.code);
           }
         }
       })
     }
 
-    sleep (s) {
+    sleep(s) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve('promise resolved')
@@ -120,16 +126,22 @@
       })
     }
 
-    async testAsync () {
+    async testAsync() {
 //      const data = await this.sleep(3);
     }
 
     getUserInfo(code) {
+//      wepy.authorize({
+//        scope: 'scope.userInfo',
+//        success() {
+//        }
+//      })
       wepy.getUserInfo({
         withCredentials: true,
-        success (res) {
+        success(res) {
           wepy.showNavigationBarLoading();
           NetworkManagerAuth.userLogin('wxmini_code', 'wxmini', code, code, res.encryptedData, res.iv).then(loginData => {
+            console.log(loginData);
             wepy.hideNavigationBarLoading();
             if (loginData.hasOwnProperty('openId')) {
 //                未注册，需要绑定手机号
@@ -152,6 +164,7 @@
               });
               NetworkManagerAuth.getUserInfo(authorData.token)
                 .then(userInfo => {
+                  console.log(userInfo);
                   wepy.hideNavigationBarLoading();
 //              全局全局用户信息
                   store.dispatch({
@@ -166,6 +179,18 @@
           }, err => {
             wepy.showToast({title: err.message, icon: 'none'});
             wepy.hideNavigationBarLoading();
+          })
+        },
+        fail(err) {
+          console.log('失败');
+          wepy.showModal({
+            title: '警告',
+            content: '尚未进行授权，请点击确定跳转到授权页面进行授权。',
+            success: function (res) {
+              wepy.navigateTo({
+                url: './auth',
+              })
+            }
           })
         }
       })
