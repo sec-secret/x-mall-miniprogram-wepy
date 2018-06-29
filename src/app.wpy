@@ -46,6 +46,7 @@
         'pages/mine/order-list',
         'pages/mine/order-detail',
         'pages/mine/order-track',
+        'pages/mine/customer',
         'pages/mine/address-list',
         'pages/mine/address-detail',
         'pages/payment/payment',
@@ -129,6 +130,7 @@
         success (res) {
           wepy.showNavigationBarLoading();
           NetworkManagerAuth.userLogin('wxmini_code', 'wxmini', code, code, res.encryptedData, res.iv).then(loginData => {
+            wepy.hideNavigationBarLoading();
             if (loginData.hasOwnProperty('openId')) {
 //                未注册，需要绑定手机号
               store.dispatch({
@@ -150,6 +152,7 @@
               });
               NetworkManagerAuth.getUserInfo(authorData.token)
                 .then(userInfo => {
+                  wepy.hideNavigationBarLoading();
 //              全局全局用户信息
                   store.dispatch({
                     type: UPDATE_USER_INFO,

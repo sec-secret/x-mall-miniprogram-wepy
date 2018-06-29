@@ -1,0 +1,901 @@
+<style lang="scss" rel="stylesheet/scss">
+  @import '../../assets/scss/index.scss';
+  .customer-page {
+    padding-top: $xg-nav-height;
+    padding-bottom: 100rpx;
+    .page-content {
+      .goods-part {
+        padding-left: 30rpx;
+        background-color: #fff;
+        .content {
+          padding-right: 30rpx;
+          @include flex-x-middle();
+          image {
+            width: 146rpx;
+            height: 146rpx;
+            margin: 24rpx 0;
+          }
+          .goods-info {
+            margin-left: 20rpx;
+            height: 100%;
+            @include flex(1);
+            @include flex-y-center();
+            .name {
+              @include ellipsis();
+              margin-bottom: 10rpx;
+              font-size: $xg-size-4;
+            }
+            .dim {
+              @include ellipsis(2);
+              font-size: $xg-size-2;
+              color: #999;
+            }
+            .price {
+              font-size: $xg-size-5;
+              margin-top: 10rpx;
+              color: $xg-c-red;
+            }
+          }
+          .count {
+            font-size: $xg-size-4;
+            color: #333;
+          }
+        }
+      }
+      .customer-type {
+        height: 88rpx;
+        background-color: #fff;
+        margin-top: 20rpx;
+        border-bottom: 1px solid $xg-c-seg;
+        @include flex-center();
+        text {
+          width: 108rpx;
+          height: 44rpx;
+          line-height: 44rpx;
+          color: #a1a1a1;
+          border: 1px solid #a1a1a1;
+          text-align: center;
+          font-size: $xg-size-2;
+          &.active {
+            background-color: $xg-c-red;
+            color: #fff;
+            border: 1px solid $xg-c-red;
+          }
+          &:first-of-type {
+            border-radius: 44rpx 0 0 44rpx;
+          }
+          &:nth-of-type(2) {
+            border-width: 1px 0 1px 0;
+          }
+          &:last-of-type {
+            border-radius: 0 44rpx 44rpx 0;
+          }
+        }
+      }
+      .details-part {
+        padding: 10rpx 30rpx;
+        border-bottom: 1px solid $xg-c-seg;
+        background-color: #fff;
+        .item {
+          height: 60rpx;
+          @include flex-x-middle();
+          @include flex-justify-content_space-between();
+          color: #333;
+          .item-title {
+            color: #666;
+          }
+        }
+      }
+      .address-part {
+        background-color: #fff;
+        color: #666;
+        .section {
+          @include flex-x-middle();
+          @include flex-justify-content_space-between();
+          height: 60rpx;
+          padding: 0 30rpx;
+          input {
+            @include flex(1);
+            font-size: $xg-size-4;
+            text-align: right;
+            color: #333;
+            &::-webkit-input-placeholder {
+              font-size: $xg-size-4;
+              color: $c-999;
+            }
+            &:-moz-placeholder {
+              font-size: $xg-size-4;
+              color: $c-999;
+            }
+            &::-moz-placeholder {
+              font-size: $xg-size-4;;
+              color: $c-999;
+            }
+            &:-ms-input-placeholder {
+              font-size: $xg-size-4;
+              color: $c-999;
+            }
+          }
+          .placeholder {
+            font-size: $xg-size-4;
+            color: $c-999;
+          }
+          .area {
+            color: #333;
+          }
+          &.address-street {
+            padding: 20rpx 30rpx;
+            height: auto;
+            .item-title {
+              align-self: flex-start;
+            }
+            textarea {
+              @include flex(1);
+              resize: none;
+              border: 0;
+              text-align: right;
+              font-size: $xg-size-4;
+              color: #333;
+              &::-webkit-input-placeholder {
+                font-size: $xg-size-4;
+                color: $c-999;
+              }
+              &:-moz-placeholder {
+                font-size: $xg-size-4;
+                color: $c-999;
+              }
+              &::-moz-placeholder {
+                font-size: $xg-size-4;
+                color: $c-999;
+              }
+              &:-ms-input-placeholder {
+                font-size: $xg-size-4;
+                color: $c-999;
+              }
+            }
+          }
+          &.set-default {
+            @include flex-justify-content_space-between();
+            image {
+              width: 34rpx;
+              height: 34rpx;
+            }
+          }
+        }
+      }
+      .describe-part {
+        background-color: #fff;
+        .package-section {
+          height: 60rpx;
+          @include flex-x-middle();
+          @include flex-justify-content_space-between();
+          color: #333;
+          .item-title {
+            color: #666;
+          }
+        }
+        .remark-section {
+          @include flex-x-middle();
+          padding: 0 30rpx;
+          color: #666;
+          .item-title {
+            align-self: flex-start;
+          }
+          textarea {
+            @include flex(1);
+            resize: none;
+            height: 100%;
+            border: 0;
+            font-size: $xg-size-4;
+            color: #333;
+            padding-left: 30rpx;
+            &::-webkit-input-placeholder {
+              font-size: $xg-size-4;
+              color: $c-999;
+            }
+            &:-moz-placeholder {
+              font-size: $xg-size-4;
+              color: $c-999;
+            }
+            &::-moz-placeholder {
+              font-size: $xg-size-4;;
+              color: $c-999;
+            }
+            &:-ms-input-placeholder {
+              font-size: $xg-size-4;
+              color: $c-999;
+            }
+          }
+        }
+        .pic-section {
+          padding: 20rpx 30rpx;
+          @include flex-x();
+          .new-file-input {
+            width: 140rpx;
+            height: 140rpx;
+            border: 1px dashed #a1a1a1;
+            padding: 0 20rpx;
+            @include flex-y-middle();
+            @include justify-content-center();
+            @include flex(none);
+            text {
+              color: #a1a1a1;
+              font-size: $xg-size-2;
+              margin-top: 10rpx;
+            }
+            image {
+              width: 40rpx;
+            }
+          }
+          .img-box {
+            padding-left: 30rpx;
+            @include flex-x();
+            flex-wrap: wrap;
+            .img-wrapper {
+              width: 173rpx;
+              height: 173rpx;
+              padding: 10rpx;
+              overflow: hidden;
+              position: relative;
+              @include flex-center();
+              image {
+                width: 100%;
+              }
+              text {
+                position: absolute;
+                right: 20rpx;
+                top: 20rpx;
+                display: block;
+                width: 30rpx;
+                height: 30rpx;
+                line-height: 30rpx;
+                text-align: center;
+                color: #333;
+                background-color: rgba(255, 255, 255, 0.6);
+              }
+            }
+          }
+        }
+      }
+      .footer-part {
+        margin-top: 20rpx;
+        height: 100rpx;
+        background-color: #fff;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        @include flex-center();
+        button {
+          width: 240rpx;
+          height: 70rpx;
+          border-radius: 70rpx;
+          background-color: #f1f1f1;
+          color: #999;
+          font-size: $xg-size-4;
+          &.active {
+            background-color: $xg-c-red;
+            color: #fff;
+          }
+        }
+      }
+    }
+    .popup {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      .address-section {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        background-color: white;
+        height: 900rpx;
+        width: 100%;
+        overflow: auto;
+        .title-list {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 80rpx;
+          width: 100%;
+          padding: 0 25rpx;
+          border-bottom: 1px solid $xg-c-seg;
+          background-color: #fff;
+          view {
+            display: inline-block;
+            margin-right: 20rpx;
+            height: 80rpx;
+            line-height: 80rpx;
+            &.selectedTitle {
+              color: $xg-c-red;
+              font-weight: blod;
+              border-bottom: 2rpx solid $xg-c-red;
+            }
+          }
+        }
+        .item-list {
+          margin-top: 80rpx;
+          .wrapper {
+            view {
+              height: 80rpx;
+              line-height: 80rpx;
+              margin-left: 25rpx;
+              width: 100%;
+              &.selectedArea {
+                color: $xg-c-red;
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+    }
+    .package-list {
+      padding-left: 30rpx;
+      .package-item {
+        height: 60rpx;
+        line-height: 60rpx;
+        &.active {
+          color: $xg-c-red;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="customer-page">
+    <view class="page-content">
+      <view class="goods-part">
+        <view @tap="onClickGoods({{goods}})" class="content">
+          <image src="{{goods.goodsImg}}" mode="widthFix">
+          </image>
+          <view class="goods-info">
+            <text class="name">{{goods.name}}</text>
+            <view class="dim">
+              {{goods.saleValue}}
+            </view>
+            <text class="price">￥{{globalWxs.formatFenPrice(goods.nbPrice)}}</text>
+          </view>
+          <view class="num">
+            <text>X {{goods.num}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="customer-type">
+        <text :class="{'active': customerExpect === 10}" @tap="onClickExpect(10)">退货</text>
+        <text :class="{'active': customerExpect === 20}" @tap="onClickExpect(20)">换货</text>
+        <text :class="{'active': customerExpect === 30}" @tap="onClickExpect(30)">维修</text>
+      </view>
+      <view class="details-part">
+        <!--<div class="item">-->
+        <!--<span>退货</span>-->
+        <!--<span>退货原因</span>-->
+        <!--</div>-->
+        <view class="item">
+          <text class="item-title">退货方式</text>
+          <text>上门取件</text>
+        </view>
+        <view class="item">
+          <text class="item-title">包装描述</text>
+          <text @click="onClickPackage">{{packageTitle}}</text>
+        </view>
+        <view class="item">
+          <text class="item-title">退款金额</text>
+          <text>￥{{globalWxs.formatFenPrice(total)}}</text>
+        </view>
+      </view>
+      <view class="address-part">
+        <view class="name section">
+          <text class="item-title">联系人:</text>
+          <input type="text"
+                 placeholder="联系人姓名"
+                 value="{{customerContactName}}"/>
+        </view>
+        <view class="mobile section">
+          <text class="item-title">联系方式:</text>
+          <input type="number"
+                 placeholder="收货人手机号"
+                 maxlength="11"
+                 value="{{customerMobilePhone}}"/>
+        </view>
+        <view class="address-city section" @tap="onClickAddress">
+          <text class="item-title">取货地址：</text>
+          <text wx:if="{{province.areaId === 0}}" class="content placeholder">省份 城市 区县</text>
+          <text wx:else class="area">{{province.areaName}} {{city.areaName}} {{county.areaName}} {{town.areaName}}</text>
+        </view>
+        <view class="address-street pr2 section">
+          <text class="item-title">详细地址：</text>
+          <textarea value="{{detailAddress}}"
+                    auto-height
+                    placeholder="详细地址"></textarea>
+        </view>
+      </view>
+      <view class="describe-part">
+        <view class="remark-section">
+          <text class="item-title">退货原因:</text>
+          <textarea value="{{questionDesc}}"
+                    auto-height
+                    placeholder="选填"
+                    maxlength="1000"></textarea>
+        </view>
+        <view class="pic-section">
+          <!--<input type="file"-->
+                 <!--id="imgInput"-->
+                 <!--accept="image/jpeg,image/x-png,image/jpg"-->
+                 <!--multiple ref="file"-->
+                 <!--style="display: none"-->
+                 <!--@change="onClickUpload"/>-->
+          <view class="new-file-input" @tap="onClickFile">
+            <image src="./img/pic-icon.png" mode="widthFix">
+            </image>
+            <text>上传凭证最多六张</text></view>
+          <view class="img-box">
+            <repeat for="{{imgList}}">
+            <view class="img-wrapper">
+              <image src="{{item}}" mode="widthFix">
+              </image>
+              <text @tap="onClickImgClose(index)">X</text>
+            </view>
+            </repeat>
+          </view>
+        </view>
+      </view>
+      <view class="footer-part">
+        <view class="submit">
+          <button @tap="onClickSubmit" :class="{'active': canSubmit}">提交申请</button>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{showAddress}}" class="popup" @tap="onCloseAddress">
+      <view class="address-section" @tap.stop="onClickContent">
+        <view class="title-list">
+          <repeat for="{{titleList}}" item="title">
+            <view :class="{'selectedTitle': showLevel === index}"
+                  @tap="onClickTitle({{index}})">
+              {{(longAddress[index].areaName !== '') ? longAddress[index].areaName : title}}
+            </view>
+          </repeat>
+        </view>
+        <view class="item-list">
+          <view class="wrapper li" hidden="{{showLevel !== 0}}">
+            <repeat for="{{provinces}}" item="i">
+              <view
+                :class="{selectedArea: i.areaName === province.areaName}"
+                @tap="onClickProvince({{i}})">{{i.areaName}}</view>
+            </repeat>
+          </view>
+          <view class="wrapper li" hidden="{{showLevel !== 1}}">
+            <repeat for="{{cities}}" item="i">
+              <view :class="{selectedArea: i.areaName === city.areaName}"
+                    @tap="onClickCity({{i}})">{{i.areaName}}</view>
+            </repeat>
+          </view>
+          <view class="wrapper li" hidden="{{showLevel !== 2}}">
+            <repeat for="{{counties}}"
+                    item="i">
+              <view :class="{selectedArea: i.areaName === county.areaName}"
+                    @tap="onClickCounty({{i}})">{{i.areaName}}</view>
+            </repeat>
+          </view>
+          <view class="wrapper li" hidden="{{showLevel !== 3}}">
+            <repeat for="{{towns}}"
+                    item="i">
+              <view :class="{selectedArea: i.areaName === town.areaName}"
+                    @tap="onClickTown({{i}})">{{i.areaName}}</view>
+            </repeat>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!--<mt-popup v-model="showPackage"-->
+              <!--position="bottom"-->
+              <!--class="address-popup"-->
+              <!--popup-transition="popup-fade">-->
+      <!--<slot>-->
+        <!--<div class="package-list">-->
+          <!--<div v-for="item in packageList" class="package-item" :class="{active: packageDesc === item.id}"-->
+               <!--@click="onClickPackageItem(item)">-->
+            <!--{{item.name}}-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</slot>-->
+    <!--</mt-popup>-->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import { connect } from 'wepy-redux'
+  import globalWxs from '../../wxs/global.wxs'
+  import NetworkManagerMine from '@/network/NetworkManagerMine'
+  import NetworkManagerCustomer from '@/network/NetworkManagerCustomer'
+
+  @connect({
+    isLogin(state) {
+      return state.user.hasAuthor;
+    },
+    userInfo(state) {
+      return state.user.userInfo;
+    }
+  })
+
+  export default class Customer extends wepy.page {
+    config = {
+      navigationBarTitleText: '申请售后'
+    };
+    wxs = {
+      globalWxs
+    }
+
+    components = {}
+
+    data = {
+      customerExpect: 10, // 客户预期：退货(10)、换货(20)、维修(30)
+      questionDesc: '', // 产品问题描述（最多1000字符）
+      isNeedDetectionReport: false, // 是否需要检测报告
+      isHasPackage: false, // 是否有包装
+      packageDesc: 0, // 包装描述
+      customerContactName: '',
+      customerMobilePhone: '',
+      customerEmail: '',
+      customerPostcode: '',
+      showAddress: false,
+      pickwareType: 4, // 取件方式：上门取件（4）
+      province: {
+        areaName: '',
+        areaId: 0
+      },
+      city: {
+        areaName: '',
+        areaId: 0
+      },
+      county: {
+        areaName: '',
+        areaId: 0
+      },
+      town: {
+        areaName: '',
+        areaId: 0
+      },
+      detailAddress: '',
+      files: [],
+      imgList: [],
+      showLevel: 0,
+      provinces: [],
+      cities: [],
+      counties: [],
+      towns: [],
+      titleList: [
+        '省份',
+        '城市',
+        '乡镇'
+      ],
+      packageList: [
+        {name: '无包装', id: 0},
+        {name: '包装完整', id: 10},
+        {name: '包装破损', id: 20}
+      ],
+      showPackage: false,
+      packageTitle: '请选择',
+      selectedPackage: false,
+      orderInfo: {},
+      defaultAddress: {},
+      goods: {}
+    }
+
+    computed = {
+        total() {
+          let goods = this.goods;
+          return goods.nbPrice * goods.num;
+        },
+      longAddress() {
+        return [this.province, this.city, this.county, this.town]
+      },
+      skuId() {
+            return this.goods.skuId
+      },
+      orderId() {
+        return this.orderInfo.orderId;
+      }
+    }
+
+    methods = {
+      onClickExpect(type) {
+        this.customerExpect = Number(type);
+        this.$apply();
+      },
+      onClickAddress() {
+        this.showAddress = true;
+      },
+      onClickTitle(index) {
+        this.showLevel = index;
+        this.$apply();
+      },
+      onClickContent() {
+        console.log('nothing')
+      },
+      onCloseAddress() {
+        console.log('close')
+        this.showAddress = false;
+        this.$apply();
+      },
+      onClickProvince(item) {
+        NetworkManagerMine.fetchCities({provinceId: item.areaId})
+          .then(list => {
+//            document.querySelector('.address-section').scrollTop = 0;
+            this.showLevel = 1;
+            this.province = item;
+            this.cities = list;
+            this.city = {
+              areaName: '',
+              areaId: 0
+            };
+            this.counties = [];
+            this.county = {
+              areaName: '',
+              areaId: 0
+            };
+          }, err => {
+            console.log(err)
+          })
+      },
+      onClickProvince(item) {
+        NetworkManagerMine.fetchCities({provinceId: item.areaId})
+          .then(list => {
+//            document.querySelector('.address-section').scrollTop = 0;
+            this.showLevel = 1;
+            this.province = item;
+            this.cities = list;
+            this.city = {
+              areaName: '',
+              areaId: 0
+            };
+            this.counties = [];
+            this.county = {
+              areaName: '',
+              areaId: 0
+            };
+            this.$apply();
+          }, err => {
+            console.log(err)
+          })
+      },
+      onClickCity(item) {
+        NetworkManagerMine.fetchCounties({cityId: item.areaId})
+          .then(list => {
+//            document.querySelector('.address-section').scrollTop = 0;
+            this.showLevel = 2;
+            this.city = item;
+            this.counties = list;
+            this.county = {
+              areaName: '',
+              areaId: 0
+            };
+            this.$apply();
+          }, err => {
+            console.log(err)
+          })
+      },
+      onClickCounty(item) {
+//        document.querySelector('.address-section').scrollTop = 0;
+        this.county = item;
+        NetworkManagerMine.fetchTowns({countyId: item.areaId})
+          .then(list => {
+            if (list.length !== 0) {
+              this.titleList.push('区域');
+              this.showLevel = 3;
+              this.towns = list;
+              this.town = {
+                areaName: '',
+                areaId: 0
+              }
+            } else {
+              this.showLevel = 2;
+              this.towns = list;
+              this.town = {
+                areaName: '',
+                areaId: 0
+              }
+              this.titleList = this.titleList.slice(0, 3);
+              this.showAddress = false;
+            }
+            this.$apply();
+//              document.querySelector('.address-section').scrollTop = 0;
+          }, err => {
+            console.log(err)
+          })
+      },
+      onClickTown(item) {
+//        document.querySelector('.address-section').scrollTop = 0;
+        this.town = item;
+        this.showAddress = false;
+        this.$apply();
+      },
+      onClickFile() {
+        if (this.imgList.length === 6) {
+          wepy.showToast({title: '最多上传6张图片', icon: 'none'})
+          return
+        }
+        let files;
+        let params = {
+          'orderId': this.orderId,
+          'skuId': this.skuId
+        }
+        wepy.chooseImage({
+          success: (res) => {
+            console.log(res);
+            files = res.tempFilePaths;
+//            this.imgList = [...this.imgList, ...files];
+//            wepy.saveFile({
+//              tempFilePath: files[0],
+//              success: function(saveFile) {
+//                console.log(saveFile);
+//              }
+//            })
+            this.$apply();
+            wepy.showNavigationBarLoading();
+            NetworkManagerCustomer.uploadFiles(files, params)
+              .then(res => {
+                wepy.hideNavigationBarLoading();
+                if (!res.errorCode) {
+                  this.imgList = [...this.imgList, ...res.data];
+                } else {
+                  wepy.showToast({title: res.message, icon: 'none'})
+                }
+              }, err => {
+                wepy.hideNavigationBarLoading();
+                wepy.showToast({title: '上传失败', icon: 'none'})
+              })
+          }
+        })
+      },
+      onClickUpload() {
+        let limitNum = 6;
+        let query = wx.createSelectorQuery();
+        let imgInput = query.select('#imgInput');
+        this.files = imgInput.files;
+        let params = new FormData();
+        for (let i = 0; i < this.files.length; i++) {
+          if (i === 6) {
+            Toast('最多上传6张图片');
+            break
+          }
+          params.append('files', this.files[i]);
+        }
+        console.log('进行中')
+        this.upLoadImg(params);
+      },
+      onClickImgClose(index) {
+        this.imgList.splice(index, 1);
+      }
+    };
+
+    onLoad() {
+        let options = {
+          address: {
+            town: 0,
+            province: 2,
+            cityName: '徐汇区',
+            city: 2813,
+            county: 51976,
+            mobile: '18621077431',
+            name: '张浩轩',
+            detailAddress: '远中',
+            provinceName: '上海',
+            countyName: '城区'
+          },
+          goods: {
+            skuId: 5604283,
+            nbPrice: 596400,
+            name: '【KA】Apple iPhone 8 Plus (A1864) 64GB 银色 移动联通电信4G手机',
+            goodsImg: 'http://xiaogua.oss-cn-hangzhou.aliyuncs.com/nb/goodsImg/5604283.jpg',
+            num: 1,
+            saleValue: '颜色:银色 / 版本:公开版'
+          },
+          order: {
+            orderId: '2018062814435761512288',
+            addressId: 56,
+            freightAmount: 0,
+            nbAmount: 596400,
+            status: 121,
+            userId: 250,
+            outTradeNo: '2018062814435761512288_826',
+            payType: 'wxmini',
+            remark:'',
+            wzOrderId: '201806285910000075',
+            createdTime: '2018-06-28 14:43:58',
+            payTime: '2018-06-28 14:44:01',
+            updateTime: '2018-06-28 14:44:11',
+            tails: {}
+          }
+        }
+        console.log(options);
+      this.orderInfo = options.order;
+      this.defaultAddress = options.address;
+      this.goods = options.goods;
+      this.customerMobilePhone = this.defaultAddress.mobile;
+      this.customerContactName = this.defaultAddress.name;
+      this.detailAddress = this.defaultAddress.detailAddress;
+      this.province = {
+        areaName: this.defaultAddress.provinceName,
+        areaId: this.defaultAddress.province
+      };
+      this.city = {
+        areaName: this.defaultAddress.cityName,
+        areaId: this.defaultAddress.city
+      };
+      this.county = {
+        areaName: this.defaultAddress.countyName,
+        areaId: this.defaultAddress.county
+      };
+      this.town = {
+        areaName: this.defaultAddress.townName,
+        areaId: this.defaultAddress.town
+      };
+      NetworkManagerMine.fetchProvince()
+        .then(list => {
+          this.provinces = list.sort(function (a, b) {
+            return a.areaId - b.areaId
+          });
+//          如果是编辑的情况
+            let addressInfo = this.defaultAddress;
+            this.province = list.find(item => {
+              return item.areaId === addressInfo.province;
+            })
+            this.$apply();
+            NetworkManagerMine.fetchCities({provinceId: addressInfo.province})
+              .then(list => {
+                this.cities = list.sort(function (a, b) {
+                  return a.areaId - b.areaId
+                });
+                this.city = list.find(item => {
+                  return item.areaId === addressInfo.city;
+                })
+                this.$apply();
+              }, err => {
+                wepy.showToast({title: err.message, icon: 'none'})
+              })
+
+            NetworkManagerMine.fetchCounties({cityId: addressInfo.city})
+              .then(list => {
+                this.showLevel = 2;
+                this.counties = list.sort(function (a, b) {
+                  return a.areaId - b.areaId
+                });
+                this.county = list.find(item => {
+                  return item.areaId === addressInfo.county;
+                })
+                this.$apply();
+              }, err => {
+                wepy.showToast({title: err.message, icon: 'none'})
+              })
+            if (addressInfo.town !== 0) {
+              NetworkManagerMine.fetchTowns({countyId: addressInfo.county})
+                .then(list => {
+                  this.showLevel = 3;
+                  this.titleList.push('区域');
+                  this.towns = list.sort(function (a, b) {
+                    return a.areaId - b.areaId
+                  });
+                  this.town = list.find(item => {
+                    return item.areaId === addressInfo.town;
+                  })
+                  this.$apply();
+                }, err => {
+                  wepy.showToast({title: err.message, icon: 'none'})
+                })
+            }
+        }, err => {
+          console.log(err)
+        })
+      this.$apply();
+    }
+
+    onShow() {}
+  }
+</script>

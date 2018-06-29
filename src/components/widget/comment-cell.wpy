@@ -105,7 +105,7 @@
     <view class="content">
       <view class="text">{{comment.commentData}}</view>
       <view  wx:if="{{comment.havePic}}">
-        <swiper display-multiple-items="4">
+        <swiper wx:if="{{comment.picArray.length !== 0}}" display-multiple-items="4">
           <repeat for="{{comment.picArray}}">
             <swiper-item class="swiper-item">
               <image src="{{item}}" class="slide-image" mode="aspectFit"/>

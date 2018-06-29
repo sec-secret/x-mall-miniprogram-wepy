@@ -81,8 +81,19 @@
         }
       }
       .count {
-        font-size: $xg-size-4;
-        color: #333;
+        @include flex-y-middle();
+        .num {
+          font-size: $xg-size-4;
+          color: #333;
+        }
+        .customer {
+          margin-top: 20rpx;
+          font-size: $xg-size-2;
+          border-radius: 100rpx;
+          border: 1px solid $xg-c-red;
+          color: $xg-c-red;
+          padding: 0 10rpx;
+        }
       }
     }
   }
@@ -205,8 +216,9 @@
           </view>
           <text class="price">￥{{globalWxs.formatFenPrice(i.nbPrice)}}</text>
         </view>
-        <view class="num">
-          <text>x {{i.num}}</text>
+        <view class="count">
+          <text class="num">x {{i.num}}</text>
+          <!--<span class="customer" @tap.stop="onClickCustomer({{i}})">申请售后</span>-->
         </view>
       </view>
     </repeat>
@@ -326,6 +338,11 @@
             wepy.hideNavigationBarLoading();
             wepy.showToast({title: err.message, icon: 'none'})
           })
+      },
+      onClickCustomer(goods) {
+          wepy.navigateTo({
+          url: `./customer?order=${JSON.stringify(this.orderInfo.order)}&address=${JSON.stringify(this.orderInfo.address)}&goods=${JSON.stringify(goods)}`
+          });
       }
     }
 

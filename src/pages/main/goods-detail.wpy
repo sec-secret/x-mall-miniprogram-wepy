@@ -1,5 +1,6 @@
 <style lang="scss" rel="stylesheet/scss">
   @import '../../assets/scss/index.scss';
+  @import '../../assets/scss/jd-detail.scss';
 
   .mall-goods-detail {
     padding-bottom: $tab-bar-height;
@@ -7,11 +8,11 @@
       position: relative;
       background: $color-white;
       .swiper {
+        height: auto;
         .image {
           display: block;
           overflow: hidden;
           width: 100%;
-          height: 100%;
         }
       }
       .page-number {
@@ -138,6 +139,28 @@
         padding: 0 30rpx;
         color: #666;
         font-size: $xg-size-4;
+      }
+    }
+  }
+
+  .fix-titles {
+    @include flex-x-middle();
+    z-index: 10;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background-color: #fff;
+    height: 80rpx;
+    border-bottom: 1px solid $xg-c-seg;
+    view {
+      @include flex(1);
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      &.active {
+        font-weight: bold;
+        color: $xg-c-red;
       }
     }
   }
@@ -360,17 +383,32 @@
   }
 </style>
 <template>
-    <scroll-view class="mall-goods-detail" scroll-y style="height: 100vh" bindscroll="scroll">
+  <!--<view class="fix-titles" wx:if="{{showTitle}}">-->
+        <!--<view :class="{'active': showTopIndex === 0}"-->
+              <!--@tap="onClickTopTitle(0)">评论</view>-->
+    <!--<view :class="{'active': showTopIndex === 1}"-->
+          <!--@tap="onClickTopTitle(1)">详情</view>-->
+    <!--<view :class="{'active': showTopIndex === 2}"-->
+          <!--@tap="onClickTopTitle(2)">规格</view>-->
+  <!--</view>-->
+    <scroll-view class="mall-goods-detail"
+                 scroll-y
+                 style="height: 100vh"
+                 bindscroll="scroll"
+                 scroll-into-view="{{toView}}">
       <view class="goods-image-area">
         <swiper class="swiper"
-                bindchange="actionChangeGoodsImage">
+                bindchange="actionChangeGoodsImage"
+                style="height:{{imgheights[goodsImageIndex]}}rpx;">
           <repeat for="{{goodsImageList}}"
                   item="imageUrl"
                   key="index">
             <swiper-item class="swiper-item">
               <image class="image"
                      src="{{imageUrl}}"
-                     mode="aspectFit">
+                     mode="widthFix"
+                     bindload="imageLoad"
+                     data-id='{{index}}'>
               </image>
             </swiper-item>
           </repeat>
@@ -405,6 +443,7 @@
         </view>
       </view>
       <view class="comment-section">
+        <view id="comments-pos"></view>
         <view class="comment-title">
           商品评价（{{commentsCount}}）
         </view>
@@ -418,18 +457,29 @@
         </view>
       </view>
       <view class="goods-des">
+        <view id="detail-pos"></view>
         <view class="des-title">商品介绍</view>
-        <view id="btmDetail" class="btm-detail">
-          <view class="detail" id="wareInfo" style="display:block;">
-            <view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">
-              <view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">
+        <view class="detail_info_wrap" id="detail">
+          <view class="detail_item p_desc" id="detail1" style="position: relative; padding: 0px;height:{{scaleH + 'px'}}">
+            <view class="parent-wrapper" style="height:{{scaleH + 'px'}}">
+              <view id="commDesc" class="detail_pc" hasdata="1" style="transform-origin: 0px 0px 0px; line-height: 2;transform: scale({{scaling}});font-size:{{desFontSize}}">
                 <rich-text type="node" nodes="{{goodsInfoRichNodes}}"></rich-text>
                 <rich-text type="node" nodes="{{goodsTableRichNodes}}"></rich-text>
               </view>
             </view>
           </view>
         </view>
-        <view class="des-title qingdan-title">物品清单</view>
+        <!--<view id="btmDetail" class="btm-detail">-->
+          <!--<view class="detail" id="wareInfo" style="display:block;">-->
+            <!--<view id="scale-parent" style="margin: 0px 10px; overflow: hidden;height: {{scaleH + 'px'}}">-->
+              <!--<view class="scale-box" id="scale-cont" style="transform: scale({{scaling}})">-->
+                <!--<rich-text type="node" nodes="{{goodsInfoRichNodes}}"></rich-text>-->
+                <!--<rich-text type="node" nodes="{{goodsTableRichNodes}}"></rich-text>-->
+              <!--</view>-->
+            <!--</view>-->
+          <!--</view>-->
+        <!--</view>-->
+        <view class="des-title qingdan-title" id="qingdan">物品清单</view>
         <view class="wearQD">{{goodsExt.wearQD}}</view>
       </view>
     </scroll-view>
@@ -576,7 +626,13 @@
       comments: [],
       commentsCount: 0,
       showComments: false,
-      showTopIndex: 0
+      showTitle: false,
+      showTopIndex: 0,
+      desFontSize: '12px',
+      toView: '',
+      imgheights: [],
+      //图片宽度
+      imgwidth: 750
     }
 
     computed = {
@@ -631,31 +687,54 @@
     }
 
     methods = {
+      imageLoad(e) {
+          console.log(e);
+          //获取图片真实宽度
+        let imgwidth = e.detail.width, imgheight = e.detail.height, ratio = imgwidth / imgheight;
+        //计算的高度值
+        let viewHeight = 750 / ratio;
+        imgheight = viewHeight;
+        console.log(imgheight);
+        console.log(e.target.dataset.id);
+        let imgheights = this.imgheights;
+        //把每一张图片的对应的高度记录到数组里
+        imgheights[e.target.dataset.id] = imgheight;
+        this.imgheights = imgheights;
+        this.$apply();
+      },
       scroll(e) {
-//        let commentT;
-//        let detailT;
-//        let listT;
-//        let query = wepy.createSelectorQuery();
-//        query.select('.comment-section').boundingClientRect((res) => {
-//          commentT = res.top;
-//          if (commentT <= 0) {
-//          }
-//        }).exec();
-//        query.select('.goods-des').boundingClientRect((res) => {
-//          detailT = res.top;
-//        }).exec();
-//        query.select('.qingdan-title').boundingClientRect((res) => {
-//          listT = res.top;
-//        }).exec();
-//        console.log(commentT);
-//        if (listT <= 0) {
-//            this.showTopIndex = 2;
-//        } else if (detailT <= 0) {
-//          this.showTopIndex = 1;
-//        } else {
-//          this.showTopIndex = 0;
-//        }
-//        this.$apply();
+        let query = wepy.createSelectorQuery();
+        let commentT = new Promise(function (resolve, reject) {
+          query.select('.comment-section').boundingClientRect((res) => {
+            resolve(res.top)
+          }).exec();
+        });
+        let detailT = new Promise(function (resolve, reject) {
+          query.select('.goods-des').boundingClientRect((res) => {
+            resolve(res.top)
+          }).exec();
+        });
+        let listT = new Promise(function (resolve, reject) {
+          query.select('.qingdan-title').boundingClientRect((res) => {
+            resolve(res.top)
+          }).exec();
+        });
+        Promise.all([commentT, detailT, listT])
+          .then(list => {
+              if (list[0] >= 0) {
+                  this.showTitle = false;
+              } else {
+                this.showTitle = true;
+                if (list[2] <= 0) {
+                  this.showTopIndex = 2;
+                } else if (list[1] <= 0) {
+                  this.showTopIndex = 1;
+                } else {
+                  this.showTopIndex = 0;
+                }
+              }
+            this.$apply();
+          })
       },
       doNothing() {
         console.log('nothing');
@@ -763,13 +842,34 @@
         wepy.navigateTo({
           url: './comment-list?skuId=' + this.skuId
         })
+      },
+      onClickTopTitle(index) {
+//        let query = wepy.createSelectorQuery();
+//        if (Number(index) === 0) {
+//          this.showTopIndex = 0;
+//            query.select('.comment-section').boundingClientRect((res) => {
+//              console.log(res);
+//              this.toView = 'comments';
+//              this.$apply();
+//            }).exec();
+//        } else if (Number(index) === 1) {
+//          this.showTopIndex = 1;
+//          query.select('.goods-des').boundingClientRect((res) => {
+//            this.toView = 'goods-detail';
+//            this.$apply();
+//          }).exec();
+//        } else if (Number(index) === 2) {
+//          this.showTopIndex = 2;
+//          query.select('.qingdan-title').boundingClientRect((res) => {
+//            this.toView = 'qingdan';
+//            this.$apply();
+//          }).exec();
+//        }
       }
     }
 
     onLoad(options) {
       this.skuId = parseInt(options.skuId);
-//      this.skuId = 4890944;
-//      this.skuId = 6280032;
       this.fetchCheckIsSale();
       this.fetchGoodsState();
       this.fetchGoodsDetail();
@@ -1025,17 +1125,17 @@
 
     formatDetail() {
       let query = wepy.createSelectorQuery();
-//      let parentWrapper = query.select('#scale-parent');
-      let scaleWrapper = query.select('.scale-box');
+      let scaleWrapper = query.select('#commDesc');
       setTimeout(() => {
         let _this = this;
         scaleWrapper.boundingClientRect((res) => {
-          _this.scaling = (wepy.getSystemInfoSync().windowWidth - 20) / res.width;
+            console.log(res);
+          _this.scaling = wepy.getSystemInfoSync().windowWidth / res.width;
           _this.scaleH = res.height * _this.scaling;
-          console.log(_this.scaling);
+          _this.desFontSize = parseInt(12 / _this.scaling) + 'px';
           _this.$apply();
         }).exec();
-      }, 500)
+      }, 1000)
     }
   }
 </script>
