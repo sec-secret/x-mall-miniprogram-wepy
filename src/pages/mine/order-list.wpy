@@ -59,7 +59,7 @@
 
 <script>
   import wepy from 'wepy'
-  import {connect} from 'wepy-redux'
+  import {connect} from 'wepy-redux' // eslint-disable-line
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
   import NetworkManagerPayment from '../../network/NetworkManagerPayment'
   import OrderCell from '@/components/widget/order-cell';

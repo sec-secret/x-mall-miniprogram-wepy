@@ -510,7 +510,7 @@
 
 <script>
   import wepy from 'wepy'
-  import { connect } from 'wepy-redux'
+  import { connect } from 'wepy-redux' // eslint-disable-line
   import globalWxs from '../../wxs/global.wxs'
   import NetworkManagerMine from '@/network/NetworkManagerMine'
   import NetworkManagerCustomer from '@/network/NetworkManagerCustomer'
@@ -644,27 +644,6 @@
             console.log(err)
           })
       },
-      onClickProvince(item) {
-        NetworkManagerMine.fetchCities({provinceId: item.areaId})
-          .then(list => {
-//            document.querySelector('.address-section').scrollTop = 0;
-            this.showLevel = 1;
-            this.province = item;
-            this.cities = list;
-            this.city = {
-              areaName: '',
-              areaId: 0
-            };
-            this.counties = [];
-            this.county = {
-              areaName: '',
-              areaId: 0
-            };
-            this.$apply();
-          }, err => {
-            console.log(err)
-          })
-      },
       onClickCity(item) {
         NetworkManagerMine.fetchCounties({cityId: item.areaId})
           .then(list => {
@@ -748,6 +727,7 @@
                   wepy.showToast({title: res.message, icon: 'none'})
                 }
               }, err => {
+                console.log(err);
                 wepy.hideNavigationBarLoading();
                 wepy.showToast({title: '上传失败', icon: 'none'})
               })
@@ -756,13 +736,13 @@
       },
       onClickUpload() {
         let limitNum = 6;
-        let query = wx.createSelectorQuery();
+        let query = wepy.createSelectorQuery();
         let imgInput = query.select('#imgInput');
         this.files = imgInput.files;
         let params = new FormData();
         for (let i = 0; i < this.files.length; i++) {
-          if (i === 6) {
-            Toast('最多上传6张图片');
+          if (i === limitNum) {
+            wepy.showToast({title: '最多上传6张图片', icon: 'none'})
             break
           }
           params.append('files', this.files[i]);

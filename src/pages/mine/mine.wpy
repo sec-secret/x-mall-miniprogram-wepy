@@ -96,7 +96,7 @@
 
 <script>
   import wepy from 'wepy'
-  import { getStore, connect } from 'wepy-redux'
+  import { getStore, connect } from 'wepy-redux' // eslint-disable-line
 
   @connect({
     isLogin(state) {

@@ -262,7 +262,7 @@
   import CartCell from '@/components/widget/cart-cell';
   import globalWxs from '../../wxs/global.wxs'
   import cartWxs from '../../wxs/cart.wxs'
-  import { connect } from 'wepy-redux'
+  import { connect } from 'wepy-redux' // eslint-disable-line
   @connect({
     isLogin(state) {
       return state.user.hasAuthor;

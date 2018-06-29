@@ -568,7 +568,7 @@
   import NetworkManager from '../../network/NetworkManager';
   import globalWxs from '../../wxs/global.wxs'
   import mainWxs from '../../wxs/main.wxs'
-  import {connect} from 'wepy-redux'
+  import { connect } from 'wepy-redux' // eslint-disable-line
   import TABLE_CSS_STRING from './table-css';
   import CommentCell from '@/components/widget/comment-cell';
 
@@ -631,8 +631,7 @@
       desFontSize: '12px',
       toView: '',
       imgheights: [],
-      //图片宽度
-      imgwidth: 750
+      imgwidth: 750 // 图片宽度
     }
 
     computed = {
@@ -688,17 +687,15 @@
 
     methods = {
       imageLoad(e) {
-          console.log(e);
-          //获取图片真实宽度
-        let imgwidth = e.detail.width, imgheight = e.detail.height, ratio = imgwidth / imgheight;
-        //计算的高度值
-        let viewHeight = 750 / ratio;
+        let imgwidth = e.detail.width;
+        let imgheight = e.detail.height;
+        let ratio = imgwidth / imgheight; // 获取图片真实宽度
+        let viewHeight = 750 / ratio; // 计算的高度值
         imgheight = viewHeight;
         console.log(imgheight);
         console.log(e.target.dataset.id);
         let imgheights = this.imgheights;
-        //把每一张图片的对应的高度记录到数组里
-        imgheights[e.target.dataset.id] = imgheight;
+        imgheights[e.target.dataset.id] = imgheight; // 把每一张图片的对应的高度记录到数组里
         this.imgheights = imgheights;
         this.$apply();
       },

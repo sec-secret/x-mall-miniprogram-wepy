@@ -263,7 +263,7 @@
 
 <script>
   import wepy from 'wepy'
-  import { connect } from 'wepy-redux'
+  import { connect } from 'wepy-redux' // eslint-disable-line
   import globalWxs from '../../wxs/global.wxs'
   import mineWxs from '../../wxs/mine.wxs'
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';

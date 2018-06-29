@@ -87,7 +87,7 @@
 
 <script>
   import wepy from 'wepy'
-  import {getStore, connect} from 'wepy-redux'
+  import {getStore, connect} from 'wepy-redux' // eslint-disable-line
   import {UPDATE_USER_INFO, UPDATE_AUTHOR_INFO} from '../../store/types/user'
   import StringTool from '../../tool/StringTool'
   import NetworkManagerAuth from '../../network/NetworkManagerAuth'

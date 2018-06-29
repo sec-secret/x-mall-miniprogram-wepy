@@ -82,7 +82,7 @@
 
 <script>
   import wepy from 'wepy'
-  import { connect } from 'wepy-redux'
+  import { connect } from 'wepy-redux' // eslint-disable-line
   import Panel from '@/components/panel' // alias example
   import Counter from 'counter' // alias example
   import List from '../components/list' // aliasFields example
