@@ -317,6 +317,7 @@
       background: #fcfcfc;
       image {
         width: 36rpx;
+        height: 36rpx;
       }
     }
     button {
@@ -554,8 +555,8 @@
       <image @tap="onClickCarIcon" class="icon" src="./img/gouwuche.png" mode="widthFix">
       </image>
     </view>
-    <button class="buy-button {{!canClickBuy ?'disable':''}}" @tap="onClickAdd">加入购物车</button>
-    <button class="add-button {{!canClickBuy ?'disable':''}}" @tap="onClickBuy">购买</button>
+    <button class="buy-button" :class="{'disable': !canClickBuy}" @tap="onClickAdd">加入购物车</button>
+    <button class="add-button" :class="{'disable': !canClickBuy}" @tap="onClickBuy">购买</button>
   </view>
 </template>
 
@@ -965,7 +966,6 @@
         ]
       }
       NetworkManagerGoods.goodsState(req).then((info) => {
-//        this.isSale = info[0].state === 1;
         if (info[0].state !== 1) {
           this.isSale = false;
           this.noSaleTips = '对不起，该商品暂时无货。'

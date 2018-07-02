@@ -11,6 +11,7 @@
 	"appid": "wxf49f80d2a211497f",
 	"projectname": "x-mall-miniprogram",
 	"miniprogramRoot": "./dist",
+	"libVersion": "2.0.0",
 	"condition": {
 		"search": {
 			"current": -1,

@@ -21,6 +21,8 @@
 <script>
   import wepy from 'wepy'
   import { getStore } from 'wepy-redux'
+  import NetworkManagerAuth from '../../network/NetworkManagerAuth'
+  import {UPDATE_USER_INFO, UPDATE_AUTHOR_INFO, UPDATE_CODE} from '../../store/types/user'
   export default class AuthList extends wepy.page {
     config = {
       navigationBarTitleText: '申请授权'
