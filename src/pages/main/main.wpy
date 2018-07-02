@@ -368,7 +368,7 @@
     onShareAppMessage(res) {
       return {
         title: '',
-        path: '/page/main/main',
+        path: '/pages/main/main',
         success: function(res) {
           // 转发成功
         },

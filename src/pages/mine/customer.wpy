@@ -511,6 +511,7 @@
 <script>
   import wepy from 'wepy'
   import { connect } from 'wepy-redux' // eslint-disable-line
+  import StringTool from '../../tool/StringTool';
   import globalWxs from '../../wxs/global.wxs'
   import NetworkManagerMine from '@/network/NetworkManagerMine'
   import NetworkManagerCustomer from '@/network/NetworkManagerCustomer'
@@ -589,18 +590,46 @@
     }
 
     computed = {
-        total() {
-          let goods = this.goods;
-          return goods.nbPrice * goods.num;
-        },
+      total() {
+        let goods = this.goods;
+        return goods.nbPrice * goods.num;
+      },
       longAddress() {
         return [this.province, this.city, this.county, this.town]
       },
       skuId() {
-            return this.goods.skuId
+        return this.goods.skuId
+      },
+      skuNum() {
+        return this.goods.num;
       },
       orderId() {
         return this.orderInfo.orderId;
+      },
+      customerTel() {
+        return this.customerMobilePhone;
+      },
+      questionPic() {
+        // 问题描述图片
+        return this.imgList.join(',')
+      },
+      canSubmit() {
+        if (!this.selectedPackage) {
+          return false
+        }
+        if (this.customerContactName === '') {
+          return false
+        }
+        if (!StringTool.isMobile(this.customerMobilePhone)) {
+          return false
+        }
+        if (this.county.areaId === 0 || (this.towns.length !== 0 && this.town.areaId === 0)) {
+          return false
+        }
+        if (this.detailAddress === '') {
+          return false
+        }
+        return true;
       }
     }
 
@@ -752,52 +781,63 @@
       },
       onClickImgClose(index) {
         this.imgList.splice(index, 1);
+      },
+      onClickSubmit() {
+        if (!this.canSubmit) {
+          return
+        }
+        let params = {
+          orderId: this.orderId,
+          skuId: this.skuId,
+          skuNum: this.skuNum,
+          customerExpect: this.customerExpect,
+          questionDesc: this.questionDesc,
+          isNeedDetectionReport: this.isNeedDetectionReport, // ???
+          questionPic: this.questionPic,
+          isHasPackage: this.isHasPackage, // ???
+          packageDesc: this.packageDesc, // ???
+          customerContactName: this.customerContactName,
+          customerTel: this.customerTel, // ???
+          customerMobilePhone: this.customerMobilePhone,
+          customerEmail: this.customerEmail, // ???
+          customerPostcode: this.customerPostcode, // ???
+          pickwareType: this.pickwareType,
+          pickwareProvince: this.province.areaId,
+          pickwareCity: this.city.areaId,
+          pickwareCounty: this.county.areaId,
+          pickwareVillage: this.town.areaId,
+          pickwareAddress: this.detailAddress,
+          returnwareType: this.pickwareType,
+          returnwareProvince: this.province.areaId,
+          returnwareCity: this.city.areaId,
+          returnwareCounty: this.county.areaId,
+          returnwareVillage: this.town.areaId,
+          returnwareAddress: this.detailAddress
+        }
+        console.log(params);
+//      this.showLoading();
+//      NetworkMallCustomer.createAfsApply(params).then(data => {
+//        this.closeLoading();
+//        if (data) {
+//          Toast('申请成功');
+//          setTimeout(() => {
+//            this.$router.go(-1);
+//          }, 1500)
+//        } else {
+//          Toast('申请失败')
+//        }
+//      }, err => {
+//        this.closeLoading();
+//        Toast(err.message);
+//      })
       }
     };
 
-    onLoad() {
-        let options = {
-          address: {
-            town: 0,
-            province: 2,
-            cityName: '徐汇区',
-            city: 2813,
-            county: 51976,
-            mobile: '18621077431',
-            name: '张浩轩',
-            detailAddress: '远中',
-            provinceName: '上海',
-            countyName: '城区'
-          },
-          goods: {
-            skuId: 5604283,
-            nbPrice: 596400,
-            name: '【KA】Apple iPhone 8 Plus (A1864) 64GB 银色 移动联通电信4G手机',
-            goodsImg: 'http://xiaogua.oss-cn-hangzhou.aliyuncs.com/nb/goodsImg/5604283.jpg',
-            num: 1,
-            saleValue: '颜色:银色 / 版本:公开版'
-          },
-          order: {
-            orderId: '2018062814435761512288',
-            addressId: 56,
-            freightAmount: 0,
-            nbAmount: 596400,
-            status: 121,
-            userId: 250,
-            outTradeNo: '2018062814435761512288_826',
-            payType: 'wxmini',
-            remark:'',
-            wzOrderId: '201806285910000075',
-            createdTime: '2018-06-28 14:43:58',
-            payTime: '2018-06-28 14:44:01',
-            updateTime: '2018-06-28 14:44:11',
-            tails: {}
-          }
-        }
-        console.log(options);
-      this.orderInfo = options.order;
-      this.defaultAddress = options.address;
-      this.goods = options.goods;
+    onLoad(options) {
+      console.log(options);
+      this.orderInfo = JSON.parse(options.order);
+      this.defaultAddress = JSON.parse(options.address);
+      this.goods = JSON.parse(options.goods);
       this.customerMobilePhone = this.defaultAddress.mobile;
       this.customerContactName = this.defaultAddress.name;
       this.detailAddress = this.defaultAddress.detailAddress;

@@ -75,7 +75,7 @@
     .content {
       view {
         display: inline-block;
-        background-color: #f5f5f5;
+        background-color: #fff;
         border-radius: 4rpx;
         margin-right: 20rpx;
         height: 52rpx;
@@ -152,16 +152,17 @@
       </repeat>
     </view>
   </view>
-  <view wx:if="{{historyList.length !== 0}}" class="history-list">
-    <image src="./img/deletehei.png" model="widthFix" @click="clearHistory"/>
+  <view wx:if="{{historyList.length !== 0 && resultList.length === 0}}" class="history-list">
+    <image src="./img/deletehei.png" model="widthFix" @tap="clearHistory"/>
     <view class="title">搜索历史</view>
     <view class="content">
       <repeat for="{{historyList}}" item="i">
-        <view @tap="onClickHotWord(i)">{{i}}</view>
+        <view @tap="onClickHotWord({{i}})">{{i}}</view>
       </repeat>
     </view>
   </view>
-  <scroll-view class="result-list"
+  <scroll-view wx:if="{{resultList.length !== 0}}"
+               class="result-list"
                scroll-y="true"
                bindscrolltolower="loadMore"
                lower-threshold="150"
@@ -214,8 +215,8 @@
             this.$apply()
           })
       },
-      onSearch(e) {
-        this.searchVal = e.detail.value;
+      onSearch() {
+//        this.searchVal = e.detail.value;
         this.page = 1;
         this.resultList = [];
         this.resultType = 'input';
@@ -339,12 +340,54 @@
       },
       onClickHotWord(val) {
         this.searchVal = val;
-        this.onSearch();
+        this.page = 1;
+        this.resultList = [];
+        this.resultType = 'input';
+        this.firstCatId = 0;
+        this.secondCatId = 0;
+        this.thirdCatId = 0;
+        let req = {
+          'firstCatId': this.firstCatId,
+          'page': this.page,
+          'query': this.searchVal,
+          'secondCatId': this.secondCatId,
+          'thirdCatId': this.thirdCatId,
+          'type': this.type
+        };
+        if (this.searchVal === 'zkUserId') {
+          return
+        }
+        if (this.searchVal.replace(/\s/g, '').length === 0) {
+//            过滤空格
+          this.searchVal = '';
+          this.$apply();
+        } else if (this.searchVal !== '' && this.searchVal !== undefined) {
+          this.setHistory(this.searchVal);
+          wepy.showNavigationBarLoading();
+          NetworkManagerOther.mallSearch(req)
+            .then(list => {
+              this.suggestions = [];
+              this.resultList = list.goods;
+              this.$apply();
+              wepy.hideNavigationBarLoading();
+            }, err => {
+              this.suggestions = [];
+              this.resultList = [];
+              this.$apply();
+              wepy.showToast({title: err.message, icon: 'none'})
+              wepy.hideNavigationBarLoading();
+            })
+        }
       },
       onClickGoods(goods) {
         wepy.navigateTo({
           url: '../main/goods-detail?skuId=' + goods.skuId
         })
+      },
+      clearHistory() {
+        this.historyList = [];
+        this.$apply();
+        wepy.removeStorage({key: 'searchHistory'});
       }
     }
 
@@ -375,11 +418,6 @@
         this.$apply();
         wepy.setStorage({key: 'searchHistory', data: this.historyList})
       }
-    }
-
-    clearHistory() {
-      this.historyList = [];
-      wepy.removeStorage({key: 'searchHistory'});
     }
   }
 </script>
