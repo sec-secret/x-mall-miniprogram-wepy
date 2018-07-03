@@ -72,12 +72,12 @@
   <view class="mobile-section">
     <text>手机号</text>
     <view class="input-wrapper">
-      <input type="number" @blur="inputMobile" maxlength="11"/>
+      <input type="number" @input="inputMobile" maxlength="11"/>
     </view>
   </view>
   <view class="verify-section">
     <view class="input-wrapper">
-      <input type="number" value="{{verifyCode}}" @blur="inputVerifyCode"/>
+      <input type="number" value="{{verifyCode}}" @input="inputVerifyCode"/>
     </view>
     <view class="btn djs" wx:if="{{showDJS}}">{{timeout}}s</view>
     <view wx:else class="btn" @tap="onClickVerify">获取验证码</view>
