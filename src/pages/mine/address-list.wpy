@@ -146,7 +146,7 @@
       onClickAddress(address) {
         if (this.from === 'order') {
           wepy.showNavigationBarLoading();
-          NetworkManagerMine.setDefaultAddress({id: address.id}).then(data => {
+          NetworkManagerMine.setDefaultAddress(address.id).then(data => {
             wepy.hideNavigationBarLoading();
             wepy.navigateBack();
           }, err => {
@@ -163,7 +163,7 @@
       },
       onClickDel(address) {
         wepy.showNavigationBarLoading();
-        NetworkManagerMine.deleteAddress({id: address.id})
+        NetworkManagerMine.deleteAddress(address.id)
           .then(data => {
             wepy.hideNavigationBarLoading();
             this.fetchAddressList()

@@ -1,33 +1,5 @@
 <component name="libraryTable">
   <library name="Generated files" type="javaScript">
-    <properties>
-      <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/dist/.eslintrc.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerAuth.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerCart.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerCategory.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerGoods.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerMain.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerMine.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerOrder.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerOther.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerPayment.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/parse/css2json.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/actions/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/actions/user.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/reducers/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/types/index.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/store/types/user.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/test.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/tool/EncodeTool.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/tool/StringTool.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/wxParse/html2json.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/wxParse/htmlparser.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/wxParse/showdown.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/wxParse/wxDiscode.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/wxParse/wxParse.js" />
-      </sourceFilesUrls>
-    </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/dist/.eslintrc.js" />
       <root url="file://$PROJECT_DIR$/dist/src/network/NetworkManagerAuth.js" />
