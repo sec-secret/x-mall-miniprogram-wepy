@@ -156,8 +156,9 @@
           })
       },
       onClickPay(order) {
+          console.log(order);
         wepy.showNavigationBarLoading();
-        NetworkManagerPayment.applyPay(order.orderId, 'wxmini')
+        NetworkManagerPayment.applyPay(order.order.orderId, 'wxmini')
           .then(data => {
             wepy.hideNavigationBarLoading();
             wepy.requestPayment({
