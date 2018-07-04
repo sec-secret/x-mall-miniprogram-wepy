@@ -1062,7 +1062,8 @@
         this.imageHeader = data.imageHeader;
         this.$apply();
       }).catch((err) => {
-        wepy.showToast({title: err.message, icon: 'none'})
+          console.log(err);
+//        wepy.showToast({title: err.message, icon: 'none'})
       })
     }
 

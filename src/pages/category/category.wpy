@@ -202,5 +202,18 @@
         wepy.hideNavigationBarLoading();
       })
     }
+
+    onShareAppMessage(res) {
+      return {
+        title: '',
+        path: '/pages/category/category',
+        success: function (res) {
+          // 转发成功
+        },
+        fail: function (res) {
+          // 转发失败
+        }
+      }
+    }
   }
 </script>
