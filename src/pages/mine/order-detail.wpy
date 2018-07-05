@@ -218,7 +218,9 @@
         </view>
         <view class="count">
           <text class="num">x {{i.num}}</text>
-          <!--<span class="customer" @tap.stop="onClickCustomer({{i}})">申请售后</span>-->
+          <view wx:if="{{customerList[index]}}"
+                class="customer"
+                @tap.stop="onClickCustomer({{i}})">申请售后</view>
         </view>
       </view>
     </repeat>
@@ -268,6 +270,7 @@
   import mineWxs from '../../wxs/mine.wxs'
   import NetworkManagerOrder from '../../network/NetworkManagerOrder';
   import NetworkManagerPayment from '../../network/NetworkManagerPayment';
+  import NetworkManagerCustomer from '../../network/NetworkManagerCustomer';
 
   @connect({
     userInfo (state) {
@@ -289,10 +292,13 @@
     data = {
       orderInfo: {},
       addressInfo: {},
-      payTotal: 0
+      payTotal: 0,
+      orderExtRespList: [],
+      customerList: []
     }
 
-    computed = {}
+    computed = {
+    }
 
     methods = {
       onClickTrack() {
@@ -314,7 +320,7 @@
       },
       onClickPay() {
         wepy.showNavigationBarLoading();
-        NetworkManagerPayment.applyPay(this.orderInfo.orderId, 'wxmini')
+        NetworkManagerPayment.applyPay(this.orderInfo.order.orderId, 'wxmini')
           .then(data => {
             wepy.hideNavigationBarLoading();
             wepy.requestPayment({
@@ -348,9 +354,28 @@
 
     onLoad(option) {
       this.orderInfo = JSON.parse(option.order);
+      this.orderExtRespList = this.orderInfo.orderExtRespList;
       this.addressInfo = this.orderInfo.address;
       this.payTotal = this.orderInfo.order.freightAmount + this.orderInfo.order.nbAmount;
+      this.fetchIsCustomer();
       this.$apply();
+    }
+
+    fetchIsCustomer() {
+//        查看是否可退货
+      wepy.showNavigationBarLoading();
+      this.orderExtRespList.forEach((item, index) => {
+        NetworkManagerCustomer.fetchExpectComp(this.orderInfo.order.orderId, this.orderInfo.order.wzOrderId, item.skuId).then(data => {
+          wepy.hideNavigationBarLoading();
+          this.customerList[index] = data;
+          this.$apply();
+        }, err => {
+          this.customerList[index] = false;
+          this.$apply();
+          wepy.hideNavigationBarLoading();
+          wepy.showToast({title: err.message, icon: 'none'})
+        })
+      })
     }
   }
 </script>

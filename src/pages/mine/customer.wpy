@@ -334,14 +334,28 @@
         }
       }
     }
-    .package-list {
-      padding-left: 30rpx;
-      .package-item {
-        height: 60rpx;
-        line-height: 60rpx;
-        &.active {
-          color: $xg-c-red;
-          font-weight: 500;
+    .address-popup {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      .package-list {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        overflow: auto;
+        background-color: #fff;
+        padding-left: 30rpx;
+        .package-item {
+          height: 60rpx;
+          line-height: 60rpx;
+          &.active {
+            color: $xg-c-red;
+            font-weight: 500;
+          }
         }
       }
     }
@@ -382,7 +396,7 @@
         </view>
         <view class="item">
           <text class="item-title">包装描述</text>
-          <text @click="onClickPackage">{{packageTitle}}</text>
+          <text @tap="onClickPackage">{{packageTitle}}</text>
         </view>
         <view class="item">
           <text class="item-title">退款金额</text>
@@ -424,12 +438,6 @@
                     maxlength="1000"></textarea>
         </view>
         <view class="pic-section">
-          <!--<input type="file"-->
-                 <!--id="imgInput"-->
-                 <!--accept="image/jpeg,image/x-png,image/jpg"-->
-                 <!--multiple ref="file"-->
-                 <!--style="display: none"-->
-                 <!--@change="onClickUpload"/>-->
           <view class="new-file-input" @tap="onClickFile">
             <image src="./img/pic-icon.png" mode="widthFix">
             </image>
@@ -492,29 +500,28 @@
         </view>
       </view>
     </view>
-    <!--<mt-popup v-model="showPackage"-->
-              <!--position="bottom"-->
-              <!--class="address-popup"-->
-              <!--popup-transition="popup-fade">-->
-      <!--<slot>-->
-        <!--<div class="package-list">-->
-          <!--<div v-for="item in packageList" class="package-item" :class="{active: packageDesc === item.id}"-->
-               <!--@click="onClickPackageItem(item)">-->
-            <!--{{item.name}}-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</slot>-->
-    <!--</mt-popup>-->
+    <view wx:if="{{showPackage}}" class="address-popup">
+      <view class="package-list">
+        <repeat for="{{packageList}}">
+          <view class="package-item"
+                :class="{active: packageDesc === item.id}"
+                @tap="onClickPackageItem({{item}})">
+            {{item.name}}
+          </view>
+        </repeat>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import { connect } from 'wepy-redux' // eslint-disable-line
+  import { connect, getStore } from 'wepy-redux' // eslint-disable-line
   import StringTool from '../../tool/StringTool';
   import globalWxs from '../../wxs/global.wxs'
   import NetworkManagerMine from '@/network/NetworkManagerMine'
   import NetworkManagerCustomer from '@/network/NetworkManagerCustomer'
+  import { MALL_BASE_URL } from '@/network/NetworkManager';
 
   @connect({
     isLogin(state) {
@@ -638,8 +645,19 @@
         this.customerExpect = Number(type);
         this.$apply();
       },
+      onClickPackage() {
+        this.showPackage = true;
+      },
+      onClickPackageItem(item) {
+        this.packageDesc = item.id;
+        this.packageTitle = item.name;
+        this.selectedPackage = true;
+        this.showPackage = false;
+        this.$apply();
+      },
       onClickAddress() {
         this.showAddress = true;
+        this.$apply();
       },
       onClickTitle(index) {
         this.showLevel = index;
@@ -735,49 +753,16 @@
           'skuId': this.skuId
         }
         wepy.chooseImage({
+          count: 6,
           success: (res) => {
-            console.log(res);
             files = res.tempFilePaths;
-//            this.imgList = [...this.imgList, ...files];
-//            wepy.saveFile({
-//              tempFilePath: files[0],
-//              success: function(saveFile) {
-//                console.log(saveFile);
-//              }
-//            })
-            this.$apply();
             wepy.showNavigationBarLoading();
-            NetworkManagerCustomer.uploadFiles(files, params)
-              .then(res => {
-                wepy.hideNavigationBarLoading();
-                if (!res.errorCode) {
-                  this.imgList = [...this.imgList, ...res.data];
-                } else {
-                  wepy.showToast({title: res.message, icon: 'none'})
-                }
-              }, err => {
-                console.log(err);
-                wepy.hideNavigationBarLoading();
-                wepy.showToast({title: '上传失败', icon: 'none'})
-              })
+            let successUp = 0; // 成功个数
+            let failUp = 0; // 失败个数
+            let i = 0; //第几个
+            this.uploadFiles(files, successUp, failUp, i);
           }
         })
-      },
-      onClickUpload() {
-        let limitNum = 6;
-        let query = wepy.createSelectorQuery();
-        let imgInput = query.select('#imgInput');
-        this.files = imgInput.files;
-        let params = new FormData();
-        for (let i = 0; i < this.files.length; i++) {
-          if (i === limitNum) {
-            wepy.showToast({title: '最多上传6张图片', icon: 'none'})
-            break
-          }
-          params.append('files', this.files[i]);
-        }
-        console.log('进行中')
-        this.upLoadImg(params);
       },
       onClickImgClose(index) {
         this.imgList.splice(index, 1);
@@ -814,27 +799,25 @@
           returnwareVillage: this.town.areaId,
           returnwareAddress: this.detailAddress
         }
-        console.log(params);
-//      this.showLoading();
-//      NetworkMallCustomer.createAfsApply(params).then(data => {
-//        this.closeLoading();
-//        if (data) {
-//          Toast('申请成功');
-//          setTimeout(() => {
-//            this.$router.go(-1);
-//          }, 1500)
-//        } else {
-//          Toast('申请失败')
-//        }
-//      }, err => {
-//        this.closeLoading();
-//        Toast(err.message);
-//      })
+        wepy.showNavigationBarLoading();
+      NetworkManagerCustomer.createAfsApply(params).then(data => {
+        wepy.hideNavigationBarLoading();
+        if (data) {
+          wepy.showToast({title: '申请成功', icon: 'none'})
+          setTimeout(() => {
+            wepy.navigateBack()
+          }, 1500)
+        } else {
+          wepy.showToast({title: '申请失败', icon: 'none'})
+        }
+      }, err => {
+        wepy.hideNavigationBarLoading();
+        wepy.showToast({title: err.message, icon: 'none'})
+      })
       }
     };
 
     onLoad(options) {
-      console.log(options);
       this.orderInfo = JSON.parse(options.order);
       this.defaultAddress = JSON.parse(options.address);
       this.goods = JSON.parse(options.goods);
@@ -917,5 +900,48 @@
     }
 
     onShow() {}
+
+    uploadFiles(files, successUp, failUp, i) {
+        let store = getStore();
+        wepy.uploadFile({
+          url: MALL_BASE_URL + '/after/uploadFiles',
+          filePath: files[i],
+          name: 'files',
+          header: {
+            'Authorization': store.getState().user.token,
+            'Content-Type': 'multipart/form-data'
+          },
+          formData: {
+            'orderId': this.orderId,
+            'skuId': this.skuId
+          },
+          success: (res) => {
+            wepy.hideNavigationBarLoading();
+            let data = JSON.parse(res.data);
+            if (!data.errorCode) {
+              successUp++;
+              this.imgList = [...this.imgList, ...data.data];
+              this.$apply();
+            } else {
+                wepy.showToast({title: '上传失败', icon: 'none'})
+            }
+          },
+          fail: (err) => {
+            wepy.hideNavigationBarLoading();
+            failUp++;
+            wepy.showToast({title: '上传失败', icon: 'none'})
+          },
+          complete: () => {
+            wepy.hideNavigationBarLoading();
+            i++;
+            if (i === files.length) {
+              console.log('执行完毕');
+              console.log('成功：' + successUp + ' 失败：' + failUp);
+            } else {
+              this.uploadFiles(files, successUp, failUp, i)
+            }
+          }
+        })
+    }
   }
 </script>
