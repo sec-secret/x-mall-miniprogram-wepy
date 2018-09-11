@@ -3,8 +3,9 @@
 
 #### 项目介绍
 具备完整功能的购物平台小程序，获取微信用户信息，可以进行正常的添加购物车，添加编辑收货地址，查询订单，支付，上传图片退货。
-
+<div style="text-align:center">
 <img src="/static/img/mini-code.png" width="200"/>
+</div>
 
 <div>
 <img src="/static/img/home.gif" width="200"/>
