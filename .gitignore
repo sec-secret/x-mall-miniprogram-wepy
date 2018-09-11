@@ -1,4 +1,5 @@
 node_modules
 dist
 .DB_store
+.idea
 package-lock.json
