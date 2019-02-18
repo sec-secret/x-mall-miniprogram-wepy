@@ -27,6 +27,8 @@
     "wepy-redux": "^1.5.3"
   },
   "devDependencies": {
+    "deep-extend": ">=0.5.1",
+    "randomatic": ">=3.0.0",
     "babel-eslint": "^7.2.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
